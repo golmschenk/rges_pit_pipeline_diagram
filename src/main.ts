@@ -6,6 +6,10 @@ var chartDom = document.getElementById('main')!;
 var myChart = echarts.init(chartDom);
 var option: EChartsOption;
 
+window.addEventListener('resize', () => {
+    myChart.resize();
+});
+
 option = {
     title: {
         text: 'Basic Graph'

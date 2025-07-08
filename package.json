@@ -13,6 +13,7 @@
     "vite": "^7.0.3"
   },
   "dependencies": {
+    "dom": "^0.0.3",
     "echarts": "^5.6.0"
   }
 }
