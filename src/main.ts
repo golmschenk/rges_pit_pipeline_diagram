@@ -1,106 +1,57 @@
-import * as echarts from 'echarts';
+import cytoscape from 'cytoscape';
 
-type EChartsOption = echarts.EChartsOption;
+// Define interfaces for our data structures
+interface NodeData {
+    id: string;
+}
 
-var chartDom = document.getElementById('main')!;
-var myChart = echarts.init(chartDom);
-var option: EChartsOption;
+interface EdgeData extends NodeData {
+    source: string;
+    target: string;
+}
 
-window.addEventListener('resize', () => {
-    myChart.resize();
-});
+interface ElementData {
+    data: NodeData | EdgeData;
+}
 
-option = {
-    title: {
-        text: 'Basic Graph'
-    },
-    tooltip: {},
-    animationDurationUpdate: 1500,
-    animationEasingUpdate: 'quinticInOut',
-    series: [
+// Create the cytoscape instance
+cytoscape({
+    container: document.getElementById('main'), // container to render in
+
+    elements: [ // list of graph elements to start with
+        { // node a
+            data: { id: 'a' }
+        },
+        { // node b
+            data: { id: 'b' }
+        },
+        { // edge ab
+            data: { id: 'ab', source: 'a', target: 'b' }
+        }
+    ] as ElementData[],
+
+    style: [ // the stylesheet for the graph
         {
-            type: 'graph',
-            layout: 'none',
-            symbolSize: 50,
-            roam: true,
-            label: {
-                show: true
-            },
-            edgeSymbol: ['circle', 'arrow'],
-            edgeSymbolSize: [4, 10],
-            edgeLabel: {
-                fontSize: 20
-            },
-            data: [
-                {
-                    name: 'Node 1',
-                    x: 300,
-                    y: 300
-                },
-                {
-                    name: 'Node 2',
-                    x: 800,
-                    y: 300
-                },
-                {
-                    name: 'Node 3',
-                    x: 550,
-                    y: 100
-                },
-                {
-                    name: 'Node 4',
-                    x: 550,
-                    y: 500
-                }
-            ],
-            // links: [],
-            links: [
-                {
-                    source: 0,
-                    target: 1,
-                    symbolSize: [5, 20],
-                    label: {
-                        show: true
-                    },
-                    lineStyle: {
-                        width: 5,
-                        curveness: 0.2
-                    }
-                },
-                {
-                    source: 'Node 2',
-                    target: 'Node 1',
-                    label: {
-                        show: true
-                    },
-                    lineStyle: {
-                        curveness: 0.2
-                    }
-                },
-                {
-                    source: 'Node 1',
-                    target: 'Node 3'
-                },
-                {
-                    source: 'Node 2',
-                    target: 'Node 3'
-                },
-                {
-                    source: 'Node 2',
-                    target: 'Node 4'
-                },
-                {
-                    source: 'Node 1',
-                    target: 'Node 4'
-                }
-            ],
-            lineStyle: {
-                opacity: 0.9,
-                width: 2,
-                curveness: 0
+            selector: 'node',
+            style: {
+                'background-color': '#666',
+                'label': 'data(id)'
+            }
+        },
+        {
+            selector: 'edge',
+            style: {
+                'width': 3,
+                'line-color': '#ccc',
+                'target-arrow-color': '#ccc',
+                'target-arrow-shape': 'triangle',
+                'curve-style': 'bezier'
             }
         }
-    ]
-};
+    ],
 
-option && myChart.setOption(option);
+    layout: {
+        name: 'grid',
+        rows: 1
+    }
+});
