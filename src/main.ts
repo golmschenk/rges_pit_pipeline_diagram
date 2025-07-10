@@ -1,130 +1,7 @@
-import cytoscape, {type ElementDefinition, type NodeDefinition, type EdgeDefinition} from 'cytoscape';
+import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import {v4 as uuid} from 'uuid';
-import type {Brand} from "./brand.ts";
-
-type GroupNode = Brand<NodeDefinition, 'GroupNode'>
-type DataNode = Brand<NodeDefinition, 'DataNode'>
-type DataFlowEdge = Brand<EdgeDefinition, 'DataFlowEdge'>
-
-export type NodeTypeStyleClass = 'working-group-node' | 'external-group-node' | 'data-product-node' | 'data-node';
-export const NodeTypeStyleClass = {
-    WorkingGroup: 'working-group-node',
-    ExternalGroup: 'external-group-node',
-    DataProduct: 'data-product-node',
-    Data: 'data-node'
-} as const;
-
-export type GroupType = 'WorkingGroup' | 'ExternalGroup' | 'DataProduct';
-export const GroupType = {
-    WorkingGroup: 'WorkingGroup',
-    ExternalGroup: 'ExternalGroup',
-    DataProduct: 'DataProduct',
-} as const;
-
-
-
-function createGroupNode(name: string, groupType: GroupType = GroupType.WorkingGroup): GroupNode {
-    let classes: string[] = [NodeTypeStyleClass[groupType]]
-    return {
-        group: 'nodes',
-        data: {
-            id: uuid(),
-            name: name,
-        },
-        classes: classes,
-        __brand: 'GroupNode',
-    };
-}
-
-function createDataNode(name: string): DataNode {
-    return {
-        group: 'nodes',
-        data: {
-            id: uuid(),
-            name: name,
-        },
-        classes: [NodeTypeStyleClass.Data],
-        __brand: 'DataNode',
-    };
-}
-
-function createDataFlowEdge(sourceNode: NodeDefinition, destinationNode: NodeDefinition): DataFlowEdge {
-    return {
-        group: 'edges',
-        data: {
-            id: uuid(),
-            source: sourceNode.data.id!,
-            target: destinationNode.data.id!,
-        },
-        __brand: 'DataFlowEdge',
-    };
-}
-
-function createDataFlow(dataName: string, sourceGroupNode: GroupNode, destinationGroupNodes: GroupNode[]): [DataNode, DataFlowEdge[]] {
-    const dataNode = createDataNode(dataName)
-    const dataFlowEdges: DataFlowEdge[] = []
-    const dataFlowEdge = createDataFlowEdge(sourceGroupNode, dataNode)
-    dataFlowEdges.push(dataFlowEdge)
-    destinationGroupNodes.forEach((destinationGroupNode) => {
-        const dataFlowEdge = createDataFlowEdge(dataNode, destinationGroupNode)
-        dataFlowEdges.push(dataFlowEdge)
-    })
-    return [dataNode, dataFlowEdges]
-}
-
-function createDataFlowAndAppendToElements(dataName: string, sourceGroupNode: GroupNode, destinationGroupNodes: GroupNode[], elements: ElementDefinition[]): void {
-    const [dataNode, dataFlowEdges] = createDataFlow(dataName, sourceGroupNode, destinationGroupNodes)
-    elements.push(dataNode, ...dataFlowEdges);
-}
-
-type GroupNodes = {
-    workingGroup1Node: GroupNode,
-    workingGroup2Node: GroupNode,
-    workingGroup3Node: GroupNode,
-    workingGroup4Node: GroupNode,
-    workingGroup5Node: GroupNode,
-    workingGroup6Node: GroupNode,
-    workingGroup7Node: GroupNode,
-    workingGroup8Node: GroupNode,
-    workingGroup9Node: GroupNode,
-    workingGroup10Node: GroupNode,
-    workingGroup11Node: GroupNode,
-    workingGroup12Node: GroupNode,
-    workingGroup13Node: GroupNode,
-    workingGroup14Node: GroupNode,
-    dataProductGroupNode: GroupNode,
-    msosPhotometryGroupNode: GroupNode,
-    msosModelingGroupNode: GroupNode,
-}
-
-const groupNodes: GroupNodes = {
-    workingGroup1Node: createGroupNode('WG #1: Leadership and Project Management'),
-    workingGroup2Node: createGroupNode('WG #2: Education, Outreach, and Community'),
-    workingGroup3Node: createGroupNode('WG #3: Event Modeling'),
-    workingGroup4Node: createGroupNode('WG #4: Lens Flux Analysis'),
-    workingGroup5Node: createGroupNode('WG #5: Event and Anomaly Detection'),
-    workingGroup6Node: createGroupNode('WG #6: Variable Stars'),
-    workingGroup7Node: createGroupNode('WG #7: Survey Simulations and Pipeline Validation'),
-    workingGroup8Node: createGroupNode('WG #8: Contemporaneous and Precursor Observations'),
-    workingGroup9Node: createGroupNode('WG #9: Data Challenges, Outreach, and Citizen Science'),
-    workingGroup10Node: createGroupNode('WG #10: Microlensing Mini-Courses'),
-    workingGroup11Node: createGroupNode('WG #11: Free Floating Planets'),
-    workingGroup12Node: createGroupNode('WG #12: Efficiency and Occurrence Rate Analysis'),
-    workingGroup13Node: createGroupNode('WG #13: Astrometry'),
-    workingGroup14Node: createGroupNode('WG #14: Global Pipeline'),
-    dataProductGroupNode: createGroupNode('Data Product', GroupType.DataProduct),
-    msosPhotometryGroupNode: createGroupNode('MSOS Photometry', GroupType.ExternalGroup),
-    msosModelingGroupNode: createGroupNode('MSOS Modeling', GroupType.ExternalGroup),
-}
-
-let elements: ElementDefinition[] = [groupNodes.workingGroup3Node, groupNodes.workingGroup4Node, groupNodes.workingGroup5Node, groupNodes.workingGroup7Node, groupNodes.workingGroup12Node, groupNodes.dataProductGroupNode];
-createDataFlowAndAppendToElements('Source and Lens position and brightness posteriors', groupNodes.workingGroup4Node, [groupNodes.workingGroup3Node], elements)
-createDataFlowAndAppendToElements('Simulated light curves', groupNodes.workingGroup7Node, [groupNodes.workingGroup3Node], elements)
-createDataFlowAndAppendToElements('New candidate microlensing events and anomalies', groupNodes.workingGroup5Node, [groupNodes.workingGroup3Node], elements)
-createDataFlowAndAppendToElements('Planetary and binary microlensing event posteriors', groupNodes.workingGroup3Node, [groupNodes.workingGroup12Node], elements)
-createDataFlowAndAppendToElements('Posteriors of microlensing properties of all events', groupNodes.workingGroup3Node, [groupNodes.dataProductGroupNode], elements)
-createDataFlowAndAppendToElements('Table of microlensing properties of all events', groupNodes.workingGroup3Node, [groupNodes.dataProductGroupNode], elements)
+import {NodeTypeStyleClass} from "./graphTypes.ts";
+import {elements} from "./elementEntries.ts";
 
 cytoscape.use(dagre);
 cytoscape({
@@ -196,3 +73,20 @@ cytoscape({
         rankDir: 'LR',
     }
 });
+
+// let x = cy.edges()[0]
+// let loopAnimation = (edge: cytoscape.EdgeSingular, iteration: number) => {
+//     const offset = {
+//         style: {
+//             "line-dash-offset": 24,
+//             "line-dash-pattern": [8, 4],
+//         }
+//     }
+//     const duration = { duration: 1000 };
+//     return edge.animation({offset, duration}).play()
+//         .promise('complete')
+//         .then(() => loopAnimation(edge, iteration + 1));
+//     );
+//
+//     ani.reverse().play().promise('complete').then(() => loopAnimation(elements))
+// };
