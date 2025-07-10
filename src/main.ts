@@ -135,46 +135,55 @@ cytoscape({
             selector: 'node',
             style: {
                 label: 'data(name)',
-                shape: 'round-rectangle',
-                width: '200',
-                height: '100',
+                width: '180',
+                height: '90',
                 'text-valign': 'center',
                 'text-halign': 'center',
                 'text-wrap': 'wrap',
-                'text-max-width': '190',
+                'text-max-width': '140',
+                'border-width': '1px',
+                'border-style': 'solid',
+                'border-color': '#000000',
+                'font-size': '16px',
             }
         },
         {
             selector: `.${NodeTypeStyleClass.WorkingGroup}`,
             style: {
+                shape: 'rectangle',
                 'background-color': '#C0BFFB',
             },
         },
         {
             selector: `.${NodeTypeStyleClass.ExternalGroup}`,
             style: {
+                shape: 'rectangle',
                 'background-color': '#CCCCCC',
             },
         },
         {
             selector: `.${NodeTypeStyleClass.DataProduct}`,
             style: {
+                shape: 'rectangle',
                 'background-color': '#F6C1FC',
             },
         },
         {
             selector: `.${NodeTypeStyleClass.Data}`,
             style: {
+                shape: 'round-rectangle',
+                'corner-radius' : '20px',
                 'background-color': '#CCFEC6',
             },
         },
         {
             selector: 'edge',
             style: {
-                'width': 3,
-                'line-color': '#ccc',
-                'target-arrow-color': '#ccc',
+                'width': 1.2,
+                'line-color': '#000000',
+                'target-arrow-color': '#000000',
                 'target-arrow-shape': 'triangle',
+                'arrow-scale': 1.2,
                 'line-cap': 'square',
                 'curve-style': 'bezier',
             }
