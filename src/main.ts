@@ -7,13 +7,33 @@ type GroupNode = Brand<NodeDefinition, 'GroupNode'>
 type DataNode = Brand<NodeDefinition, 'DataNode'>
 type DataFlowEdge = Brand<EdgeDefinition, 'DataFlowEdge'>
 
-function createGroupNode(name: string): GroupNode {
+export type GroupType = 'WorkingGroup' | 'ExternalGroup' | 'DataProduct';
+export const GroupType = {
+    WorkingGroup: 'WorkingGroup',
+    ExternalGroup: 'ExternalGroup',
+    DataProduct: 'DataProduct',
+} as const;
+
+function createGroupNode(name: string, groupType: GroupType = GroupType.WorkingGroup): GroupNode {
+    let classes: string[] = []
+    switch (groupType) {
+        case GroupType.WorkingGroup:
+            classes = ['working-group-node'];
+            break;
+        case GroupType.ExternalGroup:
+            classes = ['external-group-node'];
+            break;
+        case GroupType.DataProduct:
+            classes = ['data-product-node'];
+            break;
+    }
     return {
         group: 'nodes',
         data: {
             id: uuid(),
             name: name,
         },
+        classes: classes,
         __brand: 'GroupNode',
     };
 }
@@ -107,9 +127,7 @@ createDataFlowAndAppendToElements('Posteriors of microlensing properties of all 
 createDataFlowAndAppendToElements('Table of microlensing properties of all events', groupNodes.workingGroup3Node, [groupNodes.dataProductGroupNode], elements)
 
 cytoscape.use(dagre);
-// @ts-ignore
-// @ts-ignore
-const cy = cytoscape({
+cytoscape({
     container: document.getElementById('main'),
     elements: elements,
     style: [
