@@ -7,6 +7,14 @@ type GroupNode = Brand<NodeDefinition, 'GroupNode'>
 type DataNode = Brand<NodeDefinition, 'DataNode'>
 type DataFlowEdge = Brand<EdgeDefinition, 'DataFlowEdge'>
 
+export type NodeTypeStyleClass = 'working-group-node' | 'external-group-node' | 'data-product-node' | 'data-node';
+export const NodeTypeStyleClass = {
+    WorkingGroup: 'working-group-node',
+    ExternalGroup: 'external-group-node',
+    DataProduct: 'data-product-node',
+    Data: 'data-node'
+} as const;
+
 export type GroupType = 'WorkingGroup' | 'ExternalGroup' | 'DataProduct';
 export const GroupType = {
     WorkingGroup: 'WorkingGroup',
@@ -14,19 +22,10 @@ export const GroupType = {
     DataProduct: 'DataProduct',
 } as const;
 
+
+
 function createGroupNode(name: string, groupType: GroupType = GroupType.WorkingGroup): GroupNode {
-    let classes: string[] = []
-    switch (groupType) {
-        case GroupType.WorkingGroup:
-            classes = ['working-group-node'];
-            break;
-        case GroupType.ExternalGroup:
-            classes = ['external-group-node'];
-            break;
-        case GroupType.DataProduct:
-            classes = ['data-product-node'];
-            break;
-    }
+    let classes: string[] = [NodeTypeStyleClass[groupType]]
     return {
         group: 'nodes',
         data: {
@@ -45,6 +44,7 @@ function createDataNode(name: string): DataNode {
             id: uuid(),
             name: name,
         },
+        classes: [NodeTypeStyleClass.Data],
         __brand: 'DataNode',
     };
 }
@@ -113,9 +113,9 @@ const groupNodes: GroupNodes = {
     workingGroup12Node: createGroupNode('WG #12: Efficiency and Occurrence Rate Analysis'),
     workingGroup13Node: createGroupNode('WG #13: Astrometry'),
     workingGroup14Node: createGroupNode('WG #14: Global Pipeline'),
-    dataProductGroupNode: createGroupNode('Data Product'),
-    msosPhotometryGroupNode: createGroupNode('MSOS Photometry'),
-    msosModelingGroupNode: createGroupNode('MSOS Modeling'),
+    dataProductGroupNode: createGroupNode('Data Product', GroupType.DataProduct),
+    msosPhotometryGroupNode: createGroupNode('MSOS Photometry', GroupType.ExternalGroup),
+    msosModelingGroupNode: createGroupNode('MSOS Modeling', GroupType.ExternalGroup),
 }
 
 let elements: ElementDefinition[] = [groupNodes.workingGroup3Node, groupNodes.workingGroup4Node, groupNodes.workingGroup5Node, groupNodes.workingGroup7Node, groupNodes.workingGroup12Node, groupNodes.dataProductGroupNode];
@@ -142,8 +142,31 @@ cytoscape({
                 'text-halign': 'center',
                 'text-wrap': 'wrap',
                 'text-max-width': '190',
-                'background-color': '#ddd',
             }
+        },
+        {
+            selector: `.${NodeTypeStyleClass.WorkingGroup}`,
+            style: {
+                'background-color': '#C0BFFB',
+            },
+        },
+        {
+            selector: `.${NodeTypeStyleClass.ExternalGroup}`,
+            style: {
+                'background-color': '#CCCCCC',
+            },
+        },
+        {
+            selector: `.${NodeTypeStyleClass.DataProduct}`,
+            style: {
+                'background-color': '#F6C1FC',
+            },
+        },
+        {
+            selector: `.${NodeTypeStyleClass.Data}`,
+            style: {
+                'background-color': '#CCFEC6',
+            },
         },
         {
             selector: 'edge',
@@ -155,7 +178,7 @@ cytoscape({
                 'line-cap': 'square',
                 'curve-style': 'bezier',
             }
-        }
+        },
     ],
 
     layout: {
