@@ -1,9 +1,29 @@
-import cytoscape from 'cytoscape';
+import cytoscape, {type Core, type NodeCollection} from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import {NodeTypeStyleClass} from "./graphTypes.ts";
-import {elementDefinitions} from "./elementEntries.ts";
+import {type GroupNodeDefinition, NodeTypeStyleClass} from "./graphTypes.ts";
+import {elementDefinitions, groupNodeDefinitions} from "./elementEntries.ts";
 
 cytoscape.use(dagre);
+
+function getNodesForGroupFocus(workingGroupId: string, cy: Core): NodeCollection {
+    let focusWorkingGroup = cy.getElementById(workingGroupId)
+    let inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.Data}`)
+    let sources = inputs.incomers(`.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataProduct}`)
+    let outputs = focusWorkingGroup.outgoers(`.${NodeTypeStyleClass.Data}`)
+    let destinations = outputs.outgoers(`.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataProduct}`)
+    return focusWorkingGroup.union(inputs).union(sources).union(outputs).union(destinations)
+}
+
+function setGroupFocusView(groupNodeDefinition: GroupNodeDefinition) {
+    let allElements = cy.elements()
+    allElements.style('display', 'none')
+    let activeNodes = getNodesForGroupFocus(groupNodeDefinition.data.id!, cy)
+    let activeEdges = activeNodes.edgesWith(activeNodes)
+    let activeElements = activeNodes.union(activeEdges)
+    activeElements.style('display', 'element')
+    activeElements.layout(workingGroupFocusLayout).run()
+    cy.fit(activeElements, 10)
+}
 
 const workingGroupFocusLayout = {
     name: 'dagre',
@@ -11,7 +31,7 @@ const workingGroupFocusLayout = {
     rankDir: 'LR',
 };
 
-cytoscape({
+let cy = cytoscape({
     container: document.getElementById('main'),
     elements: elementDefinitions,
     style: [
@@ -76,6 +96,10 @@ cytoscape({
 
     layout: workingGroupFocusLayout
 });
+
+const groupNodeDefinition = groupNodeDefinitions.workingGroup3;
+setGroupFocusView(groupNodeDefinition);
+
 
 // let x = cy.edges()[0]
 // let loopAnimation = (edge: cytoscape.EdgeSingular, iteration: number) => {

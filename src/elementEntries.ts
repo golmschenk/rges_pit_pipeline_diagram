@@ -3,7 +3,7 @@ import {createDataFlowDefinitionAndAppendToElementDefinitions, createGroupNodeDe
 import type {ElementDefinition} from "cytoscape";
 import type {DataFlowData} from "./graphTypes.ts";
 
-const groupNodes: GroupNodesDefinitions = {
+export const groupNodeDefinitions: GroupNodesDefinitions = {
     workingGroup1: createGroupNodeDefinition('WG #1: Leadership and Project Management'),
     workingGroup2: createGroupNodeDefinition('WG #2: Education, Outreach, and Community'),
     workingGroup3: createGroupNodeDefinition('WG #3: Event Modeling'),
@@ -23,43 +23,43 @@ const groupNodes: GroupNodesDefinitions = {
     msosModelingGroup: createGroupNodeDefinition('MSOS Modeling', GroupType.ExternalGroup),
 }
 
-let elementDefinitions: ElementDefinition[] = Object.values(groupNodes);
+let elementDefinitions: ElementDefinition[] = Object.values(groupNodeDefinitions);
 
 const dataFlows: DataFlowData[] = [
     {
         data: {name: 'Source and Lens position and brightness posteriors'},
-        sourceGroup: groupNodes.workingGroup4,
-        destinationGroups: [groupNodes.workingGroup3]
+        sourceGroup: groupNodeDefinitions.workingGroup4,
+        destinationGroups: [groupNodeDefinitions.workingGroup3]
     },
     {
         data: {name: 'Simulated light curves'},
-        sourceGroup: groupNodes.workingGroup7,
-        destinationGroups: [groupNodes.workingGroup3]
+        sourceGroup: groupNodeDefinitions.workingGroup7,
+        destinationGroups: [groupNodeDefinitions.workingGroup3]
     },
     {
         data: {name: 'New candidate microlensing events and anomalies'},
-        sourceGroup: groupNodes.workingGroup5,
-        destinationGroups: [groupNodes.workingGroup3]
+        sourceGroup: groupNodeDefinitions.workingGroup5,
+        destinationGroups: [groupNodeDefinitions.workingGroup3]
     },
     {
         data: {name: 'Planetary and binary microlensing event posteriors'},
-        sourceGroup: groupNodes.workingGroup3,
-        destinationGroups: [groupNodes.workingGroup12]
+        sourceGroup: groupNodeDefinitions.workingGroup3,
+        destinationGroups: [groupNodeDefinitions.workingGroup12]
     },
     {
         data: {name: 'Posteriors of microlensing properties of all events'},
-        sourceGroup: groupNodes.workingGroup3,
-        destinationGroups: [groupNodes.dataProductGroup]
+        sourceGroup: groupNodeDefinitions.workingGroup3,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup]
     },
     {
         data: {name: 'Table of microlensing properties of all events'},
-        sourceGroup: groupNodes.workingGroup3,
-        destinationGroups: [groupNodes.dataProductGroup]
+        sourceGroup: groupNodeDefinitions.workingGroup3,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup]
     },
     {
         data: {name: 'Precursor HST and Euclid images, photometry and astrometry'},
-        sourceGroup: groupNodes.workingGroup8,
-        destinationGroups: [groupNodes.workingGroup4]
+        sourceGroup: groupNodeDefinitions.workingGroup8,
+        destinationGroups: [groupNodeDefinitions.workingGroup4]
     },
 ];
 
