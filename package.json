@@ -9,11 +9,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/cytoscape-dagre": "^2.3.3",
     "typescript": "~5.8.3",
     "vite": "^7.0.3"
   },
   "dependencies": {
     "cytoscape": "^3.32.1",
+    "cytoscape-dagre": "^2.5.0",
     "dom": "^0.0.3",
     "echarts": "^5.6.0",
     "uuid": "^11.1.0"
