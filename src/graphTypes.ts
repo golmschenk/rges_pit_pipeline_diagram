@@ -1,9 +1,9 @@
 import type {Brand} from "./brand.ts";
 import type {EdgeDefinition, NodeDefinition} from "cytoscape";
 
-export type GroupNode = Brand<NodeDefinition, 'GroupNode'>
-export type DataNode = Brand<NodeDefinition, 'DataNode'>
-export type DataFlowEdge = Brand<EdgeDefinition, 'DataFlowEdge'>
+export type GroupNodeDefinition = Brand<NodeDefinition, 'GroupNode'>
+export type DataNodeDefinition = Brand<NodeDefinition, 'DataNode'>
+export type DataFlowEdgeDefinition = Brand<EdgeDefinition, 'DataFlowEdge'>
 
 export const NodeTypeStyleClass = {
     WorkingGroup: 'working-group-node',
@@ -20,24 +20,24 @@ export const GroupType = {
 } as const;
 export type GroupType = typeof GroupType[keyof typeof GroupType];
 
-export type GroupNodes = {
-    workingGroup1Node: GroupNode,
-    workingGroup2Node: GroupNode,
-    workingGroup3Node: GroupNode,
-    workingGroup4Node: GroupNode,
-    workingGroup5Node: GroupNode,
-    workingGroup6Node: GroupNode,
-    workingGroup7Node: GroupNode,
-    workingGroup8Node: GroupNode,
-    workingGroup9Node: GroupNode,
-    workingGroup10Node: GroupNode,
-    workingGroup11Node: GroupNode,
-    workingGroup12Node: GroupNode,
-    workingGroup13Node: GroupNode,
-    workingGroup14Node: GroupNode,
-    dataProductGroupNode: GroupNode,
-    msosPhotometryGroupNode: GroupNode,
-    msosModelingGroupNode: GroupNode,
+export type GroupNodesDefinitions = {
+    workingGroup1: GroupNodeDefinition,
+    workingGroup2: GroupNodeDefinition,
+    workingGroup3: GroupNodeDefinition,
+    workingGroup4: GroupNodeDefinition,
+    workingGroup5: GroupNodeDefinition,
+    workingGroup6: GroupNodeDefinition,
+    workingGroup7: GroupNodeDefinition,
+    workingGroup8: GroupNodeDefinition,
+    workingGroup9: GroupNodeDefinition,
+    workingGroup10: GroupNodeDefinition,
+    workingGroup11: GroupNodeDefinition,
+    workingGroup12: GroupNodeDefinition,
+    workingGroup13: GroupNodeDefinition,
+    workingGroup14: GroupNodeDefinition,
+    dataProductGroup: GroupNodeDefinition,
+    msosPhotometryGroup: GroupNodeDefinition,
+    msosModelingGroup: GroupNodeDefinition,
 }
 
 
@@ -47,6 +47,6 @@ export type DataData = {
 
 export type DataFlowData = {
     data: DataData,
-    sourceGroup: GroupNode,
-    destinationGroups: GroupNode[],
+    sourceGroup: GroupNodeDefinition,
+    destinationGroups: GroupNodeDefinition[],
 }

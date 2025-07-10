@@ -1,12 +1,19 @@
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import {NodeTypeStyleClass} from "./graphTypes.ts";
-import {elements} from "./elementEntries.ts";
+import {elementDefinitions} from "./elementEntries.ts";
 
 cytoscape.use(dagre);
+
+const workingGroupFocusLayout = {
+    name: 'dagre',
+    // @ts-ignore
+    rankDir: 'LR',
+};
+
 cytoscape({
     container: document.getElementById('main'),
-    elements: elements,
+    elements: elementDefinitions,
     style: [
         {
             selector: 'node',
@@ -49,7 +56,7 @@ cytoscape({
             selector: `.${NodeTypeStyleClass.Data}`,
             style: {
                 shape: 'round-rectangle',
-                'corner-radius' : '20px',
+                'corner-radius': '20px',
                 'background-color': '#CCFEC6',
             },
         },
@@ -67,11 +74,7 @@ cytoscape({
         },
     ],
 
-    layout: {
-        name: 'dagre',
-        // @ts-ignore
-        rankDir: 'LR',
-    }
+    layout: workingGroupFocusLayout
 });
 
 // let x = cy.edges()[0]
