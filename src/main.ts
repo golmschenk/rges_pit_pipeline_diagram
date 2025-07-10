@@ -25,6 +25,10 @@ function setGroupFocusView(groupNodeDefinition: GroupNodeDefinition) {
     cy.fit(activeElements, 10)
 }
 
+const globalPipelineLayout = {
+    name: 'dagre',
+};
+
 const workingGroupFocusLayout = {
     name: 'dagre',
     // @ts-ignore
@@ -94,11 +98,11 @@ let cy = cytoscape({
         },
     ],
 
-    layout: workingGroupFocusLayout
+    layout: globalPipelineLayout
 });
 
-const groupNodeDefinition = groupNodeDefinitions.workingGroup3;
-setGroupFocusView(groupNodeDefinition);
+// const groupNodeDefinition = groupNodeDefinitions.workingGroup3;
+// setGroupFocusView(groupNodeDefinition);
 
 
 // let x = cy.edges()[0]

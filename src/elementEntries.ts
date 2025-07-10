@@ -61,6 +61,71 @@ const dataFlows: DataFlowData[] = [
         sourceGroup: groupNodeDefinitions.workingGroup8,
         destinationGroups: [groupNodeDefinitions.workingGroup4]
     },
+    {
+        data: {name: 'Table of lens flux properties of all events'},
+        sourceGroup: groupNodeDefinitions.workingGroup4,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+    },
+    {
+        data: {name: 'Difference image astrometry and photometry'},
+        sourceGroup: groupNodeDefinitions.workingGroup4,
+        destinationGroups: [groupNodeDefinitions.workingGroup11]
+    },
+    {
+        data: {name: 'Automated light curve modeling results'},
+        sourceGroup: groupNodeDefinitions.msosModelingGroup,
+        destinationGroups: [groupNodeDefinitions.workingGroup3]
+    },
+    {
+        data: {name: 'Single lens events'},
+        sourceGroup: groupNodeDefinitions.msosModelingGroup,
+        destinationGroups: [groupNodeDefinitions.workingGroup12]
+    },
+    {
+        data: {name: 'Variable star models'},
+        sourceGroup: groupNodeDefinitions.workingGroup6,
+        destinationGroups: [groupNodeDefinitions.msosPhotometryGroup]
+    },
+    {
+        data: {name: 'Simulated variable star light curves'},
+        sourceGroup: groupNodeDefinitions.workingGroup6,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+    },
+    {
+        data: {name: 'Simulated variable star light curves'},
+        sourceGroup: groupNodeDefinitions.workingGroup6,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+    },
+    {
+        data: {name: 'Galaxy models and stellar microlensing occurrence rate predictions'},
+        sourceGroup: groupNodeDefinitions.workingGroup7,
+        destinationGroups: [groupNodeDefinitions.workingGroup12]
+    },
+    {
+        data: {name: 'Detection efficiency corrected rates for stellar microlensing events to update Galactic models'},
+        sourceGroup: groupNodeDefinitions.workingGroup12,
+        destinationGroups: [groupNodeDefinitions.workingGroup7]
+    },
+    {
+        data: {name: 'Simulated images and light curves'},
+        sourceGroup: groupNodeDefinitions.workingGroup7,
+        destinationGroups: [groupNodeDefinitions.workingGroup9]
+    },
+    {
+        data: {name: 'Data challenges'},
+        sourceGroup: groupNodeDefinitions.workingGroup9,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+    },
+    {
+        data: {name: 'Outreach material (data sonifications, etc.)'},
+        sourceGroup: groupNodeDefinitions.workingGroup9,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+    },
+    {
+        data: {name: 'Jupyter Notebooks and lectures'},
+        sourceGroup: groupNodeDefinitions.workingGroup10,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+    },
 ];
 
 dataFlows.forEach(dataFlow => {
