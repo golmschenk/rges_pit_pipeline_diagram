@@ -74,7 +74,7 @@ const dataFlows: DataFlowData[] = [
     {
         data: {name: 'Automated light curve modeling results'},
         sourceGroup: groupNodeDefinitions.msosModelingGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup3]
+        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup12]
     },
     {
         data: {name: 'Single lens events'},
@@ -85,11 +85,6 @@ const dataFlows: DataFlowData[] = [
         data: {name: 'Variable star models'},
         sourceGroup: groupNodeDefinitions.workingGroup6,
         destinationGroups: [groupNodeDefinitions.msosPhotometryGroup]
-    },
-    {
-        data: {name: 'Simulated variable star light curves'},
-        sourceGroup: groupNodeDefinitions.workingGroup6,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup]
     },
     {
         data: {name: 'Simulated variable star light curves'},
@@ -125,6 +120,16 @@ const dataFlows: DataFlowData[] = [
         data: {name: 'Jupyter Notebooks and lectures'},
         sourceGroup: groupNodeDefinitions.workingGroup10,
         destinationGroups: [groupNodeDefinitions.dataProductGroup]
+    },
+    {
+        data: {name: 'Photometric light curves'},
+        sourceGroup: groupNodeDefinitions.msosPhotometryGroup,
+        destinationGroups: [groupNodeDefinitions.workingGroup3]
+    },
+    {
+        data: {name: 'Photometric light curves'},
+        sourceGroup: groupNodeDefinitions.workingGroup4,
+        destinationGroups: [groupNodeDefinitions.workingGroup3]
     },
 ];
 

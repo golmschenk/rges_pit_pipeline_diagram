@@ -1,9 +1,11 @@
 import cytoscape, {type Core, type NodeCollection} from 'cytoscape';
 import dagre from 'cytoscape-dagre';
+import cola from 'cytoscape-cola';
 import {type GroupNodeDefinition, NodeTypeStyleClass} from "./graphTypes.ts";
-import {elementDefinitions, groupNodeDefinitions} from "./elementEntries.ts";
+import {elementDefinitions} from "./elementEntries.ts";
 
 cytoscape.use(dagre);
+cytoscape.use(cola);
 
 function getNodesForGroupFocus(workingGroupId: string, cy: Core): NodeCollection {
     let focusWorkingGroup = cy.getElementById(workingGroupId)
@@ -26,7 +28,7 @@ function setGroupFocusView(groupNodeDefinition: GroupNodeDefinition) {
 }
 
 const globalPipelineLayout = {
-    name: 'dagre',
+    name: 'cose',
 };
 
 const workingGroupFocusLayout = {
