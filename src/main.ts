@@ -1,10 +1,9 @@
-import {groupNodeDefinitions} from "./elementEntries.ts";
 import { App } from './app.ts';
 
-let app = App.create()
+App.create()
 
-const groupNodeDefinition = groupNodeDefinitions.workingGroup3;
-app.setGroupFocusView(groupNodeDefinition);
+// const groupNodeDefinition = groupNodeDefinitions.workingGroup3;
+// app.setGroupFocusView(groupNodeDefinition);
 
 
 // let x = cy.edges()[0]

@@ -1,9 +1,9 @@
 import type { Core } from "cytoscape";
-import { NodeTypeStyleClass, type GroupNodeDefinition } from "./graphTypes";
+import { NodeTypeStyleClass } from "./graphTypes";
 import cytoscape from "cytoscape";
 import dagre from 'cytoscape-dagre';
 import { elementDefinitions } from "./elementEntries";
-import type { NodeCollection } from "cytoscape";
+import type { NodeCollection, EventObject } from "cytoscape";
 
 function getNodesForGroupFocus(workingGroupId: string, cy: Core): NodeCollection {
     let focusWorkingGroup = cy.getElementById(workingGroupId)
@@ -20,17 +20,30 @@ const workingGroupFocusLayout = {
     rankDir: 'LR',
 };
 
+export const ViewType = {
+    GlobalView: 'GlobalView',
+    GroupFocusView: 'GroupFocusView',
+} as const;
+export type ViewType = typeof ViewType[keyof typeof ViewType];
+
 export class App {
     cy: Core
+    view: ViewType
+    backButton: HTMLElement
 
     constructor(cy: Core) {
         this.cy = cy
+        this.view = ViewType.GlobalView
+        this.backButton = document.getElementById('back_button')!
+
+        cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
+        
     }
 
     static create(): App {
         cytoscape.use(dagre);
         let cy = cytoscape({
-            container: document.getElementById('main'),
+            container: document.getElementById('cytoscape_container'),
             elements: elementDefinitions,
             style: [
                 {
@@ -94,17 +107,32 @@ export class App {
 
             layout: workingGroupFocusLayout
         });
+
         return new App(cy)
     }
 
-    setGroupFocusView(groupNodeDefinition: GroupNodeDefinition) {
+    setGroupFocusView(groupNodeId: string) {
         let allElements = this.cy.elements()
         allElements.style('display', 'none')
-        let activeNodes = getNodesForGroupFocus(groupNodeDefinition.data.id!, this.cy)
+        let activeNodes = getNodesForGroupFocus(groupNodeId, this.cy)
         let activeEdges = activeNodes.edgesWith(activeNodes)
         let activeElements = activeNodes.union(activeEdges)
         activeElements.style('display', 'element')
         activeElements.layout(workingGroupFocusLayout).run()
         this.cy.fit(activeElements, 10)
+    }
+
+    onclickDispatcher(event: EventObject) {
+        let targetElement = event.target
+        if (targetElement.isNode()) {
+            if (targetElement.hasClass(NodeTypeStyleClass.WorkingGroup)) {
+                this.setGroupFocusView(event.target.id())
+                this.view = ViewType.GroupFocusView
+                this.backButton.style.display = 'inline'
+            }
+            if (targetElement.hasClass(NodeTypeStyleClass.Data)) {
+                console.log('Data') // TODO: This works.
+            }
+        }
     }
 }
