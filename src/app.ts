@@ -20,6 +20,12 @@ const workingGroupFocusLayout = {
     rankDir: 'LR',
 };
 
+const GlobalViewLayout = {
+    name: 'dagre',
+    // @ts-ignore
+    rankDir: 'LR',
+};
+
 export const ViewType = {
     GlobalView: 'GlobalView',
     GroupFocusView: 'GroupFocusView',
@@ -37,7 +43,7 @@ export class App {
         this.backButton = document.getElementById('back_button')!
 
         cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
-        
+        this.backButton.addEventListener('click', () => this.backButtonCallback())
     }
 
     static create(): App {
@@ -134,5 +140,19 @@ export class App {
                 console.log('Data') // TODO: This works.
             }
         }
+    }
+
+    backButtonCallback() {
+        this.setGlobalView()
+    }
+
+    setGlobalView() {
+        console.log('back start')
+        let allElements = this.cy.elements()
+        allElements.style('display', 'element')
+        allElements.layout(GlobalViewLayout).run()
+        this.cy.fit(allElements, 10)
+        this.backButton.style.display = 'none'
+    
     }
 }
