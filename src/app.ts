@@ -1,4 +1,4 @@
-import type { Core } from "cytoscape";
+import type { Core, EdgeCollection, EdgeSingular } from "cytoscape";
 import { NodeTypeStyleClass } from "./graphTypes";
 import cytoscape from "cytoscape";
 import dagre from 'cytoscape-dagre';
@@ -32,6 +32,25 @@ export const ViewType = {
     GroupFocusView: 'GroupFocusView',
 } as const;
 export type ViewType = typeof ViewType[keyof typeof ViewType];
+
+function marchingAntsAnimationForEdge(edge: EdgeSingular) {
+    const speed = 10
+    const duration = 1000
+    let step = 1
+    while (true) {
+        step += 1
+        const style = {
+            'line-dash-pattern': [10, 10],
+            'line-dash-offset': speed * step,
+        }
+        let animationOptions = {
+            style: style,
+            duration: duration,
+        }
+        // @ts-ignore // TODO: This shouldn't be needed....
+        edge.animation(animationOptions).play().promise('complete')
+    }
+}
 
 export class App {
     cy: Core
@@ -195,5 +214,9 @@ export class App {
         });
         this.cy.fit(this.cy.elements(), 10);
         console.log('End node positions.')
+    }
+
+    animateEdges() {
+
     }
 }
