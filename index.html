@@ -15,15 +15,20 @@
             height: 100vh;
             z-index: 0;
         }
-        #back_button {
+        #button_container {
             position: absolute;
-            display: none;
             z-index: 1000;
+        }
+        #back_button {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <button id="back_button" type="button">Back</button>
+    <div id='button_container'>
+        <button id="back_button" type="button">Back</button>
+        <button id="save_positions_button" type="button">Save positions</button>
+    </div>
     <div id="cytoscape_container"></div>
 <script type="module" src="/src/main.ts"></script>
 </body>
