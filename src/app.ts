@@ -178,7 +178,6 @@ export class App {
     }
 
     setGlobalView() {
-        console.log('back start')
         let allElements = this.cy.elements()
         allElements.style('display', 'element')
         allElements.layout(GlobalViewLayout).run()
@@ -209,18 +208,14 @@ export class App {
 
     // TODO: Clean AI code.
     loadNodePositions() {
-        console.log('Start node positions.')
         const defaultGlobalViewNodePositions: Record<string, { x: number, y: number }> = defaultGlobalViewNodePositionsJson;
         this.cy.nodes().forEach(node => {
-            console.log(node.id())
             const pos = defaultGlobalViewNodePositions[node.id()];
             if (pos && typeof pos.x === "number" && typeof pos.y === "number") {
                 node.position(pos);
-                console.log('Positioned node.')
             }
         });
         this.cy.fit(this.cy.elements(), 10);
-        console.log('End node positions.')
     }
 
     animateEdges() {
