@@ -18,6 +18,8 @@ export function createGroupNodeDefinition(name: string, groupType: GroupType = G
         data: {
             id: uuid5(name, PROJECT_NAMESPACE_UUID),
             name: name,
+            height: 90,
+            width: 180,
         },
         classes: classes,
         __brand: 'GroupNode',
@@ -30,6 +32,8 @@ function createDataNodeDefinition(name: string, sourceName: string): DataNodeDef
         data: {
             id: uuid5(name + sourceName, PROJECT_NAMESPACE_UUID),
             name: name,
+            height: 90,
+            width: 180,
         },
         classes: [NodeTypeStyleClass.Data],
         __brand: 'DataNode',
@@ -43,6 +47,8 @@ function createDataFlowEdgeDefinition(sourceNode: NodeDefinition, destinationNod
             id: uuid4(),
             source: sourceNode.data.id!,
             target: destinationNode.data.id!,
+            height: 90,
+            width: 180,
         },
         __brand: 'DataFlowEdge',
     };

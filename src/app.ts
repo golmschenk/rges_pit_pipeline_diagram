@@ -56,6 +56,28 @@ async function marchingAntsAnimationForEdges(edges: EdgeCollection) {
     }
 }
 
+// TODO: Clean up AI code.
+function updateNodeDimensions(node: cytoscape.NodeSingular) {
+    const minWidth = 180;
+    const minHeight = 90;
+    const padding = 0; // Added padding around text
+
+    // Get the rendered dimensions of the label
+    const bbox = node.boundingBox({
+        includeLabels: true,
+        includeOverlays: false
+    });
+
+    // Calculate actual dimensions, respecting minimums
+    const width = Math.max(minWidth, bbox.w + padding);
+    const height = Math.max(minHeight, bbox.h + padding);
+
+    // Set the dimensions as node data
+    node.data('width', width);
+    node.data('height', height);
+}
+
+
 export class App {
     cy: Core
     view: ViewType
@@ -68,6 +90,7 @@ export class App {
         this.view = ViewType.GlobalView
         this.backButton = document.getElementById('back_button')!
         this.savePositionsButton = document.getElementById('save_positions_button')!
+        this.cy.nodes().forEach(node => updateNodeDimensions(node));
 
         cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
         this.backButton.addEventListener('click', () => this.backButtonCallback())
@@ -85,8 +108,8 @@ export class App {
                     selector: 'node',
                     style: {
                         label: 'data(name)',
-                        width: '180',
-                        height: '90',
+                        width: 'data(width)',
+                        height: 'data(height)',
                         'text-valign': 'center',
                         'text-halign': 'center',
                         'text-wrap': 'wrap',
@@ -133,6 +156,8 @@ export class App {
                         'line-color': '#000000',
                         'target-arrow-color': '#000000',
                         'target-arrow-shape': 'triangle',
+                        // 'source-arrow-color': '#000000',
+                        // 'source-arrow-shape': 'circle',
                         'arrow-scale': 1.2,
                         'line-cap': 'square',
                         'curve-style': 'bezier',
