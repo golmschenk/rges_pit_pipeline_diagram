@@ -1,9 +1,9 @@
-import type {Core, EdgeCollection, EdgeSingular, SingularAnimationOptionsBase} from 'cytoscape';
+import type {Core, EdgeCollection} from 'cytoscape';
 import {NodeTypeStyleClass} from './graphTypes';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import {elementDefinitions} from './elementEntries';
-import type {NodeCollection, EventObject} from 'cytoscape';
+import type {EventObject} from 'cytoscape';
 import defaultGlobalViewNodePositionsJson from './default_global_positions.json';
 
 const workingGroupFocusLayout = {
@@ -212,10 +212,10 @@ export class App {
         this.cy.nodes().forEach(node => {
             positions[node.id()] = node.position();
         });
-        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(
+        const dataString = 'data:text/json;charset=utf-8,' + encodeURIComponent(
             JSON.stringify(positions, null, 2));
         const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute('href', dataStr);
+        downloadAnchor.setAttribute('href', dataString);
         downloadAnchor.setAttribute('download', 'default_global_positions.json');
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
@@ -225,11 +225,12 @@ export class App {
     loadNodePositions() {
         const defaultGlobalViewNodePositions: Record<string, {
             x: number,
-            y: number
+            y: number,
         }> = defaultGlobalViewNodePositionsJson;
         this.cy.nodes().forEach(node => {
-            const position = defaultGlobalViewNodePositions[node.id()];
+            let position = defaultGlobalViewNodePositions[node.id()];
             if (position && typeof position.x === 'number' && typeof position.y === 'number') {
+                position = {x: roundToNearest10(position.x), y: roundToNearest10(position.y)}
                 node.position(position);
             }
         });
@@ -239,4 +240,8 @@ export class App {
     animateEdges() {
         marchingAntsAnimationForEdges(this.cy.edges())
     }
+}
+
+function roundToNearest10(num: number): number {
+    return Math.round(num / 10) * 10;
 }
