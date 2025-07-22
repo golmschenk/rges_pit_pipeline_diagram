@@ -1,9 +1,9 @@
-import type {Core, EdgeCollection, EdgeSingular, SingularAnimationOptionsBase} from "cytoscape";
-import {NodeTypeStyleClass} from "./graphTypes";
-import cytoscape from "cytoscape";
+import type {Core, EdgeCollection, EdgeSingular, SingularAnimationOptionsBase} from 'cytoscape';
+import {NodeTypeStyleClass} from './graphTypes';
+import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import {elementDefinitions} from "./elementEntries";
-import type {NodeCollection, EventObject} from "cytoscape";
+import {elementDefinitions} from './elementEntries';
+import type {NodeCollection, EventObject} from 'cytoscape';
 import defaultGlobalViewNodePositionsJson from './default_global_positions.json';
 
 const workingGroupFocusLayout = {
@@ -77,10 +77,10 @@ export class App {
 
     constructor(cy: Core) {
         this.cy = cy
-        this.loadNodePositions()
         this.view = ViewType.GlobalView
         this.backButton = document.getElementById('back_button')!
         this.savePositionsButton = document.getElementById('save_positions_button')!
+        this.setGlobalView()
         this.cy.nodes().forEach(node => updateNodeDimensions(node));
 
         cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
@@ -205,43 +205,39 @@ export class App {
 
     setGlobalView() {
         let allElements = this.cy.elements()
-        allElements.style('display', 'element')
-        allElements.layout(GlobalViewLayout).run()
-        this.cy.fit(allElements, 10)
+        allElements.style('display', 'none')
+        let globalViewNodes = this.cy.nodes().not(`.${NodeTypeStyleClass.DataProduct}`)
+        let globalViewElements = globalViewNodes.union(globalViewNodes.edgesWith(globalViewNodes))
+        globalViewElements.style('display', 'element')
+        this.loadNodePositions()
+        this.cy.fit(globalViewElements, 10)
         this.backButton.style.display = 'none'
     }
 
-    turnOnNodePositionSaving() {
-        this.cy.nodes().on('position', () => {
-
-        })
-    }
-
-    // TODO: Clean AI code.
     saveNodePositions() {
         const positions: Record<string, { x: number, y: number }> = {};
         this.cy.nodes().forEach(node => {
             positions[node.id()] = node.position();
         });
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(positions, null, 2));
-        const dlAnchor = document.createElement('a');
-        dlAnchor.setAttribute("href", dataStr);
-        dlAnchor.setAttribute("download", "default_global_positions.json");
-        document.body.appendChild(dlAnchor);
-        dlAnchor.click();
-        dlAnchor.remove();
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(
+            JSON.stringify(positions, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute('href', dataStr);
+        downloadAnchor.setAttribute('download', 'default_global_positions.json');
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
     }
 
-    // TODO: Clean AI code.
     loadNodePositions() {
         const defaultGlobalViewNodePositions: Record<string, {
             x: number,
             y: number
         }> = defaultGlobalViewNodePositionsJson;
         this.cy.nodes().forEach(node => {
-            const pos = defaultGlobalViewNodePositions[node.id()];
-            if (pos && typeof pos.x === "number" && typeof pos.y === "number") {
-                node.position(pos);
+            const position = defaultGlobalViewNodePositions[node.id()];
+            if (position && typeof position.x === 'number' && typeof position.y === 'number') {
+                node.position(position);
             }
         });
         this.cy.fit(this.cy.elements(), 10);
