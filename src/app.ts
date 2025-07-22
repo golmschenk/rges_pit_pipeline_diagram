@@ -1,4 +1,4 @@
-import type { Core, EdgeCollection, EdgeSingular } from "cytoscape";
+import type {Core, EdgeCollection, EdgeSingular, SingularAnimationOptionsBase} from "cytoscape";
 import { NodeTypeStyleClass } from "./graphTypes";
 import cytoscape from "cytoscape";
 import dagre from 'cytoscape-dagre';
@@ -33,22 +33,26 @@ export const ViewType = {
 } as const;
 export type ViewType = typeof ViewType[keyof typeof ViewType];
 
-function marchingAntsAnimationForEdge(edge: EdgeSingular) {
-    const speed = 10
-    const duration = 1000
-    let step = 1
+
+async function marchingAntsAnimationForEdges(edges: EdgeCollection) {
+    // TODO: There appears to be a small jitter on each iteration. The 10 second duration is probably an ok fix, but
+    //       figuring out how to actually make it smooth might be better.
+    const speed = 300
+    const duration = 10000
+    let step = 0
     while (true) {
         step += 1
         const style = {
             'line-dash-pattern': [10, 10],
-            'line-dash-offset': speed * step,
+            'line-dash-offset': -speed * step,
         }
-        let animationOptions = {
-            style: style,
-            duration: duration,
-        }
-        // @ts-ignore // TODO: This shouldn't be needed....
-        edge.animation(animationOptions).play().promise('complete')
+        await new Promise<void>((resolve) => {
+            edges.animate({
+                style: style,
+                duration: duration,
+                complete: () => resolve()
+            });
+        });
     }
 }
 
@@ -68,6 +72,7 @@ export class App {
         cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
         this.backButton.addEventListener('click', () => this.backButtonCallback())
         this.savePositionsButton.addEventListener('click', () => this.saveNodePositions())
+        this.animateEdges()
     }
 
     static create(): App {
@@ -131,6 +136,8 @@ export class App {
                         'arrow-scale': 1.2,
                         'line-cap': 'square',
                         'curve-style': 'bezier',
+                        'line-style': 'dashed',
+                        'line-dash-pattern': [10, 10],
                     }
                 },
             ],
@@ -217,6 +224,6 @@ export class App {
     }
 
     animateEdges() {
-
+        marchingAntsAnimationForEdges(this.cy.edges())
     }
 }
