@@ -1,22 +1,10 @@
-import type {Core, EdgeCollection} from 'cytoscape';
+import type {AnimationOptions, Collection, Core, EdgeCollection} from 'cytoscape';
 import {NodeTypeStyleClass} from './graphTypes';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import {elementDefinitions} from './elementEntries';
 import type {EventObject} from 'cytoscape';
 import defaultGlobalViewNodePositionsJson from './default_global_positions.json';
-
-const workingGroupFocusLayout = {
-    name: 'dagre',
-    // @ts-ignore
-    rankDir: 'LR',
-};
-
-const GlobalViewLayout = {
-    name: 'dagre',
-    // @ts-ignore
-    rankDir: 'LR',
-};
 
 export const ViewType = {
     GlobalView: 'GlobalView',
@@ -41,6 +29,7 @@ async function marchingAntsAnimationForEdges(edges: EdgeCollection) {
             edges.animate({
                 style: style,
                 duration: duration,
+                queue: false,
                 complete: () => resolve()
             });
         });
@@ -150,32 +139,42 @@ export class App {
                     }
                 },
             ],
-
-            layout: workingGroupFocusLayout
         });
 
         return new App(cy)
     }
 
     setGroupFocusView(groupNodeId: string) {
-        let allElements = this.cy.elements()
-        allElements.style('display', 'none')
-        let focusWorkingGroup = this.cy.getElementById(groupNodeId)
-        let inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.Data}`)
-        let sources = inputs.incomers(
+        const focusWorkingGroup = this.cy.getElementById(groupNodeId)
+        const inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.Data}`)
+        const sources = inputs.incomers(
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
             .${NodeTypeStyleClass.DataProduct}`)
-        let outputs = focusWorkingGroup.outgoers(`.${NodeTypeStyleClass.Data}`)
-        let destinations = outputs.outgoers(
+        const outputs = focusWorkingGroup.outgoers(`.${NodeTypeStyleClass.Data}`)
+        const destinations = outputs.outgoers(
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
             .${NodeTypeStyleClass.DataProduct}`)
-        let activeNodes = focusWorkingGroup.union(inputs).union(sources).union(outputs).union(destinations)
-        let activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(focusWorkingGroup))
+        const activeNodes = focusWorkingGroup.union(inputs).union(sources).union(outputs).union(destinations)
+        const activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(focusWorkingGroup))
             .union(focusWorkingGroup.edgesTo(outputs)).union(outputs.edgesTo(destinations))
-        let activeElements = activeNodes.union(activeEdges)
-        activeElements.style('display', 'element')
-        activeElements.layout(workingGroupFocusLayout).run()
-        this.cy.fit(activeElements, 10)
+        const activeElements = activeNodes.union(activeEdges)
+        // @ts-ignore
+        const activeElementsStyle: SingularAnimationOptionsBase = {style: {opacity: 1}, duration: 500}
+        const inactiveElements = this.cy.elements().difference(activeElements)
+        // @ts-ignore
+        const inactiveElementsStyle: SingularAnimationOptionsBase = {style: {opacity: 0}, duration: 500}
+        void asyncAnimation(activeElements, activeElementsStyle)
+        void asyncAnimation(inactiveElements, inactiveElementsStyle).then(
+            () => hideElements(inactiveElements))
+        const layoutOptions = {
+            name: 'dagre',
+            // @ts-ignore
+            rankDir: 'LR',
+            fit: true,
+            padding: 10.0,
+            animate: true,
+        }
+        activeElements.layout(layoutOptions).run()
     }
 
     onclickDispatcher(event: EventObject) {
@@ -244,4 +243,22 @@ export class App {
 
 function roundToNearest10(num: number): number {
     return Math.round(num / 10) * 10;
+}
+
+async function asyncAnimation(elements: Collection, options: AnimationOptions) {
+    await new Promise<void>((resolve) => {
+        options['complete'] = () => resolve()
+        options['queue'] = false
+        elements.animate(options);
+    });
+}
+
+async function hideElements(elements: Collection) {
+    let style = {display: 'none'}
+    elements.style(style)
+}
+
+async function showElements(elements: Collection) {
+    let style = {display: 'element'}
+    elements.style(style)
 }
