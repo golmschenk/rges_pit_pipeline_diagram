@@ -1,19 +1,10 @@
 import type {Core, EdgeCollection, EdgeSingular, SingularAnimationOptionsBase} from "cytoscape";
-import { NodeTypeStyleClass } from "./graphTypes";
+import {NodeTypeStyleClass} from "./graphTypes";
 import cytoscape from "cytoscape";
 import dagre from 'cytoscape-dagre';
-import { elementDefinitions } from "./elementEntries";
-import type { NodeCollection, EventObject } from "cytoscape";
+import {elementDefinitions} from "./elementEntries";
+import type {NodeCollection, EventObject} from "cytoscape";
 import defaultGlobalViewNodePositionsJson from './default_global_positions.json';
-
-function getNodesForGroupFocus(workingGroupId: string, cy: Core): NodeCollection {
-    let focusWorkingGroup = cy.getElementById(workingGroupId)
-    let inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.Data}`)
-    let sources = inputs.incomers(`.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataProduct}`)
-    let outputs = focusWorkingGroup.outgoers(`.${NodeTypeStyleClass.Data}`)
-    let destinations = outputs.outgoers(`.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataProduct}`)
-    return focusWorkingGroup.union(inputs).union(sources).union(outputs).union(destinations)
-}
 
 const workingGroupFocusLayout = {
     name: 'dagre',
@@ -176,8 +167,18 @@ export class App {
     setGroupFocusView(groupNodeId: string) {
         let allElements = this.cy.elements()
         allElements.style('display', 'none')
-        let activeNodes = getNodesForGroupFocus(groupNodeId, this.cy)
-        let activeEdges = activeNodes.edgesWith(activeNodes)
+        let focusWorkingGroup = this.cy.getElementById(groupNodeId)
+        let inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.Data}`)
+        let sources = inputs.incomers(
+            `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+            .${NodeTypeStyleClass.DataProduct}`)
+        let outputs = focusWorkingGroup.outgoers(`.${NodeTypeStyleClass.Data}`)
+        let destinations = outputs.outgoers(
+            `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+            .${NodeTypeStyleClass.DataProduct}`)
+        let activeNodes = focusWorkingGroup.union(inputs).union(sources).union(outputs).union(destinations)
+        let activeEdges = sources.edgesWith(inputs).union(inputs.edgesWith(focusWorkingGroup))
+            .union(focusWorkingGroup.edgesWith(outputs)).union(outputs.edgesWith(destinations))
         let activeElements = activeNodes.union(activeEdges)
         activeElements.style('display', 'element')
         activeElements.layout(workingGroupFocusLayout).run()
@@ -233,7 +234,10 @@ export class App {
 
     // TODO: Clean AI code.
     loadNodePositions() {
-        const defaultGlobalViewNodePositions: Record<string, { x: number, y: number }> = defaultGlobalViewNodePositionsJson;
+        const defaultGlobalViewNodePositions: Record<string, {
+            x: number,
+            y: number
+        }> = defaultGlobalViewNodePositionsJson;
         this.cy.nodes().forEach(node => {
             const pos = defaultGlobalViewNodePositions[node.id()];
             if (pos && typeof pos.x === "number" && typeof pos.y === "number") {
