@@ -177,8 +177,8 @@ export class App {
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
             .${NodeTypeStyleClass.DataProduct}`)
         let activeNodes = focusWorkingGroup.union(inputs).union(sources).union(outputs).union(destinations)
-        let activeEdges = sources.edgesWith(inputs).union(inputs.edgesWith(focusWorkingGroup))
-            .union(focusWorkingGroup.edgesWith(outputs)).union(outputs.edgesWith(destinations))
+        let activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(focusWorkingGroup))
+            .union(focusWorkingGroup.edgesTo(outputs)).union(outputs.edgesTo(destinations))
         let activeElements = activeNodes.union(activeEdges)
         activeElements.style('display', 'element')
         activeElements.layout(workingGroupFocusLayout).run()
