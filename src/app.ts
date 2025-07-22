@@ -62,7 +62,7 @@ export class App {
         this.view = ViewType.GlobalView
         this.backButton = document.getElementById('back_button')!
         this.savePositionsButton = document.getElementById('save_positions_button')!
-        this.setGlobalView()
+        this.setGlobalViewInstant()
         this.cy.nodes().forEach(node => updateNodeDimensions(node));
 
         cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
@@ -158,14 +158,7 @@ export class App {
         const activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(focusWorkingGroup))
             .union(focusWorkingGroup.edgesTo(outputs)).union(outputs.edgesTo(destinations))
         const activeElements = activeNodes.union(activeEdges)
-        // @ts-ignore
-        const activeElementsStyle: SingularAnimationOptionsBase = {style: {opacity: 1}, duration: 500}
-        const inactiveElements = this.cy.elements().difference(activeElements)
-        // @ts-ignore
-        const inactiveElementsStyle: SingularAnimationOptionsBase = {style: {opacity: 0}, duration: 500}
-        void asyncAnimation(activeElements, activeElementsStyle)
-        void asyncAnimation(inactiveElements, inactiveElementsStyle).then(
-            () => hideElements(inactiveElements))
+        void this.animateChangeInActiveElements(activeElements)
         const layoutOptions = {
             name: 'dagre',
             // @ts-ignore
@@ -196,14 +189,37 @@ export class App {
     }
 
     setGlobalView() {
-        let allElements = this.cy.elements()
-        allElements.style('display', 'none')
-        let globalViewNodes = this.cy.nodes().not(`.${NodeTypeStyleClass.DataProduct}`)
-        let globalViewElements = globalViewNodes.union(globalViewNodes.edgesWith(globalViewNodes))
-        globalViewElements.style('display', 'element')
-        this.loadNodePositions()
-        this.cy.fit(globalViewElements, 10)
         this.backButton.style.display = 'none'
+        const activeNodes = this.cy.nodes().not(`.${NodeTypeStyleClass.DataProduct}`)
+        const activeElements = activeNodes.union(activeNodes.edgesWith(activeNodes))
+        void this.animateChangeInActiveElements(activeElements)
+        const positions = this.loadNodePositions()
+        const layoutOptions = {
+            name: 'preset',
+            fit: true,
+            padding: 10.0,
+            animate: true,
+            positions: positions,
+        }
+        activeElements.layout(layoutOptions).run()
+    }
+
+    setGlobalViewInstant() {
+        this.backButton.style.display = 'none'
+        const activeNodes = this.cy.nodes().not(`.${NodeTypeStyleClass.DataProduct}`)
+        const activeElements = activeNodes.union(activeNodes.edgesWith(activeNodes))
+        activeElements.style({display: 'element', opacity: 1})
+        const inactiveElements = this.cy.elements().difference(activeElements)
+        inactiveElements.style({display: 'none', opacity: 1})
+        const positions = this.loadNodePositions()
+        const layoutOptions = {
+            name: 'preset',
+            fit: true,
+            padding: 10.0,
+            animate: false,
+            positions: positions,
+        }
+        activeElements.layout(layoutOptions).run()
     }
 
     saveNodePositions() {
@@ -221,23 +237,38 @@ export class App {
         downloadAnchor.remove();
     }
 
-    loadNodePositions() {
+    loadNodePositions(): Record<string, { x: number, y: number }> {
         const defaultGlobalViewNodePositions: Record<string, {
             x: number,
             y: number,
         }> = defaultGlobalViewNodePositionsJson;
+        const positions: Record<string, { x: number, y: number }> = {};
         this.cy.nodes().forEach(node => {
             let position = defaultGlobalViewNodePositions[node.id()];
             if (position && typeof position.x === 'number' && typeof position.y === 'number') {
-                position = {x: roundToNearest10(position.x), y: roundToNearest10(position.y)}
-                node.position(position);
+                positions[node.id()] = {
+                    x: roundToNearest10(position.x),
+                    y: roundToNearest10(position.y)
+                };
             }
         });
-        this.cy.fit(this.cy.elements(), 10);
+        return positions;
     }
 
     animateEdges() {
-        marchingAntsAnimationForEdges(this.cy.edges())
+        void marchingAntsAnimationForEdges(this.cy.edges())
+    }
+
+    async animateChangeInActiveElements(activeElements: Collection) {
+        void showElements(activeElements)
+        const inactiveElements = this.cy.elements().difference(activeElements)
+        // @ts-ignore
+        const activeElementsStyle: SingularAnimationOptionsBase = {style: {opacity: 1}, duration: 500}
+        // @ts-ignore
+        const inactiveElementsStyle: SingularAnimationOptionsBase = {style: {opacity: 0}, duration: 500}
+        void asyncAnimation(activeElements, activeElementsStyle)
+        void asyncAnimation(inactiveElements, inactiveElementsStyle).then(
+            () => hideElements(inactiveElements))
     }
 }
 
