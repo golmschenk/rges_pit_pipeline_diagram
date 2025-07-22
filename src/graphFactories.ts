@@ -11,6 +11,9 @@ import type {ElementDefinition, NodeDefinition} from "cytoscape";
 
 const PROJECT_NAMESPACE_UUID = '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b';
 
+const defaultNodeHeight = 90;
+const defaultNodeWidth = 180;
+
 export function createGroupNodeDefinition(name: string, groupType: GroupType = GroupType.WorkingGroup): GroupNodeDefinition {
     let classes: string[] = [NodeTypeStyleClass[groupType]]
     return {
@@ -18,8 +21,8 @@ export function createGroupNodeDefinition(name: string, groupType: GroupType = G
         data: {
             id: uuid5(name, PROJECT_NAMESPACE_UUID),
             name: name,
-            height: 90,
-            width: 180,
+            height: defaultNodeHeight,
+            width: defaultNodeWidth,
         },
         classes: classes,
         __brand: 'GroupNode',
@@ -32,8 +35,8 @@ function createDataNodeDefinition(name: string, sourceName: string): DataNodeDef
         data: {
             id: uuid5(name + sourceName, PROJECT_NAMESPACE_UUID),
             name: name,
-            height: 90,
-            width: 180,
+            height: defaultNodeHeight,
+            width: defaultNodeWidth,
         },
         classes: [NodeTypeStyleClass.Data],
         __brand: 'DataNode',
@@ -47,8 +50,8 @@ function createDataFlowEdgeDefinition(sourceNode: NodeDefinition, destinationNod
             id: uuid4(),
             source: sourceNode.data.id!,
             target: destinationNode.data.id!,
-            height: 90,
-            width: 180,
+            height: defaultNodeHeight,
+            width: defaultNodeWidth,
         },
         __brand: 'DataFlowEdge',
     };
