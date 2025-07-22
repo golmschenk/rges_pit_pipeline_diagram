@@ -10,14 +10,26 @@
             margin: 0;
             padding: 0;
         }
-        #main {
+        #cytoscape_container {
             width: 100vw;
             height: 100vh;
+            z-index: 0;
+        }
+        #button_container {
+            position: absolute;
+            z-index: 1000;
+        }
+        #back_button {
+            display: none;
         }
     </style>
 </head>
 <body>
-<div id="main"></div>
+    <div id='button_container'>
+        <button id="back_button" type="button">Back</button>
+        <button id="save_positions_button" type="button">Save positions</button>
+    </div>
+    <div id="cytoscape_container"></div>
 <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
