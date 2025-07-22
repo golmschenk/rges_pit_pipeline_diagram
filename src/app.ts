@@ -47,23 +47,16 @@ async function marchingAntsAnimationForEdges(edges: EdgeCollection) {
     }
 }
 
-// TODO: Clean up AI code.
 function updateNodeDimensions(node: cytoscape.NodeSingular) {
-    const minWidth = 180;
-    const minHeight = 90;
-    const padding = 0; // Added padding around text
-
-    // Get the rendered dimensions of the label
+    const minimumWidth = 180;
+    const minimumHeight = 90;
+    const padding = 0;
     const bbox = node.boundingBox({
         includeLabels: true,
         includeOverlays: false
     });
-
-    // Calculate actual dimensions, respecting minimums
-    const width = Math.max(minWidth, bbox.w + padding);
-    const height = Math.max(minHeight, bbox.h + padding);
-
-    // Set the dimensions as node data
+    const width = Math.max(minimumWidth, bbox.w + padding);
+    const height = Math.max(minimumHeight, bbox.h + padding);
     node.data('width', width);
     node.data('height', height);
 }
