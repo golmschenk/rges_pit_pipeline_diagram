@@ -1,4 +1,4 @@
-import {type GroupNodesDefinitions, GroupType} from "./graphTypes.ts";
+import {type DataNodeData, type GroupNodesDefinitions, GroupType} from "./graphTypes.ts";
 import {createDataFlowDefinitionAndAppendToElementDefinitions, createGroupNodeDefinition} from "./graphFactories.ts";
 import type {ElementDefinition} from "cytoscape";
 import type {DataFlowData} from "./graphTypes.ts";
@@ -27,109 +27,138 @@ let elementDefinitions: ElementDefinition[] = Object.values(groupNodeDefinitions
 
 const dataFlows: DataFlowData[] = [
     {
-        data: {name: 'Source and Lens position and brightness posteriors'},
         sourceGroup: groupNodeDefinitions.workingGroup4,
-        destinationGroups: [groupNodeDefinitions.workingGroup3]
+        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        data: {description: 'Source and Lens position and brightness posteriors'}
     },
     {
-        data: {name: 'Simulated light curves'},
         sourceGroup: groupNodeDefinitions.workingGroup7,
-        destinationGroups: [groupNodeDefinitions.workingGroup3]
+        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        data: {description: 'Simulated light curves'}
     },
     {
-        data: {name: 'New candidate microlensing events and anomalies'},
         sourceGroup: groupNodeDefinitions.workingGroup5,
-        destinationGroups: [groupNodeDefinitions.workingGroup3]
+        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        data: {description: 'New candidate microlensing events and anomalies'}
     },
     {
-        data: {name: 'Planetary and binary microlensing event posteriors'},
         sourceGroup: groupNodeDefinitions.workingGroup3,
-        destinationGroups: [groupNodeDefinitions.workingGroup12]
+        destinationGroups: [groupNodeDefinitions.workingGroup12],
+        data: {description: 'Planetary and binary microlensing event posteriors'}
     },
     {
-        data: {name: 'Posteriors of microlensing properties of all events'},
         sourceGroup: groupNodeDefinitions.workingGroup3,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        data: {description: 'Posteriors of microlensing properties of all events'}
     },
     {
-        data: {name: 'Table of microlensing properties of all events'},
         sourceGroup: groupNodeDefinitions.workingGroup3,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        data: {description: 'Table of microlensing properties of all events'}
     },
     {
-        data: {name: 'Precursor HST and Euclid images, photometry and astrometry'},
         sourceGroup: groupNodeDefinitions.workingGroup8,
-        destinationGroups: [groupNodeDefinitions.workingGroup4]
+        destinationGroups: [groupNodeDefinitions.workingGroup4],
+        data: {description: 'Precursor HST and Euclid images, photometry and astrometry'}
     },
     {
-        data: {name: 'Table of lens flux properties of all events'},
         sourceGroup: groupNodeDefinitions.workingGroup4,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        data: {description: 'Table of lens flux properties of all events'}
     },
     {
-        data: {name: 'Difference image astrometry and photometry'},
         sourceGroup: groupNodeDefinitions.workingGroup4,
-        destinationGroups: [groupNodeDefinitions.workingGroup11]
+        destinationGroups: [groupNodeDefinitions.workingGroup11],
+        data: {description: 'Difference image astrometry and photometry'},
     },
     {
-        data: {name: 'Automated light curve modeling results'},
         sourceGroup: groupNodeDefinitions.msosModelingGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup12]
+        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup12],
+        data: {description: 'Automated light curve modeling results'},
     },
     {
-        data: {name: 'Single lens events'},
         sourceGroup: groupNodeDefinitions.msosModelingGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup12]
+        destinationGroups: [groupNodeDefinitions.workingGroup12],
+        data: {description: 'Single lens events'},
     },
     {
-        data: {name: 'Variable star models'},
         sourceGroup: groupNodeDefinitions.workingGroup6,
-        destinationGroups: [groupNodeDefinitions.msosPhotometryGroup]
+        destinationGroups: [groupNodeDefinitions.msosPhotometryGroup],
+        data: {description: 'Variable star models'},
     },
     {
-        data: {name: 'Simulated variable star light curves'},
         sourceGroup: groupNodeDefinitions.workingGroup6,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        data: {description: 'Simulated variable star light curves'},
     },
     {
-        data: {name: 'Galaxy models and stellar microlensing occurrence rate predictions'},
         sourceGroup: groupNodeDefinitions.workingGroup7,
-        destinationGroups: [groupNodeDefinitions.workingGroup12]
+        destinationGroups: [groupNodeDefinitions.workingGroup12],
+        data: {description: 'Galaxy models and stellar microlensing occurrence rate predictions'},
     },
     {
-        data: {name: 'Detection efficiency corrected rates for stellar microlensing events to update Galactic models'},
         sourceGroup: groupNodeDefinitions.workingGroup12,
-        destinationGroups: [groupNodeDefinitions.workingGroup7]
+        destinationGroups: [groupNodeDefinitions.workingGroup7],
+        data: {description: 'Detection efficiency corrected rates for stellar microlensing events to update Galactic models'}
     },
     {
-        data: {name: 'Simulated images and light curves'},
         sourceGroup: groupNodeDefinitions.workingGroup7,
-        destinationGroups: [groupNodeDefinitions.workingGroup9]
+        destinationGroups: [groupNodeDefinitions.workingGroup9],
+        data: {description: 'Simulated images and light curves'}
     },
     {
-        data: {name: 'Data challenges'},
         sourceGroup: groupNodeDefinitions.workingGroup9,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        data: {description: 'Data challenges'}
     },
     {
-        data: {name: 'Outreach material (data sonifications, etc.)'},
         sourceGroup: groupNodeDefinitions.workingGroup9,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        data: {description: 'Outreach material (data sonifications, etc.)'}
     },
     {
-        data: {name: 'Jupyter Notebooks and lectures'},
         sourceGroup: groupNodeDefinitions.workingGroup10,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup]
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        data: {description: 'Jupyter Notebooks and lectures'}
     },
     {
-        data: {name: 'Photometric light curves'},
         sourceGroup: groupNodeDefinitions.msosPhotometryGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup3]
+        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        data: {
+            description: 'Photometric light curves',
+            unit: 'For each event target and nearby targets',
+            structure: 'Table of (x, y, flux/mag, xerr, yerr, magerr, t) for all time steps, all filters, ' +
+                'cross-matched across all seasons',
+        },
     },
     {
-        data: {name: 'Photometric light curves'},
         sourceGroup: groupNodeDefinitions.workingGroup4,
-        destinationGroups: [groupNodeDefinitions.workingGroup3]
+        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        data: {description: 'Photometric light curves'}
+    },
+    {
+        sourceGroup: groupNodeDefinitions.workingGroup13,
+        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        data: {
+            description: 'Joint photometric and astrometric fit of model containing proper motion + parallax ' +
+                '+ microlensing',
+            unit: 'For each event',
+            dataElements: [
+                {
+                    description: 'Posterior states',
+                    structure: 'Table of (parameter values [which parameters?], likelihood, prior probability, weight)',
+                },
+                {
+                    description: 'Best-fit quantities and uncertainties from fit [need details here: multi-modal? ' +
+                        'maxL/MAP/mean/median]',
+                    structure: 'Table of (parameter values [which parameters?], likelihood, prior probability, weight)',
+                },
+                {
+                    description: 'Evidence from fit (needed for model comparisons)',
+                },
+            ]
+        }
+
     },
 ];
 

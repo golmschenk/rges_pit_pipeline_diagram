@@ -40,13 +40,24 @@ export type GroupNodesDefinitions = {
     msosModelingGroup: GroupNodeDefinition,
 }
 
+export type DataNodeData = {
+    description: string
+    unit?: string
+    frequency?: string
+    structure?: string
+    format?: string
+    exampleFileUrl?: string
+}
 
-export type DataData = {
-    name: string,
+export type DataTreeData = {
+    description: string
+    unit?: string
+    frequency?: string
+    dataElements: (DataTreeData | DataNodeData)[]
 }
 
 export type DataFlowData = {
-    data: DataData,
-    sourceGroup: GroupNodeDefinition,
-    destinationGroups: GroupNodeDefinition[],
+    data: DataTreeData | DataNodeData
+    sourceGroup: GroupNodeDefinition
+    destinationGroups: GroupNodeDefinition[]
 }
