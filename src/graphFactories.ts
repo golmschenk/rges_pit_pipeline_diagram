@@ -58,7 +58,7 @@ function createDataFlowEdgeDefinition(sourceNode: NodeDefinition, destinationNod
 }
 
 function createDataFlowDefinition(dataFlowData: DataFlowData): [DataNodeDefinition, DataFlowEdgeDefinition[]] {
-    const dataNode = createDataNodeDefinition(dataFlowData.data.name, dataFlowData.sourceGroup.data.name)
+    const dataNode = createDataNodeDefinition(dataFlowData.data.description, dataFlowData.sourceGroup.data.name)
     const dataFlowEdges: DataFlowEdgeDefinition[] = []
     const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowData.sourceGroup, dataNode)
     dataFlowEdges.push(dataFlowEdge)

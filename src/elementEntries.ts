@@ -1,4 +1,4 @@
-import {type DataNodeData, type GroupNodesDefinitions, GroupType} from "./graphTypes.ts";
+import {type GroupNodesDefinitions, GroupType} from "./graphTypes.ts";
 import {createDataFlowDefinitionAndAppendToElementDefinitions, createGroupNodeDefinition} from "./graphFactories.ts";
 import type {ElementDefinition} from "cytoscape";
 import type {DataFlowData} from "./graphTypes.ts";
@@ -138,7 +138,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourceGroup: groupNodeDefinitions.workingGroup13,
-        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
         data: {
             description: 'Joint photometric and astrometric fit of model containing proper motion + parallax ' +
                 '+ microlensing',
