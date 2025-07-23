@@ -1,7 +1,7 @@
 import {
     type DataFlowData,
     type DataFlowEdgeDefinition,
-    type DataNodeDefinition,
+    type DataFlowNodeDefinition,
     type GroupNodeDefinition,
     GroupType,
     NodeTypeStyleClass
@@ -29,7 +29,7 @@ export function createGroupNodeDefinition(name: string, groupType: GroupType = G
     };
 }
 
-function createDataNodeDefinition(name: string, sourceName: string): DataNodeDefinition {
+function createDataNodeDefinition(name: string, sourceName: string): DataFlowNodeDefinition {
     return {
         group: 'nodes',
         data: {
@@ -39,7 +39,7 @@ function createDataNodeDefinition(name: string, sourceName: string): DataNodeDef
             width: defaultNodeWidth,
         },
         classes: [NodeTypeStyleClass.DataFlow],
-        __brand: 'DataNode',
+        __brand: 'DataFlowNode',
     };
 }
 
@@ -57,16 +57,20 @@ function createDataFlowEdgeDefinition(sourceNode: NodeDefinition, destinationNod
     };
 }
 
-function createDataFlowDefinition(dataFlowData: DataFlowData): [DataNodeDefinition, DataFlowEdgeDefinition[]] {
-    const dataNode = createDataNodeDefinition(dataFlowData.data.description, dataFlowData.sourceGroup.data.name)
+function createDataTree(dataFlowData: DataFlowData) {
+    return createDataNodeDefinition(dataFlowData.data.description, dataFlowData.sourceGroup.data.name);
+}
+
+function createDataFlowDefinition(dataFlowData: DataFlowData): [DataFlowNodeDefinition, DataFlowEdgeDefinition[]] {
+    const dataFlowNode = createDataTree(dataFlowData)
     const dataFlowEdges: DataFlowEdgeDefinition[] = []
-    const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowData.sourceGroup, dataNode)
+    const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowData.sourceGroup, dataFlowNode)
     dataFlowEdges.push(dataFlowEdge)
     dataFlowData.destinationGroups.forEach((destinationGroupNode) => {
-        const dataFlowEdge = createDataFlowEdgeDefinition(dataNode, destinationGroupNode)
+        const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowNode, destinationGroupNode)
         dataFlowEdges.push(dataFlowEdge)
     })
-    return [dataNode, dataFlowEdges]
+    return [dataFlowNode, dataFlowEdges]
 }
 
 export function createDataFlowDefinitionAndAppendToElementDefinitions(dataFlowData: DataFlowData, elementDefinitions: ElementDefinition[]): void {

@@ -2,14 +2,17 @@ import type {Brand} from "./brand.ts";
 import type {EdgeDefinition, NodeDefinition} from "cytoscape";
 
 export type GroupNodeDefinition = Brand<NodeDefinition, 'GroupNode'>
-export type DataNodeDefinition = Brand<NodeDefinition, 'DataNode'>
+export type DataFlowNodeDefinition = Brand<NodeDefinition, 'DataFlowNode'>
 export type DataFlowEdgeDefinition = Brand<EdgeDefinition, 'DataFlowEdge'>
+export type DataTreeEdgeDefinition = Brand<EdgeDefinition, 'DataTreeEdge'>
 
 export const NodeTypeStyleClass = {
     WorkingGroup: 'working-group-node',
     ExternalGroup: 'external-group-node',
     DataProduct: 'data-product-node',
-    DataFlow: 'data-flow-node'
+    DataFlow: 'data-flow-node',
+    DataTree: 'data-tree-node',
+    DataLeaf: 'data-leaf-node',
 } as const;
 export type NodeTypeStyleClass = typeof NodeTypeStyleClass[keyof typeof NodeTypeStyleClass];
 
@@ -40,7 +43,7 @@ export type GroupNodesDefinitions = {
     msosModelingGroup: GroupNodeDefinition,
 }
 
-export type DataNodeData = {
+export type DataLeafData = {
     description: string
     unit?: string
     frequency?: string
@@ -53,11 +56,11 @@ export type DataTreeData = {
     description: string
     unit?: string
     frequency?: string
-    dataElements: (DataTreeData | DataNodeData)[]
+    dataElements: (DataTreeData | DataLeafData)[]
 }
 
 export type DataFlowData = {
-    data: DataTreeData | DataNodeData
+    data: DataTreeData | DataLeafData
     sourceGroup: GroupNodeDefinition
     destinationGroups: GroupNodeDefinition[]
 }
