@@ -18,5 +18,5 @@ export default defineConfig({
         open: true,
         cors: true,
     },
-    base: '/rges_pit_pipeline_diagram/',
+    base: './',
 })
