@@ -9,7 +9,7 @@ export const NodeTypeStyleClass = {
     WorkingGroup: 'working-group-node',
     ExternalGroup: 'external-group-node',
     DataProduct: 'data-product-node',
-    Data: 'data-node'
+    DataFlow: 'data-flow-node'
 } as const;
 export type NodeTypeStyleClass = typeof NodeTypeStyleClass[keyof typeof NodeTypeStyleClass];
 

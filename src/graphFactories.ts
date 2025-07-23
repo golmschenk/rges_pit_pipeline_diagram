@@ -38,7 +38,7 @@ function createDataNodeDefinition(name: string, sourceName: string): DataNodeDef
             height: defaultNodeHeight,
             width: defaultNodeWidth,
         },
-        classes: [NodeTypeStyleClass.Data],
+        classes: [NodeTypeStyleClass.DataFlow],
         __brand: 'DataNode',
     };
 }
