@@ -40,10 +40,7 @@ function updateNodeDimensions(node: cytoscape.NodeSingular) {
     const minimumWidth = 180;
     const minimumHeight = 90;
     const padding = 0;
-    const bbox = node.boundingBox({
-        includeLabels: true,
-        includeOverlays: false
-    });
+    const bbox = node.boundingBox();
     const width = Math.max(minimumWidth, bbox.w + padding);
     const height = Math.max(minimumHeight, bbox.h + padding);
     node.data('width', width);

@@ -1,7 +1,7 @@
 import {
     type DataFlowData,
     type DataFlowEdgeDefinition,
-    type DataFlowNodeDefinition,
+    type DataFlowNodeDefinition, type DataTreeNodeDefinition,
     type GroupNodeDefinition,
     GroupType,
     NodeTypeStyleClass
@@ -29,7 +29,7 @@ export function createGroupNodeDefinition(name: string, groupType: GroupType = G
     };
 }
 
-function createDataNodeDefinition(name: string, sourceName: string): DataFlowNodeDefinition {
+function createDataFlowNodeDefinition(name: string, sourceName: string): DataFlowNodeDefinition {
     return {
         group: 'nodes',
         data: {
@@ -40,6 +40,20 @@ function createDataNodeDefinition(name: string, sourceName: string): DataFlowNod
         },
         classes: [NodeTypeStyleClass.DataFlow],
         __brand: 'DataFlowNode',
+    };
+}
+
+function createDataTreeNodeDefinition(name: string): DataTreeNodeDefinition {
+    return {
+        group: 'nodes',
+        data: {
+            id: uuid4(),
+            name: name,
+            height: defaultNodeHeight,
+            width: defaultNodeWidth,
+        },
+        classes: [NodeTypeStyleClass.DataFlow],
+        __brand: 'DataTreeNode',
     };
 }
 
@@ -58,7 +72,7 @@ function createDataFlowEdgeDefinition(sourceNode: NodeDefinition, destinationNod
 }
 
 function createDataTree(dataFlowData: DataFlowData) {
-    return createDataNodeDefinition(dataFlowData.data.description, dataFlowData.sourceGroup.data.name);
+    return createDataFlowNodeDefinition(dataFlowData.data.description, dataFlowData.sourceGroup.data.name);
 }
 
 function createDataFlowDefinition(dataFlowData: DataFlowData): [DataFlowNodeDefinition, DataFlowEdgeDefinition[]] {

@@ -3,6 +3,7 @@ import type {EdgeDefinition, NodeDefinition} from "cytoscape";
 
 export type GroupNodeDefinition = Brand<NodeDefinition, 'GroupNode'>
 export type DataFlowNodeDefinition = Brand<NodeDefinition, 'DataFlowNode'>
+export type DataTreeNodeDefinition = Brand<NodeDefinition, 'DataTreeNode'>
 export type DataFlowEdgeDefinition = Brand<EdgeDefinition, 'DataFlowEdge'>
 export type DataTreeEdgeDefinition = Brand<EdgeDefinition, 'DataTreeEdge'>
 
