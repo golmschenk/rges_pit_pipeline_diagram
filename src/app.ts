@@ -40,10 +40,7 @@ function updateNodeDimensions(node: cytoscape.NodeSingular) {
     const minimumWidth = 180;
     const minimumHeight = 90;
     const padding = 0;
-    const bbox = node.boundingBox({
-        includeLabels: true,
-        includeOverlays: false
-    });
+    const bbox = node.boundingBox();
     const width = Math.max(minimumWidth, bbox.w + padding);
     const height = Math.max(minimumHeight, bbox.h + padding);
     node.data('width', width);
@@ -115,7 +112,7 @@ export class App {
                     },
                 },
                 {
-                    selector: `.${NodeTypeStyleClass.Data}`,
+                    selector: `.${NodeTypeStyleClass.DataFlow}`,
                     style: {
                         shape: 'round-rectangle',
                         'corner-radius': '20px',
@@ -146,11 +143,11 @@ export class App {
 
     setGroupFocusView(groupNodeId: string) {
         const focusWorkingGroup = this.cy.getElementById(groupNodeId)
-        const inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.Data}`)
+        const inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.DataFlow}`)
         const sources = inputs.incomers(
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
             .${NodeTypeStyleClass.DataProduct}`)
-        const outputs = focusWorkingGroup.outgoers(`.${NodeTypeStyleClass.Data}`)
+        const outputs = focusWorkingGroup.outgoers(`.${NodeTypeStyleClass.DataFlow}`)
         const destinations = outputs.outgoers(
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
             .${NodeTypeStyleClass.DataProduct}`)
@@ -178,7 +175,7 @@ export class App {
                 this.view = ViewType.GroupFocusView
                 this.backButton.style.display = 'inline'
             }
-            if (targetElement.hasClass(NodeTypeStyleClass.Data)) {
+            if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
                 console.log('Data') // TODO: This works.
             }
         }
