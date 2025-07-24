@@ -123,7 +123,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourceGroup: groupNodeDefinitions.msosPhotometryGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup13],
         data: {
             description: 'Photometric light curves',
             unit: 'For each event target and nearby targets',
@@ -158,7 +158,11 @@ const dataFlows: DataFlowData[] = [
                 },
             ]
         }
-
+    },
+    {
+        sourceGroup: groupNodeDefinitions.msosModelingGroup,
+        destinationGroups: [groupNodeDefinitions.workingGroup13],
+        data: {description: 'Astrometric estimate data'}
     },
 ];
 
