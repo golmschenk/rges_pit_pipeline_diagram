@@ -175,9 +175,6 @@ export class App {
                 this.view = ViewType.GroupFocusView
                 this.backButton.style.display = 'inline'
             }
-            if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
-                console.log('Data') // TODO: This works.
-            }
         }
     }
 
@@ -203,7 +200,8 @@ export class App {
 
     setGlobalViewInstant() {
         this.backButton.style.display = 'none'
-        const activeNodes = this.cy.nodes().not(`.${NodeTypeStyleClass.DataProduct}`)
+        const activeNodes = this.cy.nodes().filter(`.${NodeTypeStyleClass.WorkingGroup}, ` +
+            `.${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataFlow}`)
         const activeElements = activeNodes.union(activeNodes.edgesWith(activeNodes))
         activeElements.style({display: 'element', opacity: 1})
         const inactiveElements = this.cy.elements().difference(activeElements)

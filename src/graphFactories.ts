@@ -1,10 +1,14 @@
 import {
     type DataFlowData,
+    type DataTreeData,
     type DataFlowEdgeDefinition,
-    type DataFlowNodeDefinition, type DataTreeNodeDefinition,
+    type DataFlowNodeDefinition,
+    type DataTreeNodeDefinition,
+    type DataTreeAndDataFlowNodeDefinition,
     type GroupNodeDefinition,
     GroupType,
-    NodeTypeStyleClass
+    NodeTypeStyleClass,
+    type DataLeafData, type DataTreeEdgeDefinition
 } from "./graphTypes.ts";
 import {v4 as uuid4, v5 as uuid5} from "uuid";
 import type {ElementDefinition, NodeDefinition} from "cytoscape";
@@ -25,7 +29,7 @@ export function createGroupNodeDefinition(name: string, groupType: GroupType = G
             width: defaultNodeWidth,
         },
         classes: classes,
-        __brand: 'GroupNode',
+        __brand_GroupNode: true,
     };
 }
 
@@ -38,22 +42,23 @@ function createDataFlowNodeDefinition(name: string, sourceName: string): DataFlo
             height: defaultNodeHeight,
             width: defaultNodeWidth,
         },
-        classes: [NodeTypeStyleClass.DataFlow],
-        __brand: 'DataFlowNode',
+        classes: [NodeTypeStyleClass.DataFlow, NodeTypeStyleClass.DataTree],
+        __brand_DataFlowNode: true,
     };
 }
 
-function createDataTreeNodeDefinition(name: string): DataTreeNodeDefinition {
+function createDataTreeNodeDefinition(name: string, idOverride?: string): DataTreeNodeDefinition {
+    const id = idOverride ? idOverride : uuid4()
     return {
         group: 'nodes',
         data: {
-            id: uuid4(),
+            id: id,
             name: name,
             height: defaultNodeHeight,
             width: defaultNodeWidth,
         },
-        classes: [NodeTypeStyleClass.DataFlow],
-        __brand: 'DataTreeNode',
+        classes: [NodeTypeStyleClass.DataTree],
+        __brand_DataTreeNode: true,
     };
 }
 
@@ -67,27 +72,65 @@ function createDataFlowEdgeDefinition(sourceNode: NodeDefinition, destinationNod
             height: defaultNodeHeight,
             width: defaultNodeWidth,
         },
-        __brand: 'DataFlowEdge',
+        __brand_DataFlowEdge: true,
     };
 }
 
-function createDataTree(dataFlowData: DataFlowData) {
-    return createDataFlowNodeDefinition(dataFlowData.data.description, dataFlowData.sourceGroup.data.name);
+function createDataTreeEdgeDefinition(sourceNode: NodeDefinition, destinationNode: NodeDefinition): DataTreeEdgeDefinition {
+    return {
+        group: 'edges',
+        data: {
+            id: uuid4(),
+            source: sourceNode.data.id!,
+            target: destinationNode.data.id!,
+            height: defaultNodeHeight,
+            width: defaultNodeWidth,
+        },
+        __brand_DataTreeEdge: true,
+    };
 }
 
-function createDataFlowDefinition(dataFlowData: DataFlowData): [DataFlowNodeDefinition, DataFlowEdgeDefinition[]] {
-    const dataFlowNode = createDataTree(dataFlowData)
-    const dataFlowEdges: DataFlowEdgeDefinition[] = []
-    const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowData.sourceGroup, dataFlowNode)
-    dataFlowEdges.push(dataFlowEdge)
-    dataFlowData.destinationGroups.forEach((destinationGroupNode) => {
-        const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowNode, destinationGroupNode)
-        dataFlowEdges.push(dataFlowEdge)
+function isDataTreeData(data: DataTreeData | DataLeafData): data is DataTreeData {
+    return 'dataElements' in data;
+}
+
+function createDataTree(dataElement: DataTreeData | DataLeafData, dataElementIdOverride?: string): [DataTreeNodeDefinition, ElementDefinition[]] {
+    const rootNodeDefinition = createDataTreeNodeDefinition(dataElement.name, dataElementIdOverride);
+    let treeElementDefinitions: ElementDefinition[] = []
+    if (isDataTreeData(dataElement)) {
+        dataElement.dataElements.forEach(subDataElement => {
+            const [subRootNodeDefinition, subTreeElementDefinitions] = createDataTree(subDataElement)
+            const edgeToSubTree = createDataTreeEdgeDefinition(rootNodeDefinition, subRootNodeDefinition)
+            treeElementDefinitions.push(subRootNodeDefinition, edgeToSubTree, ...subTreeElementDefinitions)
+        })
+    }
+    return [rootNodeDefinition, treeElementDefinitions];
+}
+
+function createDataTreeForDataFlowData(dataFlowData: DataFlowData): [DataTreeAndDataFlowNodeDefinition, ElementDefinition[]] {
+    const [rootNodeDefinition, treeElementDefinitions] = createDataTree(dataFlowData.data, uuid5(dataFlowData.data.name + dataFlowData.sourceGroup.data.name, PROJECT_NAMESPACE_UUID))
+    const rootNodeDefinitionWithDataFlowNodeType = {
+        ...rootNodeDefinition,
+        classes: [NodeTypeStyleClass.DataFlow, NodeTypeStyleClass.DataTree],
+        __brand_DataFlowNode: true,
+    } as DataTreeAndDataFlowNodeDefinition
+    return [rootNodeDefinitionWithDataFlowNodeType, treeElementDefinitions]
+}
+
+function createDataFlowDefinition(dataFlowData: DataFlowData): ElementDefinition[] {
+    let elementDefinitions: ElementDefinition[] = []
+    const [dataFlowNodeDefinition, dataTreeElementDefinitions] = createDataTreeForDataFlowData(dataFlowData)
+    elementDefinitions.push(dataFlowNodeDefinition, ...dataTreeElementDefinitions)
+    const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowData.sourceGroup, dataFlowNodeDefinition)
+    elementDefinitions.push(dataFlowEdge)
+    dataFlowData.destinationGroups.forEach((destinationGroupNodeDefinition) => {
+        const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowNodeDefinition, destinationGroupNodeDefinition)
+        elementDefinitions.push(dataFlowEdge)
     })
-    return [dataFlowNode, dataFlowEdges]
+    return elementDefinitions
 }
 
 export function createDataFlowDefinitionAndAppendToElementDefinitions(dataFlowData: DataFlowData, elementDefinitions: ElementDefinition[]): void {
-    const [dataNode, dataFlowEdges] = createDataFlowDefinition(dataFlowData)
-    elementDefinitions.push(dataNode, ...dataFlowEdges);
+    const newElementDefinitions = createDataFlowDefinition(dataFlowData)
+    elementDefinitions.push(...newElementDefinitions);
 }
