@@ -68,14 +68,14 @@ function getNodePositions(nodes: cytoscape.NodeCollection) {
 export class App {
     cy: Core
     view: ViewType
-    backButton: HTMLElement
-    savePositionsButton: HTMLElement
+    backButton: HTMLButtonElement
+    savePositionsButton: HTMLButtonElement
 
     constructor(cy: Core) {
         this.cy = cy
         this.view = ViewType.GlobalView
-        this.backButton = document.getElementById('back_button')!
-        this.savePositionsButton = document.getElementById('save_positions_button')!
+        this.backButton = document.getElementById('back_button')! as HTMLButtonElement
+        this.savePositionsButton = document.getElementById('save_positions_button')! as HTMLButtonElement
         this.cy.nodes().forEach(node => updateNodeDimensions(node));
         this.setGlobalViewInstant()
 
@@ -286,11 +286,11 @@ export class App {
         if (targetElement.isNode()) {
             if (targetElement.hasClass(NodeTypeStyleClass.WorkingGroup)) {
                 this.setGroupFocusView(event.target.id())
-                this.backButton.style.display = 'inline'
+                this.backButton.disabled = false
             }
             if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
                 this.setDataFlowView(event.target.id())
-                this.backButton.style.display = 'inline'
+                this.backButton.disabled = false
             }
         }
     }
@@ -300,7 +300,7 @@ export class App {
     }
 
     setGlobalView() {
-        this.backButton.style.display = 'none'
+        this.backButton.disabled = true
         const activeNodes = this.cy.nodes().filter(`.${NodeTypeStyleClass.WorkingGroup}, ` +
             `.${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataFlow}`)
         const activeElements = activeNodes.union(activeNodes.edgesWith(activeNodes))
@@ -317,7 +317,7 @@ export class App {
     }
 
     setGlobalViewInstant() {
-        this.backButton.style.display = 'none'
+        this.backButton.disabled = true
         const activeNodes = this.cy.nodes().filter(`.${NodeTypeStyleClass.WorkingGroup}, ` +
             `.${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataFlow}`)
         const activeElements = activeNodes.union(activeNodes.edgesWith(activeNodes))
