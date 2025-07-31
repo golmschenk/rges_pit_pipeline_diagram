@@ -18,6 +18,12 @@ export const NodeTypeStyleClass = {
 } as const;
 export type NodeTypeStyleClass = typeof NodeTypeStyleClass[keyof typeof NodeTypeStyleClass];
 
+export const EdgeTypeStyleClass = {
+    DataFlow: 'data-flow-edge',
+    DataTree: 'data-tree-edge',
+} as const;
+export type EdgeTypeStyleClass = typeof EdgeTypeStyleClass[keyof typeof EdgeTypeStyleClass];
+
 export const GroupType = {
     WorkingGroup: 'WorkingGroup',
     ExternalGroup: 'ExternalGroup',

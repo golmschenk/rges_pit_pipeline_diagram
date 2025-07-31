@@ -1,5 +1,5 @@
-import type {AnimationOptions, Collection, Core, EdgeCollection} from 'cytoscape';
-import {NodeTypeStyleClass} from './graphTypes';
+import type {AnimationOptions, Collection, Core, EdgeCollection, Layouts, Position} from 'cytoscape';
+import {EdgeTypeStyleClass, NodeTypeStyleClass} from './graphTypes';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import {elementDefinitions} from './elementEntries';
@@ -48,6 +48,23 @@ function updateNodeDimensions(node: cytoscape.NodeSingular) {
 }
 
 
+function offsetPositions(positions: Record<string, Position>, offset: Position): Record<string, Position> {
+    let updatedPositions: Record<string, Position> = {}
+    Object.entries(positions).forEach(([key, position]) => {
+        updatedPositions[key] = {
+            x: position.x + offset.x,
+            y: position.y + offset.y
+        }
+    })
+    return updatedPositions
+}
+
+function getNodePositions(nodes: cytoscape.NodeCollection) {
+    return Object.fromEntries(
+        nodes.map(node => [node.id(), {x: node.position().x, y: node.position().y}])
+    );
+}
+
 export class App {
     cy: Core
     view: ViewType
@@ -59,8 +76,8 @@ export class App {
         this.view = ViewType.GlobalView
         this.backButton = document.getElementById('back_button')!
         this.savePositionsButton = document.getElementById('save_positions_button')!
-        this.setGlobalViewInstant()
         this.cy.nodes().forEach(node => updateNodeDimensions(node));
+        this.setGlobalViewInstant()
 
         cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
         this.backButton.addEventListener('click', () => this.backButtonCallback())
@@ -112,6 +129,14 @@ export class App {
                     },
                 },
                 {
+                    selector: `.${NodeTypeStyleClass.DataTree}`,
+                    style: {
+                        shape: 'round-rectangle',
+                        'corner-radius': '20px',
+                        'background-color': '#FFFFC5',
+                    },
+                },
+                {
                     selector: `.${NodeTypeStyleClass.DataFlow}`,
                     style: {
                         shape: 'round-rectangle',
@@ -124,15 +149,23 @@ export class App {
                     style: {
                         'width': 1.2,
                         'line-color': '#000000',
-                        'target-arrow-color': '#000000',
-                        'target-arrow-shape': 'triangle',
-                        // 'source-arrow-color': '#000000',
-                        // 'source-arrow-shape': 'circle',
-                        'arrow-scale': 1.2,
                         'line-cap': 'square',
                         'curve-style': 'bezier',
+                    }
+                },
+                {
+                    selector: `.${EdgeTypeStyleClass.DataFlow}`,
+                    style: {
+                        'target-arrow-color': '#000000',
+                        'target-arrow-shape': 'triangle',
+                        'arrow-scale': 1.2,
                         'line-style': 'dashed',
                         'line-dash-pattern': [10, 10],
+                    }
+                },
+                {
+                    selector: `.${EdgeTypeStyleClass.DataFlow}`,
+                    style: {
                     }
                 },
             ],
@@ -167,12 +200,96 @@ export class App {
         activeElements.layout(layoutOptions).run()
     }
 
+    setDataFlowView(dataFlowNodeId: string) {
+        // TODO: Using a cloned headless instance is probably safer than saving the old positions and then reloading them.
+        const dataFlowNode = this.cy.getElementById(dataFlowNodeId)
+        const source = dataFlowNode.incomers(
+            `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}`)
+        const destinations = dataFlowNode.outgoers(
+            `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+            .${NodeTypeStyleClass.DataProduct}`)
+        const childDataElementNodes = dataFlowNode.outgoers(
+            `.${NodeTypeStyleClass.DataTree}, .${NodeTypeStyleClass.DataLeaf}`)
+        // Need to have a separate successor call to make sure you don't get tree nodes from other data flows.
+        let dataElementNodes = childDataElementNodes
+        childDataElementNodes.forEach(childDataElementNode => {
+            dataElementNodes = dataElementNodes.union(childDataElementNode.successors(`.${NodeTypeStyleClass.DataTree}, .${NodeTypeStyleClass.DataLeaf}`))
+        })
+        const dataFlowNodes = dataFlowNode.union(source).union(destinations);
+        const dataTreeNodes = dataFlowNode.union(dataElementNodes)
+        const dataFlowEdges = source.edgesTo(dataFlowNode).union(dataFlowNode.edgesTo(destinations));
+        const dataTreeEdges = dataFlowNode.edgesWith(dataElementNodes).union(dataElementNodes.edgesWith(dataElementNodes));
+        const dataFlowElements = dataFlowNodes.union(dataFlowEdges)
+        const dataTreeElements = dataTreeNodes.union(dataTreeEdges)
+        const activeElements = dataFlowElements.union(dataTreeElements)
+        const activeNodes = activeElements.nodes()
+        const oldPositions = getNodePositions(activeNodes);
+        void this.animateChangeInActiveElements(activeElements)
+
+        const dataFlowLayoutOptions = {
+            name: 'dagre',
+            // @ts-ignore
+            rankDir: 'LR',
+            animate: false,
+            fit: false,
+        }
+        dataFlowElements.layout(dataFlowLayoutOptions).run();
+        let dataFlowLayoutPositions = getNodePositions(dataFlowNodes)
+        const dataTreeLayoutOptions = {
+            name: 'dagre',
+            // @ts-ignore
+            rankDir: 'TB',
+            fit: false,
+            animate: false,
+        }
+        dataTreeElements.layout(dataTreeLayoutOptions).run();
+        let dataTreeLayoutPositions = getNodePositions(dataTreeNodes)
+        const dataTreeLayoutDataFLowNodePosition = dataTreeLayoutPositions[dataFlowNode.id()]
+        const dataFlowLayoutDataFLowNodePosition = dataFlowLayoutPositions[dataFlowNode.id()]
+        const dataFlowOffset = {
+            x: dataTreeLayoutDataFLowNodePosition.x - dataFlowLayoutDataFLowNodePosition.x,
+            y: dataTreeLayoutDataFLowNodePosition.y - dataFlowLayoutDataFLowNodePosition.y,
+        }
+        dataFlowLayoutPositions = offsetPositions(dataFlowLayoutPositions, dataFlowOffset)
+        let lowestDestination = destinations[0];
+        destinations.forEach(destination => {
+            if (destination.position().y > lowestDestination.position().y) {
+                lowestDestination = destination;
+            }
+        })
+        const destinationsYOffset = dataTreeLayoutDataFLowNodePosition.y - lowestDestination.position().y
+        destinations.forEach(destination => {
+            dataFlowLayoutPositions[destination.id()] = {
+                x: dataFlowLayoutPositions[destination.id()].x,
+                y: dataFlowLayoutPositions[destination.id()].y + destinationsYOffset,
+            }
+        })
+        const oldLayoutOptions = {
+            name: 'preset',
+            fit: false,
+            animate: false,
+            positions: oldPositions,
+        }
+        activeNodes.layout(oldLayoutOptions).run()
+        const newLayoutOptions = {
+            name: 'preset',
+            fit: true,
+            padding: 10.0,
+            animate: true,
+            positions: {...dataTreeLayoutPositions, ...dataFlowLayoutPositions},
+        }
+        activeElements.layout(newLayoutOptions).run()
+    }
+
     onclickDispatcher(event: EventObject) {
         let targetElement = event.target
         if (targetElement.isNode()) {
             if (targetElement.hasClass(NodeTypeStyleClass.WorkingGroup)) {
                 this.setGroupFocusView(event.target.id())
-                this.view = ViewType.GroupFocusView
+                this.backButton.style.display = 'inline'
+            }
+            if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
+                this.setDataFlowView(event.target.id())
                 this.backButton.style.display = 'inline'
             }
         }
@@ -184,7 +301,8 @@ export class App {
 
     setGlobalView() {
         this.backButton.style.display = 'none'
-        const activeNodes = this.cy.nodes().not(`.${NodeTypeStyleClass.DataProduct}`)
+        const activeNodes = this.cy.nodes().filter(`.${NodeTypeStyleClass.WorkingGroup}, ` +
+            `.${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataFlow}`)
         const activeElements = activeNodes.union(activeNodes.edgesWith(activeNodes))
         void this.animateChangeInActiveElements(activeElements)
         const positions = this.loadNodePositions()
@@ -251,7 +369,7 @@ export class App {
     }
 
     animateEdges() {
-        void marchingAntsAnimationForEdges(this.cy.edges())
+        void marchingAntsAnimationForEdges(this.cy.edges().filter(`.${EdgeTypeStyleClass.DataFlow}`))
     }
 
     async animateChangeInActiveElements(activeElements: Collection) {

@@ -8,7 +8,7 @@ import {
     type GroupNodeDefinition,
     GroupType,
     NodeTypeStyleClass,
-    type DataLeafData, type DataTreeEdgeDefinition
+    type DataLeafData, type DataTreeEdgeDefinition, EdgeTypeStyleClass
 } from "./graphTypes.ts";
 import {v4 as uuid4, v5 as uuid5} from "uuid";
 import type {ElementDefinition, NodeDefinition} from "cytoscape";
@@ -72,6 +72,7 @@ function createDataFlowEdgeDefinition(sourceNode: NodeDefinition, destinationNod
             height: defaultNodeHeight,
             width: defaultNodeWidth,
         },
+        classes: [EdgeTypeStyleClass.DataFlow],
         __brand_DataFlowEdge: true,
     };
 }
@@ -86,6 +87,7 @@ function createDataTreeEdgeDefinition(sourceNode: NodeDefinition, destinationNod
             height: defaultNodeHeight,
             width: defaultNodeWidth,
         },
+        classes: [EdgeTypeStyleClass.DataTree],
         __brand_DataTreeEdge: true,
     };
 }

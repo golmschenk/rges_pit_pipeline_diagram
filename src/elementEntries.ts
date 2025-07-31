@@ -150,7 +150,7 @@ const dataFlows: DataFlowData[] = [
                 },
                 {
                     name: 'Best-fit quantities and uncertainties from fit [need details here: multi-modal? ' +
-                        'maxL/MAP/mean/median]',
+                        'maxL/MAP/mean/ median]',
                     structure: 'Table of (parameter values [which parameters?], likelihood, prior probability, weight)',
                 },
                 {
