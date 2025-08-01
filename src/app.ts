@@ -1,9 +1,11 @@
-import type {AnimationOptions, Collection, Core, EdgeCollection, Layouts, Position} from 'cytoscape';
-import {EdgeTypeStyleClass, NodeTypeStyleClass} from './graphTypes';
+import type {AnimationOptions, Collection, Core, EdgeCollection, EventObject, Position} from 'cytoscape';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
+import Handlebars from 'handlebars';
+import dataTreeInformationTemplate from './data_tree_information.hbs?raw'
+
 import {elementDefinitions} from './elementEntries';
-import type {EventObject} from 'cytoscape';
+import {EdgeTypeStyleClass, NodeTypeStyleClass} from './graphTypes';
 import defaultGlobalViewNodePositionsJson from './default_global_positions.json';
 
 export const ViewType = {
@@ -70,12 +72,14 @@ export class App {
     view: ViewType
     backButton: HTMLButtonElement
     savePositionsButton: HTMLButtonElement
+    nodeInformationDiv: HTMLDivElement
 
     constructor(cy: Core) {
         this.cy = cy
         this.view = ViewType.GlobalView
         this.backButton = document.getElementById('back_button')! as HTMLButtonElement
         this.savePositionsButton = document.getElementById('save_positions_button')! as HTMLButtonElement
+        this.nodeInformationDiv = document.getElementById('node_information')! as HTMLDivElement
         this.cy.nodes().forEach(node => updateNodeDimensions(node));
         this.setGlobalViewInstant()
 
@@ -174,6 +178,10 @@ export class App {
         return new App(cy)
     }
 
+    clearNodeSelection() {
+        this.nodeInformationDiv.innerHTML = '<div>(Click a node for more information.)</div>'
+    }
+
     setGroupFocusView(groupNodeId: string) {
         const focusWorkingGroup = this.cy.getElementById(groupNodeId)
         const inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.DataFlow}`)
@@ -197,6 +205,7 @@ export class App {
             padding: 10.0,
             animate: true,
         }
+        this.clearNodeSelection()
         activeElements.layout(layoutOptions).run()
     }
 
@@ -278,6 +287,9 @@ export class App {
             animate: true,
             positions: {...dataTreeLayoutPositions, ...dataFlowLayoutPositions},
         }
+        this.clearNodeSelection()
+        const information_template = Handlebars.compile(dataTreeInformationTemplate);
+        this.nodeInformationDiv.innerHTML = information_template(dataFlowNode.data()['information_data'])
         activeElements.layout(newLayoutOptions).run()
     }
 
@@ -313,6 +325,7 @@ export class App {
             animate: true,
             positions: positions,
         }
+        this.clearNodeSelection()
         activeElements.layout(layoutOptions).run()
     }
 
@@ -332,6 +345,7 @@ export class App {
             animate: false,
             positions: positions,
         }
+        this.clearNodeSelection()
         activeElements.layout(layoutOptions).run()
     }
 

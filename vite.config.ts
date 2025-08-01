@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
     define: { 'process.env': {} },
+    assetsInclude: ['**/*.hbs'],
     resolve: {
         extensions: [
             '.js',
@@ -12,6 +13,7 @@ export default defineConfig({
             '.ts',
             '.tsx',
             '.vue',
+            '.hbs',
         ],
     },
     server: {

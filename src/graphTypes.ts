@@ -58,6 +58,7 @@ export type DataLeafData = {
     structure?: string
     format?: string
     exampleFileUrl?: string
+    notes?: string
 }
 
 export type DataTreeData = {
@@ -65,6 +66,7 @@ export type DataTreeData = {
     unit?: string
     frequency?: string
     dataElements: (DataTreeData | DataLeafData)[]
+    notes?: string
 }
 
 export type DataFlowData = {
