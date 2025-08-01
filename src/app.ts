@@ -296,7 +296,9 @@ export class App {
     onclickDispatcher(event: EventObject) {
         let targetElement = event.target
         if (targetElement.isNode()) {
-            if (targetElement.hasClass(NodeTypeStyleClass.WorkingGroup)) {
+            if (targetElement.is(
+                `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+                .${NodeTypeStyleClass.DataProduct}`)) {
                 this.setGroupFocusView(event.target.id())
                 this.backButton.disabled = false
             }
