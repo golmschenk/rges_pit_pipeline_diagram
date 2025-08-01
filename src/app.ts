@@ -1,4 +1,4 @@
-import type {AnimationOptions, Collection, Core, EdgeCollection, EventObject, Position} from 'cytoscape';
+import type {AnimationOptions, Collection, Core, EdgeCollection, EventObject, NodeSingular, Position} from 'cytoscape';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Handlebars from 'handlebars';
@@ -70,6 +70,7 @@ function getNodePositions(nodes: cytoscape.NodeCollection) {
 export class App {
     cy: Core
     view: ViewType
+    selectedNode: NodeSingular | null
     backButton: HTMLButtonElement
     savePositionsButton: HTMLButtonElement
     nodeInformationDiv: HTMLDivElement
@@ -77,6 +78,7 @@ export class App {
     constructor(cy: Core) {
         this.cy = cy
         this.view = ViewType.GlobalView
+        this.selectedNode = null
         this.backButton = document.getElementById('back_button')! as HTMLButtonElement
         this.savePositionsButton = document.getElementById('save_positions_button')! as HTMLButtonElement
         this.nodeInformationDiv = document.getElementById('node_information')! as HTMLDivElement
@@ -169,7 +171,12 @@ export class App {
                 },
                 {
                     selector: `.${EdgeTypeStyleClass.DataFlow}`,
+                    style: {}
+                },
+                {
+                    selector: `.selected-node`,
                     style: {
+                        'border-width': '2px',
                     }
                 },
             ],
@@ -180,10 +187,21 @@ export class App {
 
     clearNodeSelection() {
         this.nodeInformationDiv.innerHTML = '<div>(Click a node for more information.)</div>'
+        if (this.selectedNode !== null) {
+            this.selectedNode.removeClass('selected-node')
+        }
+        this.selectedNode = null
+    }
+
+    setNodeSelection(node: NodeSingular) {
+        this.clearNodeSelection()
+        this.selectedNode = node
+        this.selectedNode.addClass('selected-node')
     }
 
     setGroupFocusView(groupNodeId: string) {
         const focusWorkingGroup = this.cy.getElementById(groupNodeId)
+
         const inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.DataFlow}`)
         const sources = inputs.incomers(
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
@@ -205,7 +223,7 @@ export class App {
             padding: 10.0,
             animate: true,
         }
-        this.clearNodeSelection()
+        this.setNodeSelection(focusWorkingGroup)
         activeElements.layout(layoutOptions).run()
     }
 
@@ -287,7 +305,7 @@ export class App {
             animate: true,
             positions: {...dataTreeLayoutPositions, ...dataFlowLayoutPositions},
         }
-        this.clearNodeSelection()
+        this.setNodeSelection(dataFlowNode)
         const information_template = Handlebars.compile(dataTreeInformationTemplate);
         this.nodeInformationDiv.innerHTML = information_template(dataFlowNode.data()['information_data'])
         activeElements.layout(newLayoutOptions).run()
