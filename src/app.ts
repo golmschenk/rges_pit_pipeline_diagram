@@ -199,20 +199,18 @@ export class App {
         this.selectedNode.addClass('selected-node')
     }
 
-    setGroupFocusView(groupNodeId: string) {
-        const focusWorkingGroup = this.cy.getElementById(groupNodeId)
-
-        const inputs = focusWorkingGroup.incomers(`.${NodeTypeStyleClass.DataFlow}`)
+    setGroupFocusView(groupNode: NodeSingular) {
+        const inputs = groupNode.incomers(`.${NodeTypeStyleClass.DataFlow}`)
         const sources = inputs.incomers(
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
             .${NodeTypeStyleClass.DataProduct}`)
-        const outputs = focusWorkingGroup.outgoers(`.${NodeTypeStyleClass.DataFlow}`)
+        const outputs = groupNode.outgoers(`.${NodeTypeStyleClass.DataFlow}`)
         const destinations = outputs.outgoers(
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
             .${NodeTypeStyleClass.DataProduct}`)
-        const activeNodes = focusWorkingGroup.union(inputs).union(sources).union(outputs).union(destinations)
-        const activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(focusWorkingGroup))
-            .union(focusWorkingGroup.edgesTo(outputs)).union(outputs.edgesTo(destinations))
+        const activeNodes = groupNode.union(inputs).union(sources).union(outputs).union(destinations)
+        const activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(groupNode))
+            .union(groupNode.edgesTo(outputs)).union(outputs.edgesTo(destinations))
         const activeElements = activeNodes.union(activeEdges)
         void this.animateChangeInActiveElements(activeElements)
         const layoutOptions = {
@@ -223,13 +221,12 @@ export class App {
             padding: 10.0,
             animate: true,
         }
-        this.setNodeSelection(focusWorkingGroup)
+        this.setNodeSelection(groupNode)
         activeElements.layout(layoutOptions).run()
     }
 
-    setDataFlowView(dataFlowNodeId: string) {
+    setDataFlowView(dataFlowNode: NodeSingular) {
         // TODO: Using a cloned headless instance is probably safer than saving the old positions and then reloading them.
-        const dataFlowNode = this.cy.getElementById(dataFlowNodeId)
         const source = dataFlowNode.incomers(
             `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}`)
         const destinations = dataFlowNode.outgoers(
@@ -320,7 +317,7 @@ export class App {
                 this.setGroupFocusView(event.target.id())
                 this.backButton.disabled = false
             }
-            if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
+            else if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
                 this.setDataFlowView(event.target.id())
                 this.backButton.disabled = false
             }
