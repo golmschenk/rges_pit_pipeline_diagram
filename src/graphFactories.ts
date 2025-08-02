@@ -27,27 +27,16 @@ export function createGroupNodeDefinition(name: string, groupType: GroupType = G
             name: name,
             height: defaultNodeHeight,
             width: defaultNodeWidth,
+            information: {
+                name: name
+            }
         },
         classes: classes,
         __brand_GroupNode: true,
     };
 }
 
-function createDataFlowNodeDefinition(name: string, sourceName: string): DataFlowNodeDefinition {
-    return {
-        group: 'nodes',
-        data: {
-            id: uuid5(name + sourceName, PROJECT_NAMESPACE_UUID),
-            name: name,
-            height: defaultNodeHeight,
-            width: defaultNodeWidth,
-        },
-        classes: [NodeTypeStyleClass.DataFlow, NodeTypeStyleClass.DataTree],
-        __brand_DataFlowNode: true,
-    };
-}
-
-function createDataTreeNodeDefinition(name: string, information_data: Record<string, any>, idOverride?: string): DataTreeNodeDefinition {
+function createDataTreeNodeDefinition(name: string, information: Record<string, any>, nodeTypeStyleClass: NodeTypeStyleClass, idOverride?: string): DataTreeNodeDefinition {
     const id = idOverride ? idOverride : uuid4()
     return {
         group: 'nodes',
@@ -56,9 +45,9 @@ function createDataTreeNodeDefinition(name: string, information_data: Record<str
             name: name,
             height: defaultNodeHeight,
             width: defaultNodeWidth,
-            information_data: information_data
+            information: information
         },
-        classes: [NodeTypeStyleClass.DataTree],
+        classes: [nodeTypeStyleClass],
         __brand_DataTreeNode: true,
     };
 }
@@ -98,14 +87,17 @@ function isDataTreeData(data: DataTreeData | DataLeafData): data is DataTreeData
 }
 
 function createDataTree(dataElement: DataTreeData | DataLeafData, dataElementIdOverride?: string): [DataTreeNodeDefinition, ElementDefinition[]] {
-    let information_data: Record<string, any>
+    let information: Record<string, any>
+    let dataElementNodeClass: NodeTypeStyleClass
     if (isDataTreeData(dataElement)) {
         const{dataElements: _, ...information_data_} = dataElement
-        information_data = information_data_
+        information = information_data_
+        dataElementNodeClass = NodeTypeStyleClass.DataTree;
     } else {
-        information_data = dataElement
+        information = dataElement
+        dataElementNodeClass = NodeTypeStyleClass.DataLeaf;
     }
-    const rootNodeDefinition = createDataTreeNodeDefinition(dataElement.name, information_data, dataElementIdOverride);
+    const rootNodeDefinition = createDataTreeNodeDefinition(dataElement.name, information, dataElementNodeClass, dataElementIdOverride);
     let treeElementDefinitions: ElementDefinition[] = []
     if (isDataTreeData(dataElement)) {
         dataElement.dataElements.forEach(subDataElement => {
@@ -119,9 +111,15 @@ function createDataTree(dataElement: DataTreeData | DataLeafData, dataElementIdO
 
 function createDataTreeForDataFlowData(dataFlowData: DataFlowData): [DataTreeAndDataFlowNodeDefinition, ElementDefinition[]] {
     const [rootNodeDefinition, treeElementDefinitions] = createDataTree(dataFlowData.data, uuid5(dataFlowData.data.name + dataFlowData.sourceGroup.data.name, PROJECT_NAMESPACE_UUID))
+    let dataElementNodeClass: NodeTypeStyleClass
+    if (isDataTreeData(dataFlowData.data)) {
+        dataElementNodeClass = NodeTypeStyleClass.DataTree;
+    } else {
+        dataElementNodeClass = NodeTypeStyleClass.DataLeaf;
+    }
     const rootNodeDefinitionWithDataFlowNodeType = {
         ...rootNodeDefinition,
-        classes: [NodeTypeStyleClass.DataFlow, NodeTypeStyleClass.DataTree],
+        classes: [NodeTypeStyleClass.DataFlow, dataElementNodeClass],
         __brand_DataFlowNode: true,
     } as DataTreeAndDataFlowNodeDefinition
     return [rootNodeDefinitionWithDataFlowNodeType, treeElementDefinitions]

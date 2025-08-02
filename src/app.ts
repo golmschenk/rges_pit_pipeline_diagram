@@ -3,6 +3,8 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Handlebars from 'handlebars';
 import dataTreeInformationTemplate from './data_tree_information.hbs?raw'
+import dataLeafInformationTemplate from './data_leaf_information.hbs?raw'
+import groupInformationTemplate from './group_information.hbs?raw'
 
 import {elementDefinitions} from './elementEntries';
 import {EdgeTypeStyleClass, NodeTypeStyleClass} from './graphTypes';
@@ -135,7 +137,7 @@ export class App {
                     },
                 },
                 {
-                    selector: `.${NodeTypeStyleClass.DataTree}`,
+                    selector: `.${NodeTypeStyleClass.DataLeaf}, .${NodeTypeStyleClass.DataTree}`,
                     style: {
                         shape: 'round-rectangle',
                         'corner-radius': '20px',
@@ -193,10 +195,12 @@ export class App {
         this.selectedNode = null
     }
 
-    setNodeSelection(node: NodeSingular) {
+    setNodeSelection(node: NodeSingular, handleBarsTemplate: string) {
         this.clearNodeSelection()
         this.selectedNode = node
         this.selectedNode.addClass('selected-node')
+        const information_template = Handlebars.compile(handleBarsTemplate);
+        this.nodeInformationDiv.innerHTML = information_template(node.data()['information'])
     }
 
     setGroupFocusView(groupNode: NodeSingular) {
@@ -221,7 +225,6 @@ export class App {
             padding: 10.0,
             animate: true,
         }
-        this.setNodeSelection(groupNode)
         activeElements.layout(layoutOptions).run()
     }
 
@@ -302,14 +305,12 @@ export class App {
             animate: true,
             positions: {...dataTreeLayoutPositions, ...dataFlowLayoutPositions},
         }
-        this.setNodeSelection(dataFlowNode)
         const information_template = Handlebars.compile(dataTreeInformationTemplate);
         this.nodeInformationDiv.innerHTML = information_template(dataFlowNode.data()['information_data'])
         activeElements.layout(newLayoutOptions).run()
     }
 
     dataTreeNodeClickCallback(dataTreeNode: NodeSingular) {
-        this.setNodeSelection(dataTreeNode)
         const information_template = Handlebars.compile(dataTreeInformationTemplate);
         this.nodeInformationDiv.innerHTML = information_template(dataTreeNode.data()['information_data'])
     }
@@ -317,18 +318,23 @@ export class App {
     onclickDispatcher(event: EventObject) {
         let targetElement = event.target
         if (targetElement.isNode()) {
+            this.backButton.disabled = false
             if (targetElement.is(
                 `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
                 .${NodeTypeStyleClass.DataProduct}`)) {
                 this.setGroupFocusView(event.target)
-                this.backButton.disabled = false
+                this.setNodeSelection(event.target, groupInformationTemplate)
             }
-            else if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
+            if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
                 this.setDataFlowView(event.target)
-                this.backButton.disabled = false
             }
-            else if (targetElement.hasClass(NodeTypeStyleClass.DataTree)) {
+            if (targetElement.hasClass(NodeTypeStyleClass.DataTree)) {
                 this.dataTreeNodeClickCallback(event.target)
+                this.setNodeSelection(event.target, dataTreeInformationTemplate)
+            }
+            if (targetElement.hasClass(NodeTypeStyleClass.DataLeaf)) {
+                this.dataTreeNodeClickCallback(event.target)
+                this.setNodeSelection(event.target, dataLeafInformationTemplate)
             }
         }
     }
