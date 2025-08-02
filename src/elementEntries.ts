@@ -140,21 +140,22 @@ const dataFlows: DataFlowData[] = [
         sourceGroup: groupNodeDefinitions.workingGroup13,
         destinationGroups: [groupNodeDefinitions.dataProductGroup],
         data: {
-            name: 'Joint photometric and astrometric fit of model containing proper motion + parallax ' +
-                '+ microlensing',
+            name: 'Joint photometric and astrometric fit of model',
             unit: 'For each event',
+            notes: 'Containing proper motion + parallax + microlensing.',
             dataElements: [
                 {
                     name: 'Posterior states',
                     structure: 'Table of (parameter values [which parameters?], likelihood, prior probability, weight)',
                 },
                 {
-                    name: 'Best-fit quantities and uncertainties from fit [need details here: multi-modal? ' +
-                        'maxL/MAP/mean/ median]',
-                    structure: 'Table of (parameter values [which parameters?], likelihood, prior probability, weight)',
+                    name: 'Best-fit quantities and uncertainties from fit',
+                    structure: '(parameter values [which parameters?], likelihood, prior probability, weight)',
+                    notes: 'Need details here: multi-modal? maxL/MAP/mean/median',
                 },
                 {
-                    name: 'Evidence from fit (needed for model comparisons)',
+                    name: 'Evidence from fit',
+                    notes: 'Needed for model comparisons.',
                 },
             ]
         }
