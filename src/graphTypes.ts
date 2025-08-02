@@ -49,6 +49,7 @@ export type GroupNodesDefinitions = {
     dataProductGroup: GroupNodeDefinition,
     msosPhotometryGroup: GroupNodeDefinition,
     msosModelingGroup: GroupNodeDefinition,
+    socGroup: GroupNodeDefinition,
 }
 
 export type DataLeafData = {

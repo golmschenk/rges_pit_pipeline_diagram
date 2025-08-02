@@ -21,6 +21,7 @@ export const groupNodeDefinitions: GroupNodesDefinitions = {
     dataProductGroup: createGroupNodeDefinition('Data Product', GroupType.DataProduct),
     msosPhotometryGroup: createGroupNodeDefinition('MSOS Photometry', GroupType.ExternalGroup),
     msosModelingGroup: createGroupNodeDefinition('MSOS Modeling', GroupType.ExternalGroup),
+    socGroup: createGroupNodeDefinition('SOC', GroupType.ExternalGroup),
 }
 
 let elementDefinitions: ElementDefinition[] = Object.values(groupNodeDefinitions);
@@ -123,6 +124,49 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourceGroup: groupNodeDefinitions.msosPhotometryGroup,
+        destinationGroups: [groupNodeDefinitions.socGroup],
+        data: {
+            name: 'Photometry data points',
+            unit: 'For each source in input catalog',
+            structure: 'Table of (x, y, flux/mag, xerr, yerr, magerr, t) for all time steps, all filters, ' +
+                'cross-matched across all seasons',
+            notes: 'Initial catalog of sources:\n' +
+                '* Catalog is built with PSF photometry (one product)\n' +
+                '* Take one week of data\n' +
+                '* ~ 700 images\n' +
+                '* Averaging, etc.\n' +
+                '* Visible sources survive\n' +
+                '* There will be the equivalent of the TIC numbers\n' +
+                '* Pretty complete down to 25 magnitude\n' +
+                '* Catalog is fixed, but update parameters of each source every eight days\n' +
+                '* Sources may get added throughout season, then reprocessing at the end of the season for things missed early in the season\n' +
+                '* MSOS releases nothing for the first month of the first season\n' +
+                '* At 30 days, we get the catalog and we get the light curve for those 30 days\n' +
+                '\n' +
+                'Will not produce the light curves themselves. Will hand these data points off to the SOC every 2 ' +
+                'days and expects the SOC to stitch together the light curves and release them. They will also not ' +
+                'directly release these data points. This also goes to through the SOC. The SOC is expected to ' +
+                'release the data "promptly" after receiving it. Unclear if the SOC intends to make the individual ' +
+                'data point tables available or just the resulting light curves after stitching.'
+            ,
+            dataElements: [
+                {
+                    name: 'PSF photometry data points',
+                    notes: 'Single star fit to catalog position, single star fit with floating centroid, multiple ' +
+                        'star fit with fixed centroid (week before location)'
+                },
+                {
+                    name: 'DIA photometry data points',
+                    notes: '* Fixed centroid, and floating centroid\n' +
+                        '* Against 8 day stack from first week of season (challenges here— proper motion over' +
+                        ' season, if the thing was already changing during stack [long duration event], bad DIA)\n' +
+                        '* Not currently to be included in what’s sent to SOC (e.g., not released at all)\n'
+                },
+            ]
+        },
+    },
+    {
+        sourceGroup: groupNodeDefinitions.socGroup,
         destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup13],
         data: {
             name: 'Photometric light curves',
