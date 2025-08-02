@@ -308,18 +308,27 @@ export class App {
         activeElements.layout(newLayoutOptions).run()
     }
 
+    dataTreeNodeClickCallback(dataTreeNode: NodeSingular) {
+        this.setNodeSelection(dataTreeNode)
+        const information_template = Handlebars.compile(dataTreeInformationTemplate);
+        this.nodeInformationDiv.innerHTML = information_template(dataTreeNode.data()['information_data'])
+    }
+
     onclickDispatcher(event: EventObject) {
         let targetElement = event.target
         if (targetElement.isNode()) {
             if (targetElement.is(
                 `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
                 .${NodeTypeStyleClass.DataProduct}`)) {
-                this.setGroupFocusView(event.target.id())
+                this.setGroupFocusView(event.target)
                 this.backButton.disabled = false
             }
             else if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
-                this.setDataFlowView(event.target.id())
+                this.setDataFlowView(event.target)
                 this.backButton.disabled = false
+            }
+            else if (targetElement.hasClass(NodeTypeStyleClass.DataTree)) {
+                this.dataTreeNodeClickCallback(event.target)
             }
         }
     }
