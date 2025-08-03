@@ -316,19 +316,21 @@ export class App {
             y: dataTreeLayoutDataFLowNodePosition.y - dataFlowLayoutDataFLowNodePosition.y,
         }
         dataFlowLayoutPositions = offsetPositions(dataFlowLayoutPositions, dataFlowOffset)
-        let lowestDestination = destinations[0];
-        destinations.forEach(destination => {
-            if (destination.position().y > lowestDestination.position().y) {
-                lowestDestination = destination;
-            }
-        })
-        const destinationsYOffset = dataTreeLayoutDataFLowNodePosition.y - lowestDestination.position().y
-        destinations.forEach(destination => {
-            dataFlowLayoutPositions[destination.id()] = {
-                x: dataFlowLayoutPositions[destination.id()].x,
-                y: dataFlowLayoutPositions[destination.id()].y + destinationsYOffset,
-            }
-        })
+        if (childDataElementNodes.length > 0) {
+            let lowestDestination = destinations[0];
+            destinations.forEach(destination => {
+                if (destination.position().y > lowestDestination.position().y) {
+                    lowestDestination = destination;
+                }
+            })
+            const destinationsYOffset = dataFlowLayoutDataFLowNodePosition.y - lowestDestination.position().y
+            destinations.forEach(destination => {
+                dataFlowLayoutPositions[destination.id()] = {
+                    x: dataFlowLayoutPositions[destination.id()].x,
+                    y: dataFlowLayoutPositions[destination.id()].y + destinationsYOffset,
+                }
+            })
+        }
         const oldLayoutOptions = {
             name: 'preset',
             fit: false,
