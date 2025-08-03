@@ -128,6 +128,7 @@ const dataFlows: DataFlowData[] = [
         data: {
             name: 'Photometry data points',
             unit: 'For each source in input catalog',
+            frequency: 'Each observation within 2 days of observation',
             structure: 'Table of (x, y, flux/mag, xerr, yerr, magerr, t) for all time steps, all filters, ' +
                 'cross-matched across all seasons',
             notes: 'Initial catalog of sources:<br>' +
@@ -159,8 +160,7 @@ const dataFlows: DataFlowData[] = [
                     name: 'DIA photometry data points',
                     notes: '* Fixed centroid, and floating centroid<br>' +
                         '* Against 8 day stack from first week of season (challenges here— proper motion over' +
-                        ' season, if the thing was already changing during stack [long duration event], bad DIA)<br>' +
-                        '* Not currently to be included in what’s sent to SOC (e.g., not released at all)<br>'
+                        ' season, if the thing was already changing during stack [long duration event], bad DIA)<br>'
                 },
             ]
         },

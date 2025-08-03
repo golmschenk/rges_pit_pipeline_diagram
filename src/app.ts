@@ -195,12 +195,47 @@ export class App {
         this.selectedNode = null
     }
 
-    setNodeSelection(node: NodeSingular, handleBarsTemplate: string) {
+    setNodeSelection(node: NodeSingular) {
         this.clearNodeSelection()
         this.selectedNode = node
         this.selectedNode.addClass('selected-node')
-        const information_template = Handlebars.compile(handleBarsTemplate);
-        this.nodeInformationDiv.innerHTML = information_template(node.data()['information'])
+        if (node.is(`.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+                .${NodeTypeStyleClass.DataProduct}`)) {
+            this.setInformationForGroupNode(node)
+        } else if (node.hasClass(NodeTypeStyleClass.DataTree)) {
+            this.setInformationForDataTreeNode(node)
+        } else if (node.hasClass(NodeTypeStyleClass.DataLeaf)) {
+            this.setInformationForDataLeafNode(node)
+        }
+    }
+
+    private setInformationForGroupNode(node: NodeSingular) {
+        const informationTemplate = Handlebars.compile(groupInformationTemplate);
+        this.nodeInformationDiv.innerHTML = informationTemplate(node.data()['information'])
+    }
+
+    private setInformationForDataTreeNode(node: NodeSingular) {
+        const informationTemplate = Handlebars.compile(dataTreeInformationTemplate);
+        this.inheritInformationFromPredecessorsIfEmpty(node, 'unit')
+        this.inheritInformationFromPredecessorsIfEmpty(node, 'frequency')
+        this.nodeInformationDiv.innerHTML = informationTemplate(node.data()['information'])
+    }
+
+    private setInformationForDataLeafNode(node: NodeSingular) {
+        const informationTemplate = Handlebars.compile(dataLeafInformationTemplate);
+        this.inheritInformationFromPredecessorsIfEmpty(node, 'unit')
+        this.inheritInformationFromPredecessorsIfEmpty(node, 'frequency')
+        this.nodeInformationDiv.innerHTML = informationTemplate(node.data()['information'])
+    }
+
+    // TODO: Could do once on graph creation.
+    private inheritInformationFromPredecessorsIfEmpty(dataElement: NodeSingular, property: string) {
+        while (dataElement.data().information[property] === undefined && dataElement.incomers().nodes()[0].hasClass(NodeTypeStyleClass.DataTree)) {
+            const treeParent = dataElement.incomers().nodes()[0]
+            if (treeParent.data().information[property] !== undefined) {
+                dataElement.data().information[property] = treeParent.data().information[property] + ' <i>(inherited from parent)</i>'
+            }
+        }
     }
 
     setGroupFocusView(groupNode: NodeSingular) {
@@ -323,18 +358,18 @@ export class App {
                 `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
                 .${NodeTypeStyleClass.DataProduct}`)) {
                 this.setGroupFocusView(event.target)
-                this.setNodeSelection(event.target, groupInformationTemplate)
+                this.setNodeSelection(event.target)
             }
             if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
                 this.setDataFlowView(event.target)
             }
             if (targetElement.hasClass(NodeTypeStyleClass.DataTree)) {
                 this.dataTreeNodeClickCallback(event.target)
-                this.setNodeSelection(event.target, dataTreeInformationTemplate)
+                this.setNodeSelection(event.target)
             }
             if (targetElement.hasClass(NodeTypeStyleClass.DataLeaf)) {
                 this.dataTreeNodeClickCallback(event.target)
-                this.setNodeSelection(event.target, dataLeafInformationTemplate)
+                this.setNodeSelection(event.target)
             }
         }
     }
