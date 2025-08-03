@@ -228,13 +228,16 @@ export class App {
         this.nodeInformationDiv.innerHTML = informationTemplate(node.data()['information'])
     }
 
-    // TODO: Could do once on graph creation.
+    // TODO: Could do once on graph creation (need to alter how it's handled though).
     private inheritInformationFromPredecessorsIfEmpty(dataElement: NodeSingular, property: string) {
-        while (dataElement.data().information[property] === undefined && dataElement.incomers().nodes()[0].hasClass(NodeTypeStyleClass.DataTree)) {
-            const treeParent = dataElement.incomers().nodes()[0]
+        let currentNode = dataElement
+        while (dataElement.data().information[property] === undefined && currentNode.incomers().nodes()[0].hasClass(NodeTypeStyleClass.DataTree)) {
+            const treeParent = currentNode.incomers().nodes()[0]
             if (treeParent.data().information[property] !== undefined) {
                 dataElement.data().information[property] = treeParent.data().information[property] + ' <i>(inherited from parent)</i>'
+                break
             }
+            currentNode = treeParent
         }
     }
 
