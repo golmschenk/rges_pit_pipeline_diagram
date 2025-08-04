@@ -50,7 +50,23 @@ const dataFlows: DataFlowData[] = [
     {
         sourceGroup: groupNodeDefinitions.workingGroup3,
         destinationGroups: [groupNodeDefinitions.dataProductGroup],
-        data: {name: 'Posteriors of microlensing properties of all events'}
+        data: {
+            name: 'Microlensing event properties',
+            dataElements: [
+                {
+                    name: 'Posteriors',
+                    unit: 'Per event for all events',
+                    frequency: 'After detection of event, and re-run at end of season and end of mission (at least)',
+                },
+                {
+                    name: 'Table for all events',
+                    unit: 'For all detected events',
+                    frequency: 'After each season',
+                    structure: 'Columns with median properties (which properties?) with credible intervals',
+                    notes: 'How different types of solutions (1S1L vs 2S1L) to be represented? Perhaps use a relation database instead of a single table?'
+                },
+            ],
+        },
     },
     {
         sourceGroup: groupNodeDefinitions.workingGroup3,
@@ -60,7 +76,20 @@ const dataFlows: DataFlowData[] = [
     {
         sourceGroup: groupNodeDefinitions.workingGroup8,
         destinationGroups: [groupNodeDefinitions.workingGroup4],
-        data: {name: 'Precursor HST and Euclid images, photometry and astrometry'}
+        data: {
+            name: 'Precursor HST and Euclid data',
+            dataElements: [
+                {
+                    name: 'Images',
+                },
+                {
+                    name: 'Photometry',
+                },
+                {
+                    name: 'Astrometry',
+                },
+            ],
+        },
     },
     {
         sourceGroup: groupNodeDefinitions.workingGroup4,
