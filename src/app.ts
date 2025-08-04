@@ -218,6 +218,7 @@ export class App {
         const informationTemplate = Handlebars.compile(dataTreeInformationTemplate);
         this.inheritInformationFromPredecessorsIfEmpty(node, 'unit')
         this.inheritInformationFromPredecessorsIfEmpty(node, 'frequency')
+        this.inheritInformationFromPredecessorsIfEmpty(node, 'latency')
         this.nodeInformationDiv.innerHTML = informationTemplate(node.data()['information'])
     }
 
@@ -225,6 +226,7 @@ export class App {
         const informationTemplate = Handlebars.compile(dataLeafInformationTemplate);
         this.inheritInformationFromPredecessorsIfEmpty(node, 'unit')
         this.inheritInformationFromPredecessorsIfEmpty(node, 'frequency')
+        this.inheritInformationFromPredecessorsIfEmpty(node, 'latency')
         this.nodeInformationDiv.innerHTML = informationTemplate(node.data()['information'])
     }
 
