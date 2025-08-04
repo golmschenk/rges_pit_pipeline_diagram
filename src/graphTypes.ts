@@ -56,6 +56,7 @@ export type DataLeafData = {
     name: string
     unit?: string
     frequency?: string
+    latency?: string
     structure?: string
     format?: string
     exampleFileUrl?: string
@@ -66,6 +67,7 @@ export type DataTreeData = {
     name: string
     unit?: string
     frequency?: string
+    latency?: string
     dataElements: (DataTreeData | DataLeafData)[]
     notes?: string
 }

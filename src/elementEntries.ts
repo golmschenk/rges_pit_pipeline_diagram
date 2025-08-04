@@ -127,8 +127,9 @@ const dataFlows: DataFlowData[] = [
         destinationGroups: [groupNodeDefinitions.socGroup],
         data: {
             name: 'Photometry data points',
-            unit: 'For each source in input catalog',
-            frequency: 'Each observation within 2 days of observation',
+            unit: 'Per source in input catalog',
+            frequency: 'After each Roman image',
+            latency: 'Within 2 days',
             structure: 'Table of (x, y, flux/mag, xerr, yerr, magerr, t) for all time steps, all filters, ' +
                 'cross-matched across all seasons',
             notes: 'Initial catalog of sources:<br><ul class="list-disc list-outside px-5">' +
