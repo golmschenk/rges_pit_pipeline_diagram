@@ -69,11 +69,6 @@ const dataFlows: DataFlowData[] = [
         },
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup3,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
-        data: {name: 'Table of microlensing properties of all events'}
-    },
-    {
         sourceGroup: groupNodeDefinitions.workingGroup8,
         destinationGroups: [groupNodeDefinitions.workingGroup4],
         data: {
