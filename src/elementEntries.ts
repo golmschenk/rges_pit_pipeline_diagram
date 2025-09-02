@@ -247,6 +247,13 @@ const dataFlows: DataFlowData[] = [
         destinationGroups: [groupNodeDefinitions.workingGroup13],
         data: {name: 'Astrometric estimate data'}
     },
+    {
+        sourceGroup: groupNodeDefinitions.workingGroup11,
+        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        data: {
+            name: 'Free-floating planet catalog'
+        }
+    },
 ];
 
 dataFlows.forEach(dataFlow => {
