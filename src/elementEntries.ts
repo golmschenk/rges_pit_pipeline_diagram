@@ -39,7 +39,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourceGroup: groupNodeDefinitions.workingGroup5,
-        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup11],
         data: {name: 'New candidate microlensing events and anomalies'}
     },
     {
@@ -57,6 +57,9 @@ const dataFlows: DataFlowData[] = [
                     name: 'Posteriors',
                     unit: 'Per event for all events',
                     frequency: 'After detection of event, and re-run at end of season and end of mission (at least)',
+                    latency: 'days (?)',
+                    structure: '(parameter values [which parameters?], likelihood)',
+                    format: 'Parquet'
                 },
                 {
                     name: 'Table for all events',
@@ -205,7 +208,8 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourceGroup: groupNodeDefinitions.socGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup13],
+        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup13,
+            groupNodeDefinitions.workingGroup5],
         data: {
             name: 'Photometric light curves',
             unit: 'For each event target and nearby targets',
