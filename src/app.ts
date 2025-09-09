@@ -86,11 +86,12 @@ export class App {
         this.nodeInformationDiv = document.getElementById('node_information')! as HTMLDivElement
         this.cy.nodes().forEach(node => updateNodeDimensions(node));
         this.setGlobalViewInstant()
-
         cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
+
         this.backButton.addEventListener('click', () => this.backButtonCallback())
         this.savePositionsButton.addEventListener('click', () => this.saveNodePositions())
         this.animateEdges()
+        this.setGlobalViewInstant()
     }
 
     static create(): App {
