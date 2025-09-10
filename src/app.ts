@@ -420,7 +420,8 @@ export class App {
         }
         this.clearNodeSelection()
         activeElements.layout(layoutOptions).run()
-        this.cy.center()
+        this.cy.center(activeElements)
+        this.cy.fit(activeElements, 10.0)
     }
 
     saveNodePositions() {
