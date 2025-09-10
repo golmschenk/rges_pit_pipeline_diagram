@@ -85,11 +85,7 @@ export class App {
         this.savePositionsButton = document.getElementById('save_positions_button')! as HTMLButtonElement
         this.nodeInformationDiv = document.getElementById('node_information')! as HTMLDivElement
         this.cy.nodes().forEach(node => updateNodeDimensions(node));
-        // TODO: One of these two lines below probably shouldn't exist.
-        //       This was added to fix a bug where Safari would occasionally not load the global view centered.
         this.setGlobalViewInstant()
-        window.addEventListener('load', () => this.setGlobalViewInstant())
-
         cy.on('tap', 'node', (event) => this.onclickDispatcher(event))
         this.backButton.addEventListener('click', () => this.backButtonCallback())
         this.savePositionsButton.addEventListener('click', () => this.saveNodePositions())
@@ -424,6 +420,7 @@ export class App {
         }
         this.clearNodeSelection()
         activeElements.layout(layoutOptions).run()
+        this.cy.center()
     }
 
     saveNodePositions() {
