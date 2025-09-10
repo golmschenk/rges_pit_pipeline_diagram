@@ -91,7 +91,7 @@ export class App {
         this.animateEdges()
         this.setGlobalViewInstant()
         cy.ready(async () => {
-            await new Promise(resolve => setTimeout(resolve, 1));
+            await new Promise(resolve => setTimeout(resolve, 1000));
             this.setGlobalViewInstant();
         })
 
