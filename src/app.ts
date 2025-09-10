@@ -89,7 +89,8 @@ export class App {
         this.backButton.addEventListener('click', () => this.backButtonCallback())
         this.savePositionsButton.addEventListener('click', () => this.saveNodePositions())
         this.animateEdges()
-        cy.ready(() => this.setGlobalViewInstant())
+        this.setGlobalViewInstant()
+        cy.ready(() => setTimeout(() => this.setGlobalViewInstant(), 0.001))
     }
 
     static create(): App {
