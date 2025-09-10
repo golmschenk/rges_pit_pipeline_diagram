@@ -90,9 +90,11 @@ export class App {
         this.backButton.addEventListener('click', () => this.backButtonCallback())
         this.savePositionsButton.addEventListener('click', () => this.saveNodePositions())
         this.animateEdges()
+        // TODO: The below is a hack to fix a bug where the view is not centered in Safari occasionally. This should
+        //       not be needed. Probably only `cy.ready(() => this.setGlobalViewInstant()) should be needed.
         this.setGlobalViewInstant()
         cy.ready(async () => {
-            await new Promise(resolve => setTimeout(resolve, 10));
+            await new Promise(resolve => setTimeout(resolve, 100));
             this.setGlobalViewInstant();
         })
 
