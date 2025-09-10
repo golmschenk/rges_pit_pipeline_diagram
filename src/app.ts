@@ -94,7 +94,7 @@ export class App {
         //       not be needed. Probably only `cy.ready(() => this.setGlobalViewInstant()) should be needed.
         this.setGlobalViewInstant()
         cy.ready(async () => {
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 200));
             this.setGlobalViewInstant();
         })
 
