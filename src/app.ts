@@ -23,6 +23,7 @@ async function marchingAntsAnimationForEdges(edges: EdgeCollection) {
     const speed = 300
     const duration = 10000
     let step = 0
+    // noinspection InfiniteLoopJS
     while (true) {
         step += 1
         const style = {
@@ -91,7 +92,7 @@ export class App {
         this.animateEdges()
         this.setGlobalViewInstant()
         cy.ready(async () => {
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 10));
             this.setGlobalViewInstant();
         })
 
