@@ -90,7 +90,11 @@ export class App {
         this.savePositionsButton.addEventListener('click', () => this.saveNodePositions())
         this.animateEdges()
         this.setGlobalViewInstant()
-        cy.ready(() => setTimeout(() => this.setGlobalViewInstant(), 0.001))
+        cy.ready(async () => {
+            await new Promise(resolve => setTimeout(resolve, 1));
+            this.setGlobalViewInstant();
+        })
+
     }
 
     static create(): App {
