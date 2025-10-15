@@ -44,12 +44,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourceGroup: groupNodeDefinitions.workingGroup3,
-        destinationGroups: [groupNodeDefinitions.workingGroup12],
-        data: {name: 'Planetary and binary microlensing event posteriors'}
-    },
-    {
-        sourceGroup: groupNodeDefinitions.workingGroup3,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        destinationGroups: [groupNodeDefinitions.workingGroup12, groupNodeDefinitions.dataProductGroup],
         data: {
             name: 'Microlensing event properties',
             dataElements: [
