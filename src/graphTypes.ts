@@ -31,27 +31,6 @@ export const PipelineNodeType = {
 } as const;
 export type PipelineNodeType = typeof PipelineNodeType[keyof typeof PipelineNodeType];
 
-export type PipelineNodeDefinitions = {
-    workingGroup1Pipeline: PipelineNodeDefinition,
-    workingGroup2Pipeline: PipelineNodeDefinition,
-    workingGroup3Pipeline: PipelineNodeDefinition,
-    workingGroup4Pipeline: PipelineNodeDefinition,
-    workingGroup5Pipeline: PipelineNodeDefinition,
-    workingGroup6Pipeline: PipelineNodeDefinition,
-    workingGroup7Pipeline: PipelineNodeDefinition,
-    workingGroup8Pipeline: PipelineNodeDefinition,
-    workingGroup9Pipeline: PipelineNodeDefinition,
-    workingGroup10Pipeline: PipelineNodeDefinition,
-    workingGroup11Pipeline: PipelineNodeDefinition,
-    workingGroup12Pipeline: PipelineNodeDefinition,
-    workingGroup13Pipeline: PipelineNodeDefinition,
-    workingGroup14Pipeline: PipelineNodeDefinition,
-    dataProduct: PipelineNodeDefinition,
-    msosPhotometryPipeline: PipelineNodeDefinition,
-    msosModelingPipeline: PipelineNodeDefinition,
-    socPipeline: PipelineNodeDefinition,
-}
-
 export type DataLeafData = {
     name: string
     unit?: string

@@ -1,28 +1,52 @@
-import {type PipelineNodeDefinitions, PipelineNodeType} from "./graphTypes.ts";
+import {
+    type DataLeafData,
+    type PipelineNodeDefinition,
+    PipelineNodeType
+} from "./graphTypes.ts";
 import {createDataFlowDefinitionAndAppendToElementDefinitions, createPipelineNodeDefinition} from "./graphFactories.ts";
 import type {ElementDefinition} from "cytoscape";
 import type {DataFlowData} from "./graphTypes.ts";
 
-export const pipelineNodeDefinitions: PipelineNodeDefinitions = {
-    workingGroup1Pipeline: createPipelineNodeDefinition('WG #1: Leadership and Project Management'),
-    workingGroup2Pipeline: createPipelineNodeDefinition('WG #2: Education, Outreach, and Community'),
-    workingGroup3Pipeline: createPipelineNodeDefinition('WG #3: Event Modeling'),
-    workingGroup4Pipeline: createPipelineNodeDefinition('WG #4: Lens Flux Analysis'),
-    workingGroup5Pipeline: createPipelineNodeDefinition('WG #5: Event and Anomaly Detection'),
-    workingGroup6Pipeline: createPipelineNodeDefinition('WG #6: Variable Stars'),
-    workingGroup7Pipeline: createPipelineNodeDefinition('WG #7: Survey Simulations and Pipeline Validation'),
-    workingGroup8Pipeline: createPipelineNodeDefinition('WG #8: Contemporaneous and Precursor Observations'),
-    workingGroup9Pipeline: createPipelineNodeDefinition('WG #9: Data Challenges, Outreach, and Citizen Science'),
-    workingGroup10Pipeline: createPipelineNodeDefinition('WG #10: Microlensing Mini-Courses'),
-    workingGroup11Pipeline: createPipelineNodeDefinition('WG #11: Free Floating Planets'),
-    workingGroup12Pipeline: createPipelineNodeDefinition('WG #12: Efficiency and Occurrence Rate Analysis'),
-    workingGroup13Pipeline: createPipelineNodeDefinition('WG #13: Astrometry'),
-    workingGroup14Pipeline: createPipelineNodeDefinition('WG #14: Global Pipeline'),
-    dataProduct: createPipelineNodeDefinition('Data Product', PipelineNodeType.DataProduct),
-    msosPhotometryPipeline: createPipelineNodeDefinition('MSOS Photometry', PipelineNodeType.ExternalGroupPipeline),
-    msosModelingPipeline: createPipelineNodeDefinition('MSOS Modeling', PipelineNodeType.ExternalGroupPipeline),
-    socPipeline: createPipelineNodeDefinition('SOC', PipelineNodeType.ExternalGroupPipeline),
+
+export type WorkingGroup = {
+    number: number
+    name: string
 }
+
+export const WorkingGroups = {
+    workingGroup1: {number: 1, name: 'Leadership and Project Management'},
+    workingGroup2: {number: 2, name: 'Education, Outreach, and Community'},
+    workingGroup3: {number: 3, name: 'Event Modeling'},
+    workingGroup4: {number: 4, name: 'Lens Flux Analysis'},
+    workingGroup5: {number: 5, name: 'Event and Anomaly Detection'},
+    workingGroup6: {number: 6, name: 'Variable Stars'},
+    workingGroup7: {number: 7, name: 'Survey Simulations and Pipeline Validation'},
+    workingGroup8: {number: 8, name: 'Contemporaneous and Precursor Observations'},
+    workingGroup9: {number: 9, name: 'Data Challenges, Outreach, and Citizen Science'},
+    workingGroup10: {number: 10, name: 'Microlensing Mini-Courses'},
+    workingGroup11: {number: 11, name: 'Free Floating Planets'},
+    workingGroup12: {number: 12, name: 'Efficiency and Occurrence Rate Analysis'},
+    workingGroup13: {number: 13, name: 'Astrometry'},
+    workingGroup14: {number: 14, name: 'Global Pipeline'},
+} satisfies Record<string, WorkingGroup>;
+
+export const pipelineNodeDefinitions = {
+    workingGroup3Pipeline: createPipelineNodeDefinition('Event modeling pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup3),
+    workingGroup4Pipeline: createPipelineNodeDefinition('Lens flux analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup4),
+    workingGroup5Pipeline: createPipelineNodeDefinition('Event and anomaly detection pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup5),
+    workingGroup6Pipeline: createPipelineNodeDefinition('Variable stars pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup6),
+    workingGroup7Pipeline: createPipelineNodeDefinition('Survey simulations and pipeline validation pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup7),
+    workingGroup8Pipeline: createPipelineNodeDefinition('Contemporaneous and precursor observations pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup8),
+    workingGroup9Pipeline: createPipelineNodeDefinition('Data challenges, outreach, and citizen science pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup9),
+    workingGroup10Pipeline: createPipelineNodeDefinition('Microlensing mini-courses pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup10),
+    workingGroup11Pipeline: createPipelineNodeDefinition('Free floating planets pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup11),
+    workingGroup12Pipeline: createPipelineNodeDefinition('Efficiency and occurrence rate analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup12),
+    workingGroup13Pipeline: createPipelineNodeDefinition('Astrometry pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup13),
+    dataProduct: createPipelineNodeDefinition('Data product', PipelineNodeType.DataProduct),
+    msosPhotometryPipeline: createPipelineNodeDefinition('MSOS photometry', PipelineNodeType.ExternalGroupPipeline),
+    msosModelingPipeline: createPipelineNodeDefinition('MSOS modeling', PipelineNodeType.ExternalGroupPipeline),
+    socPipeline: createPipelineNodeDefinition('SOC', PipelineNodeType.ExternalGroupPipeline),
+} satisfies Record<string, PipelineNodeDefinition>;
 
 let elementDefinitions: ElementDefinition[] = Object.values(pipelineNodeDefinitions);
 

@@ -12,23 +12,32 @@ import {
 } from "./graphTypes.ts";
 import {v4 as uuid4, v5 as uuid5} from "uuid";
 import type {ElementDefinition, NodeDefinition} from "cytoscape";
+import type {WorkingGroup} from "./elementEntries.ts";
 
 const PROJECT_NAMESPACE_UUID = '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b';
 
 const defaultNodeHeight = 90;
 const defaultNodeWidth = 180;
 
-export function createPipelineNodeDefinition(name: string, pipelineNodeType: PipelineNodeType = PipelineNodeType.WorkingGroupPipeline): PipelineNodeDefinition {
+export function createPipelineNodeDefinition(name: string, pipelineNodeType: PipelineNodeType = PipelineNodeType.WorkingGroupPipeline, workingGroup?: WorkingGroup): PipelineNodeDefinition {
     let classes: string[] = [NodeTypeStyleClass[pipelineNodeType]]
+    let node_label: string
+    if (workingGroup !== undefined) {
+        node_label = name + ` (WG${workingGroup.number})`
+    } else {
+        node_label = name
+    }
+
     return {
         group: 'nodes',
         data: {
             id: uuid5(name, PROJECT_NAMESPACE_UUID),
-            name: name,
+            name: node_label,
             height: defaultNodeHeight,
             width: defaultNodeWidth,
             information: {
                 name: name
+
             }
         },
         classes: classes,
