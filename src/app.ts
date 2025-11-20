@@ -4,7 +4,7 @@ import dagre from 'cytoscape-dagre';
 import Handlebars from 'handlebars';
 import dataTreeInformationTemplate from './data_tree_information.hbs?raw'
 import dataLeafInformationTemplate from './data_leaf_information.hbs?raw'
-import groupInformationTemplate from './group_information.hbs?raw'
+import pipelineInformationTemplate from './pipeline_information.hbs?raw'
 
 import {elementDefinitions} from './elementEntries';
 import {EdgeTypeStyleClass, NodeTypeStyleClass} from './graphTypes';
@@ -12,7 +12,7 @@ import defaultGlobalViewNodePositionsJson from './default_global_positions.json'
 
 export const ViewType = {
     GlobalView: 'GlobalView',
-    GroupFocusView: 'GroupFocusView',
+    PipelineFocusView: 'PipelineFocusView',
 } as const;
 export type ViewType = typeof ViewType[keyof typeof ViewType];
 
@@ -123,14 +123,14 @@ export class App {
                     }
                 },
                 {
-                    selector: `.${NodeTypeStyleClass.WorkingGroup}`,
+                    selector: `.${NodeTypeStyleClass.WorkingGroupPipeline}`,
                     style: {
                         shape: 'rectangle',
                         'background-color': '#C0BFFB',
                     },
                 },
                 {
-                    selector: `.${NodeTypeStyleClass.ExternalGroup}`,
+                    selector: `.${NodeTypeStyleClass.ExternalGroupPipeline}`,
                     style: {
                         shape: 'rectangle',
                         'background-color': '#CCCCCC',
@@ -206,9 +206,9 @@ export class App {
         this.clearNodeSelection()
         this.selectedNode = node
         this.selectedNode.addClass('selected-node')
-        if (node.is(`.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+        if (node.is(`.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
                 .${NodeTypeStyleClass.DataProduct}`)) {
-            this.setInformationForGroupNode(node)
+            this.setInformationForPipelineNode(node)
         } else if (node.hasClass(NodeTypeStyleClass.DataTree)) {
             this.setInformationForDataTreeNode(node)
         } else if (node.hasClass(NodeTypeStyleClass.DataLeaf)) {
@@ -216,8 +216,8 @@ export class App {
         }
     }
 
-    private setInformationForGroupNode(node: NodeSingular) {
-        const informationTemplate = Handlebars.compile(groupInformationTemplate);
+    private setInformationForPipelineNode(node: NodeSingular) {
+        const informationTemplate = Handlebars.compile(pipelineInformationTemplate);
         this.nodeInformationDiv.innerHTML = informationTemplate(node.data()['information'])
     }
 
@@ -250,18 +250,18 @@ export class App {
         }
     }
 
-    setGroupFocusView(groupNode: NodeSingular) {
-        const inputs = groupNode.incomers(`.${NodeTypeStyleClass.DataFlow}`)
+    setPipelineFocusView(pipelineNode: NodeSingular) {
+        const inputs = pipelineNode.incomers(`.${NodeTypeStyleClass.DataFlow}`)
         const sources = inputs.incomers(
-            `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+            `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
             .${NodeTypeStyleClass.DataProduct}`)
-        const outputs = groupNode.outgoers(`.${NodeTypeStyleClass.DataFlow}`)
+        const outputs = pipelineNode.outgoers(`.${NodeTypeStyleClass.DataFlow}`)
         const destinations = outputs.outgoers(
-            `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+            `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
             .${NodeTypeStyleClass.DataProduct}`)
-        const activeNodes = groupNode.union(inputs).union(sources).union(outputs).union(destinations)
-        const activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(groupNode))
-            .union(groupNode.edgesTo(outputs)).union(outputs.edgesTo(destinations))
+        const activeNodes = pipelineNode.union(inputs).union(sources).union(outputs).union(destinations)
+        const activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(pipelineNode))
+            .union(pipelineNode.edgesTo(outputs)).union(outputs.edgesTo(destinations))
         const activeElements = activeNodes.union(activeEdges)
         void this.animateChangeInActiveElements(activeElements)
         const layoutOptions = {
@@ -278,9 +278,9 @@ export class App {
     setDataFlowView(dataFlowNode: NodeSingular) {
         // TODO: Using a cloned headless instance is probably safer than saving the old positions and then reloading them.
         const source = dataFlowNode.incomers(
-            `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}`)
+            `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}`)
         const destinations = dataFlowNode.outgoers(
-            `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+            `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
             .${NodeTypeStyleClass.DataProduct}`)
         const childDataElementNodes = dataFlowNode.outgoers(
             `.${NodeTypeStyleClass.DataTree}, .${NodeTypeStyleClass.DataLeaf}`)
@@ -369,9 +369,9 @@ export class App {
         if (targetElement.isNode()) {
             this.backButton.disabled = false
             if (targetElement.is(
-                `.${NodeTypeStyleClass.WorkingGroup}, .${NodeTypeStyleClass.ExternalGroup}, 
+                `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
                 .${NodeTypeStyleClass.DataProduct}`)) {
-                this.setGroupFocusView(event.target)
+                this.setPipelineFocusView(event.target)
                 this.setNodeSelection(event.target)
             }
             if (targetElement.hasClass(NodeTypeStyleClass.DataFlow)) {
@@ -394,8 +394,8 @@ export class App {
 
     setGlobalView() {
         this.backButton.disabled = true
-        const activeNodes = this.cy.nodes().filter(`.${NodeTypeStyleClass.WorkingGroup}, ` +
-            `.${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataFlow}`)
+        const activeNodes = this.cy.nodes().filter(`.${NodeTypeStyleClass.WorkingGroupPipeline}, ` +
+            `.${NodeTypeStyleClass.ExternalGroupPipeline}, .${NodeTypeStyleClass.DataFlow}`)
         const activeElements = activeNodes.union(activeNodes.edgesWith(activeNodes))
         void this.animateChangeInActiveElements(activeElements)
         const positions = this.loadNodePositions()
@@ -412,8 +412,8 @@ export class App {
 
     setGlobalViewInstant() {
         this.backButton.disabled = true
-        const activeNodes = this.cy.nodes().filter(`.${NodeTypeStyleClass.WorkingGroup}, ` +
-            `.${NodeTypeStyleClass.ExternalGroup}, .${NodeTypeStyleClass.DataFlow}`)
+        const activeNodes = this.cy.nodes().filter(`.${NodeTypeStyleClass.WorkingGroupPipeline}, ` +
+            `.${NodeTypeStyleClass.ExternalGroupPipeline}, .${NodeTypeStyleClass.DataFlow}`)
         const activeElements = activeNodes.union(activeNodes.edgesWith(activeNodes))
         activeElements.style({display: 'element', opacity: 1})
         const inactiveElements = this.cy.elements().difference(activeElements)

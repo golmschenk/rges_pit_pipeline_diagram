@@ -1,50 +1,50 @@
-import {type GroupNodesDefinitions, GroupType} from "./graphTypes.ts";
-import {createDataFlowDefinitionAndAppendToElementDefinitions, createGroupNodeDefinition} from "./graphFactories.ts";
+import {type PipelineNodeDefinitions, PipelineNodeType} from "./graphTypes.ts";
+import {createDataFlowDefinitionAndAppendToElementDefinitions, createPipelineNodeDefinition} from "./graphFactories.ts";
 import type {ElementDefinition} from "cytoscape";
 import type {DataFlowData} from "./graphTypes.ts";
 
-export const groupNodeDefinitions: GroupNodesDefinitions = {
-    workingGroup1: createGroupNodeDefinition('WG #1: Leadership and Project Management'),
-    workingGroup2: createGroupNodeDefinition('WG #2: Education, Outreach, and Community'),
-    workingGroup3: createGroupNodeDefinition('WG #3: Event Modeling'),
-    workingGroup4: createGroupNodeDefinition('WG #4: Lens Flux Analysis'),
-    workingGroup5: createGroupNodeDefinition('WG #5: Event and Anomaly Detection'),
-    workingGroup6: createGroupNodeDefinition('WG #6: Variable Stars'),
-    workingGroup7: createGroupNodeDefinition('WG #7: Survey Simulations and Pipeline Validation'),
-    workingGroup8: createGroupNodeDefinition('WG #8: Contemporaneous and Precursor Observations'),
-    workingGroup9: createGroupNodeDefinition('WG #9: Data Challenges, Outreach, and Citizen Science'),
-    workingGroup10: createGroupNodeDefinition('WG #10: Microlensing Mini-Courses'),
-    workingGroup11: createGroupNodeDefinition('WG #11: Free Floating Planets'),
-    workingGroup12: createGroupNodeDefinition('WG #12: Efficiency and Occurrence Rate Analysis'),
-    workingGroup13: createGroupNodeDefinition('WG #13: Astrometry'),
-    workingGroup14: createGroupNodeDefinition('WG #14: Global Pipeline'),
-    dataProductGroup: createGroupNodeDefinition('Data Product', GroupType.DataProduct),
-    msosPhotometryGroup: createGroupNodeDefinition('MSOS Photometry', GroupType.ExternalGroup),
-    msosModelingGroup: createGroupNodeDefinition('MSOS Modeling', GroupType.ExternalGroup),
-    socGroup: createGroupNodeDefinition('SOC', GroupType.ExternalGroup),
+export const pipelineNodeDefinitions: PipelineNodeDefinitions = {
+    workingGroup1Pipeline: createPipelineNodeDefinition('WG #1: Leadership and Project Management'),
+    workingGroup2Pipeline: createPipelineNodeDefinition('WG #2: Education, Outreach, and Community'),
+    workingGroup3Pipeline: createPipelineNodeDefinition('WG #3: Event Modeling'),
+    workingGroup4Pipeline: createPipelineNodeDefinition('WG #4: Lens Flux Analysis'),
+    workingGroup5Pipeline: createPipelineNodeDefinition('WG #5: Event and Anomaly Detection'),
+    workingGroup6Pipeline: createPipelineNodeDefinition('WG #6: Variable Stars'),
+    workingGroup7Pipeline: createPipelineNodeDefinition('WG #7: Survey Simulations and Pipeline Validation'),
+    workingGroup8Pipeline: createPipelineNodeDefinition('WG #8: Contemporaneous and Precursor Observations'),
+    workingGroup9Pipeline: createPipelineNodeDefinition('WG #9: Data Challenges, Outreach, and Citizen Science'),
+    workingGroup10Pipeline: createPipelineNodeDefinition('WG #10: Microlensing Mini-Courses'),
+    workingGroup11Pipeline: createPipelineNodeDefinition('WG #11: Free Floating Planets'),
+    workingGroup12Pipeline: createPipelineNodeDefinition('WG #12: Efficiency and Occurrence Rate Analysis'),
+    workingGroup13Pipeline: createPipelineNodeDefinition('WG #13: Astrometry'),
+    workingGroup14Pipeline: createPipelineNodeDefinition('WG #14: Global Pipeline'),
+    dataProduct: createPipelineNodeDefinition('Data Product', PipelineNodeType.DataProduct),
+    msosPhotometryPipeline: createPipelineNodeDefinition('MSOS Photometry', PipelineNodeType.ExternalGroupPipeline),
+    msosModelingPipeline: createPipelineNodeDefinition('MSOS Modeling', PipelineNodeType.ExternalGroupPipeline),
+    socPipeline: createPipelineNodeDefinition('SOC', PipelineNodeType.ExternalGroupPipeline),
 }
 
-let elementDefinitions: ElementDefinition[] = Object.values(groupNodeDefinitions);
+let elementDefinitions: ElementDefinition[] = Object.values(pipelineNodeDefinitions);
 
 const dataFlows: DataFlowData[] = [
     {
-        sourceGroup: groupNodeDefinitions.workingGroup4,
-        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup4Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline],
         data: {name: 'Source and Lens position and brightness posteriors'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup7,
-        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup7Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline],
         data: {name: 'Simulated light curves'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup5,
-        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup11],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup5Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline, pipelineNodeDefinitions.workingGroup11Pipeline],
         data: {name: 'New candidate microlensing events and anomalies'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup3,
-        destinationGroups: [groupNodeDefinitions.workingGroup12, groupNodeDefinitions.dataProductGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup3Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline, pipelineNodeDefinitions.dataProduct],
         data: {
             name: 'Microlensing event properties',
             dataElements: [
@@ -67,8 +67,8 @@ const dataFlows: DataFlowData[] = [
         },
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup8,
-        destinationGroups: [groupNodeDefinitions.workingGroup4],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup8Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup4Pipeline],
         data: {
             name: 'Precursor HST and Euclid data',
             unit: 'For each field/event',
@@ -96,68 +96,68 @@ const dataFlows: DataFlowData[] = [
         },
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup4,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup4Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
         data: {name: 'Table of lens flux properties of all events'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup4,
-        destinationGroups: [groupNodeDefinitions.workingGroup11],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup4Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup11Pipeline],
         data: {name: 'Difference image astrometry and photometry'},
     },
     {
-        sourceGroup: groupNodeDefinitions.msosModelingGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup12],
+        sourcePipeline: pipelineNodeDefinitions.msosModelingPipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline, pipelineNodeDefinitions.workingGroup12Pipeline],
         data: {name: 'Automated light curve modeling results'},
     },
     {
-        sourceGroup: groupNodeDefinitions.msosModelingGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup12],
+        sourcePipeline: pipelineNodeDefinitions.msosModelingPipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline],
         data: {name: 'Single lens events'},
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup6,
-        destinationGroups: [groupNodeDefinitions.msosPhotometryGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup6Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.msosPhotometryPipeline],
         data: {name: 'Variable star models'},
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup6,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup6Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
         data: {name: 'Simulated variable star light curves'},
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup7,
-        destinationGroups: [groupNodeDefinitions.workingGroup12],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup7Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline],
         data: {name: 'Galaxy models and stellar microlensing occurrence rate predictions'},
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup12,
-        destinationGroups: [groupNodeDefinitions.workingGroup7],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup12Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup7Pipeline],
         data: {name: 'Detection efficiency corrected rates for stellar microlensing events to update Galactic models'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup7,
-        destinationGroups: [groupNodeDefinitions.workingGroup9],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup7Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup9Pipeline],
         data: {name: 'Simulated images and light curves'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup9,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup9Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
         data: {name: 'Data challenges'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup9,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup9Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
         data: {name: 'Outreach material (data sonifications, etc.)'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup10,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup10Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
         data: {name: 'Jupyter Notebooks and lectures'}
     },
     {
-        sourceGroup: groupNodeDefinitions.msosPhotometryGroup,
-        destinationGroups: [groupNodeDefinitions.socGroup],
+        sourcePipeline: pipelineNodeDefinitions.msosPhotometryPipeline,
+        destinationPipelines: [pipelineNodeDefinitions.socPipeline],
         data: {
             name: 'Photometry data points',
             unit: 'Per source in input catalog',
@@ -202,9 +202,9 @@ const dataFlows: DataFlowData[] = [
         },
     },
     {
-        sourceGroup: groupNodeDefinitions.socGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup3, groupNodeDefinitions.workingGroup13,
-            groupNodeDefinitions.workingGroup5],
+        sourcePipeline: pipelineNodeDefinitions.socPipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline, pipelineNodeDefinitions.workingGroup13Pipeline,
+            pipelineNodeDefinitions.workingGroup5Pipeline],
         data: {
             name: 'Photometric light curves',
             unit: 'For each event target and nearby targets',
@@ -213,13 +213,13 @@ const dataFlows: DataFlowData[] = [
         },
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup4,
-        destinationGroups: [groupNodeDefinitions.workingGroup3],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup4Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline],
         data: {name: 'Photometric light curves'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup13,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup13Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
         data: {
             name: 'Joint photometric and astrometric fit of model',
             unit: 'For each event',
@@ -242,13 +242,13 @@ const dataFlows: DataFlowData[] = [
         }
     },
     {
-        sourceGroup: groupNodeDefinitions.msosModelingGroup,
-        destinationGroups: [groupNodeDefinitions.workingGroup13],
+        sourcePipeline: pipelineNodeDefinitions.msosModelingPipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup13Pipeline],
         data: {name: 'Astrometric estimate data'}
     },
     {
-        sourceGroup: groupNodeDefinitions.workingGroup11,
-        destinationGroups: [groupNodeDefinitions.dataProductGroup],
+        sourcePipeline: pipelineNodeDefinitions.workingGroup11Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
         data: {
             name: 'Free-floating planet catalog'
         }

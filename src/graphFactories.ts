@@ -5,8 +5,8 @@ import {
     type DataFlowNodeDefinition,
     type DataTreeNodeDefinition,
     type DataTreeAndDataFlowNodeDefinition,
-    type GroupNodeDefinition,
-    GroupType,
+    type PipelineNodeDefinition,
+    PipelineNodeType,
     NodeTypeStyleClass,
     type DataLeafData, type DataTreeEdgeDefinition, EdgeTypeStyleClass
 } from "./graphTypes.ts";
@@ -18,8 +18,8 @@ const PROJECT_NAMESPACE_UUID = '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b';
 const defaultNodeHeight = 90;
 const defaultNodeWidth = 180;
 
-export function createGroupNodeDefinition(name: string, groupType: GroupType = GroupType.WorkingGroup): GroupNodeDefinition {
-    let classes: string[] = [NodeTypeStyleClass[groupType]]
+export function createPipelineNodeDefinition(name: string, pipelineNodeType: PipelineNodeType = PipelineNodeType.WorkingGroupPipeline): PipelineNodeDefinition {
+    let classes: string[] = [NodeTypeStyleClass[pipelineNodeType]]
     return {
         group: 'nodes',
         data: {
@@ -32,7 +32,7 @@ export function createGroupNodeDefinition(name: string, groupType: GroupType = G
             }
         },
         classes: classes,
-        __brand_GroupNode: true,
+        __brand_PipelineNode: true,
     };
 }
 
@@ -110,7 +110,7 @@ function createDataTree(dataElement: DataTreeData | DataLeafData, dataElementIdO
 }
 
 function createDataTreeForDataFlowData(dataFlowData: DataFlowData): [DataTreeAndDataFlowNodeDefinition, ElementDefinition[]] {
-    const [rootNodeDefinition, treeElementDefinitions] = createDataTree(dataFlowData.data, uuid5(dataFlowData.data.name + dataFlowData.sourceGroup.data.name, PROJECT_NAMESPACE_UUID))
+    const [rootNodeDefinition, treeElementDefinitions] = createDataTree(dataFlowData.data, uuid5(dataFlowData.data.name + dataFlowData.sourcePipeline.data.name, PROJECT_NAMESPACE_UUID))
     let dataElementNodeClass: NodeTypeStyleClass
     if (isDataTreeData(dataFlowData.data)) {
         dataElementNodeClass = NodeTypeStyleClass.DataTree;
@@ -129,10 +129,10 @@ function createDataFlowDefinition(dataFlowData: DataFlowData): ElementDefinition
     let elementDefinitions: ElementDefinition[] = []
     const [dataFlowNodeDefinition, dataTreeElementDefinitions] = createDataTreeForDataFlowData(dataFlowData)
     elementDefinitions.push(dataFlowNodeDefinition, ...dataTreeElementDefinitions)
-    const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowData.sourceGroup, dataFlowNodeDefinition)
+    const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowData.sourcePipeline, dataFlowNodeDefinition)
     elementDefinitions.push(dataFlowEdge)
-    dataFlowData.destinationGroups.forEach((destinationGroupNodeDefinition) => {
-        const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowNodeDefinition, destinationGroupNodeDefinition)
+    dataFlowData.destinationPipelines.forEach((destinationPipelineNodeDefinition) => {
+        const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowNodeDefinition, destinationPipelineNodeDefinition)
         elementDefinitions.push(dataFlowEdge)
     })
     return elementDefinitions
