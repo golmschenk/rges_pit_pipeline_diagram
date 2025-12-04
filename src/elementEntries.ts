@@ -71,7 +71,7 @@ const dataFlows: DataFlowData[] = [
         sourcePipeline: pipelineNodeDefinitions.workingGroup3Pipeline,
         destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline, pipelineNodeDefinitions.Public],
         data: {
-            name: 'Microlensing event properties and light curves',
+            name: 'Microlensing event models and light curves',
             host: 'MAST',
             totalDataSize: '1.2TB',
             dataElements: [
@@ -141,7 +141,29 @@ const dataFlows: DataFlowData[] = [
     {
         sourcePipeline: pipelineNodeDefinitions.lensFluxAnalysisPipeline,
         destinationPipelines: [pipelineNodeDefinitions.Public],
-        data: {name: 'Table of lens flux properties of all events'}
+        data: {
+            name: 'Lens flux analysis fits',
+            dataElements: [
+                {
+                    name: 'Lens flux analysis best-fit model parameters',
+                    unit: 'Per event for all events',
+                    frequency: 'After each event',
+                    structure: '23 parameters per row [what parameters?]',
+                    totalNumberOfUnits: '30,000 rows (5,000 rows per season, with updates to old models each season)',
+                    unitDataSize: '92B',
+                    totalDataSize: '20MB',
+                },
+                {
+                    name: 'Lens flux analysis model parameter posteriors',
+                    unit: 'Per event for all events',
+                    frequency: 'After each event',
+                    structure: '23 parameters per row [what parameters?], with 100,000 rows per posterior',
+                    totalNumberOfUnits: '30,000 rows (5,000 rows per season, with updates to old models each season)',
+                    unitDataSize: '92B',
+                    totalDataSize: '20MB',
+                },
+            ],
+        },
     },
     {
         sourcePipeline: pipelineNodeDefinitions.msosModelingPipeline,

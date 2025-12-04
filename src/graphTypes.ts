@@ -53,6 +53,7 @@ export type DataTreeData = {
     unitDataSize?: string
     totalNumberOfUnits?: string
     totalDataSize?: string
+    dataReleaseFrequency?: string
 }
 
 export type DataFlowData = {
