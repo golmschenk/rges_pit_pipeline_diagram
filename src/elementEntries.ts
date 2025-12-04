@@ -32,7 +32,8 @@ export const WorkingGroups = {
 
 export const pipelineNodeDefinitions = {
     workingGroup3Pipeline: createPipelineNodeDefinition('Event modeling pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup3),
-    workingGroup4Pipeline: createPipelineNodeDefinition('Lens flux analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup4),
+    lensFluxAnalysisPipeline: createPipelineNodeDefinition('Lens flux analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup4),
+    differenceImageAnalysisPipeline: createPipelineNodeDefinition('Difference image analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup4),
     workingGroup5Pipeline: createPipelineNodeDefinition('Event and anomaly detection pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup5),
     workingGroup6Pipeline: createPipelineNodeDefinition('Variable stars pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup6),
     workingGroup7Pipeline: createPipelineNodeDefinition('Survey simulations and pipeline validation pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup7),
@@ -41,7 +42,7 @@ export const pipelineNodeDefinitions = {
     workingGroup10Pipeline: createPipelineNodeDefinition('Microlensing mini-courses pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup10),
     workingGroup11Pipeline: createPipelineNodeDefinition('Free floating planets pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup11),
     workingGroup12Pipeline: createPipelineNodeDefinition('Efficiency and occurrence rate analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup12),
-    workingGroup13Pipeline: createPipelineNodeDefinition('Astrometry pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup13),
+    workingGroup13Pipeline: createPipelineNodeDefinition('Astrometry analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup13),
     dataProduct: createPipelineNodeDefinition('Data product', PipelineNodeType.DataProduct),
     msosPhotometryPipeline: createPipelineNodeDefinition('MSOS photometry', PipelineNodeType.ExternalGroupPipeline),
     msosModelingPipeline: createPipelineNodeDefinition('MSOS modeling', PipelineNodeType.ExternalGroupPipeline),
@@ -52,7 +53,7 @@ let elementDefinitions: ElementDefinition[] = Object.values(pipelineNodeDefiniti
 
 const dataFlows: DataFlowData[] = [
     {
-        sourcePipeline: pipelineNodeDefinitions.workingGroup4Pipeline,
+        sourcePipeline: pipelineNodeDefinitions.lensFluxAnalysisPipeline,
         destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline],
         data: {name: 'Source and Lens position and brightness posteriors'}
     },
@@ -92,7 +93,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup8Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.workingGroup4Pipeline],
+        destinationPipelines: [pipelineNodeDefinitions.lensFluxAnalysisPipeline],
         data: {
             name: 'Precursor HST and Euclid data',
             unit: 'For each field/event',
@@ -104,7 +105,7 @@ const dataFlows: DataFlowData[] = [
                     name: 'Images',
                     structure: 'Drizzled Reference Image',
                     format: '.fits',
-                    notes: 'Images are hosted and downloadable at SOC/ MAST.',
+                    notes: 'Images are hosted and downloadable at SOC/MAST.',
                 },
                 {
                     name: 'Photometry',
@@ -120,14 +121,9 @@ const dataFlows: DataFlowData[] = [
         },
     },
     {
-        sourcePipeline: pipelineNodeDefinitions.workingGroup4Pipeline,
+        sourcePipeline: pipelineNodeDefinitions.lensFluxAnalysisPipeline,
         destinationPipelines: [pipelineNodeDefinitions.dataProduct],
         data: {name: 'Table of lens flux properties of all events'}
-    },
-    {
-        sourcePipeline: pipelineNodeDefinitions.workingGroup4Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.workingGroup11Pipeline],
-        data: {name: 'Difference image astrometry and photometry'},
     },
     {
         sourcePipeline: pipelineNodeDefinitions.msosModelingPipeline,
@@ -237,7 +233,21 @@ const dataFlows: DataFlowData[] = [
         },
     },
     {
-        sourcePipeline: pipelineNodeDefinitions.workingGroup4Pipeline,
+        sourcePipeline: pipelineNodeDefinitions.socPipeline,
+        destinationPipelines: [pipelineNodeDefinitions.differenceImageAnalysisPipeline],
+        data: {
+            name: 'Difference images',
+        },
+    },
+    {
+        sourcePipeline: pipelineNodeDefinitions.differenceImageAnalysisPipeline,
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup11Pipeline],
+        data: {
+            name: 'Difference image analysis',
+        },
+    },
+    {
+        sourcePipeline: pipelineNodeDefinitions.lensFluxAnalysisPipeline,
         destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline],
         data: {name: 'Photometric light curves'}
     },
