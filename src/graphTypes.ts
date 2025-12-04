@@ -11,7 +11,7 @@ export type DataTreeEdgeDefinition = Brand<EdgeDefinition, ['DataTreeEdge']>
 export const NodeTypeStyleClass = {
     WorkingGroupPipeline: 'working-group-pipeline-node',
     ExternalGroupPipeline: 'external-group-pipeline-node',
-    DataProduct: 'data-product-node',
+    Public: 'public-node',
     DataFlow: 'data-flow-node',
     DataTree: 'data-tree-node',
     DataLeaf: 'data-leaf-node',
@@ -27,7 +27,7 @@ export type EdgeTypeStyleClass = typeof EdgeTypeStyleClass[keyof typeof EdgeType
 export const PipelineNodeType = {
     WorkingGroupPipeline: 'WorkingGroupPipeline',
     ExternalGroupPipeline: 'ExternalGroupPipeline',
-    DataProduct: 'DataProduct',
+    Public: 'Public',
 } as const;
 export type PipelineNodeType = typeof PipelineNodeType[keyof typeof PipelineNodeType];
 
@@ -49,6 +49,10 @@ export type DataTreeData = {
     latency?: string
     dataElements: (DataTreeData | DataLeafData)[]
     notes?: string
+    host?: string
+    unitDataSize?: string
+    numberOfUnits?: string
+    totalDataSize?: string
 }
 
 export type DataFlowData = {

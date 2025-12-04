@@ -43,7 +43,7 @@ export const pipelineNodeDefinitions = {
     workingGroup11Pipeline: createPipelineNodeDefinition('Free floating planets pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup11),
     workingGroup12Pipeline: createPipelineNodeDefinition('Efficiency and occurrence rate analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup12),
     workingGroup13Pipeline: createPipelineNodeDefinition('Astrometry analysis pipeline', PipelineNodeType.WorkingGroupPipeline, WorkingGroups.workingGroup13),
-    dataProduct: createPipelineNodeDefinition('Data product', PipelineNodeType.DataProduct),
+    Public: createPipelineNodeDefinition('Public', PipelineNodeType.Public),
     msosPhotometryPipeline: createPipelineNodeDefinition('MSOS photometry', PipelineNodeType.ExternalGroupPipeline),
     msosModelingPipeline: createPipelineNodeDefinition('MSOS modeling', PipelineNodeType.ExternalGroupPipeline),
     socPipeline: createPipelineNodeDefinition('SOC', PipelineNodeType.ExternalGroupPipeline),
@@ -69,7 +69,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup3Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline, pipelineNodeDefinitions.dataProduct],
+        destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline, pipelineNodeDefinitions.Public],
         data: {
             name: 'Microlensing event properties',
             dataElements: [
@@ -122,7 +122,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourcePipeline: pipelineNodeDefinitions.lensFluxAnalysisPipeline,
-        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
+        destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {name: 'Table of lens flux properties of all events'}
     },
     {
@@ -142,7 +142,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup6Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
+        destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {name: 'Simulated variable star light curves'},
     },
     {
@@ -162,17 +162,17 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup9Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
+        destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {name: 'Data challenges'}
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup9Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
+        destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {name: 'Outreach material (data sonifications, etc.)'}
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup10Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
+        destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {name: 'Jupyter Notebooks and lectures'}
     },
     {
@@ -253,7 +253,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup13Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
+        destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {
             name: 'Joint photometric and astrometric fit of model',
             unit: 'For each event',
@@ -282,7 +282,7 @@ const dataFlows: DataFlowData[] = [
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup11Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.dataProduct],
+        destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {
             name: 'Free-floating planet catalog'
         }

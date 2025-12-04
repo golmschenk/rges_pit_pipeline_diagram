@@ -137,7 +137,7 @@ export class App {
                     },
                 },
                 {
-                    selector: `.${NodeTypeStyleClass.DataProduct}`,
+                    selector: `.${NodeTypeStyleClass.Public}`,
                     style: {
                         shape: 'rectangle',
                         'background-color': '#F6C1FC',
@@ -207,7 +207,7 @@ export class App {
         this.selectedNode = node
         this.selectedNode.addClass('selected-node')
         if (node.is(`.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
-                .${NodeTypeStyleClass.DataProduct}`)) {
+                .${NodeTypeStyleClass.Public}`)) {
             this.setInformationForPipelineNode(node)
         } else if (node.hasClass(NodeTypeStyleClass.DataTree)) {
             this.setInformationForDataTreeNode(node)
@@ -254,11 +254,11 @@ export class App {
         const inputs = pipelineNode.incomers(`.${NodeTypeStyleClass.DataFlow}`)
         const sources = inputs.incomers(
             `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
-            .${NodeTypeStyleClass.DataProduct}`)
+            .${NodeTypeStyleClass.Public}`)
         const outputs = pipelineNode.outgoers(`.${NodeTypeStyleClass.DataFlow}`)
         const destinations = outputs.outgoers(
             `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
-            .${NodeTypeStyleClass.DataProduct}`)
+            .${NodeTypeStyleClass.Public}`)
         const activeNodes = pipelineNode.union(inputs).union(sources).union(outputs).union(destinations)
         const activeEdges = sources.edgesTo(inputs).union(inputs.edgesTo(pipelineNode))
             .union(pipelineNode.edgesTo(outputs)).union(outputs.edgesTo(destinations))
@@ -281,7 +281,7 @@ export class App {
             `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}`)
         const destinations = dataFlowNode.outgoers(
             `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
-            .${NodeTypeStyleClass.DataProduct}`)
+            .${NodeTypeStyleClass.Public}`)
         const childDataElementNodes = dataFlowNode.outgoers(
             `.${NodeTypeStyleClass.DataTree}, .${NodeTypeStyleClass.DataLeaf}`)
         // Need to have a separate successor call to make sure you don't get tree nodes from other data flows.
@@ -370,7 +370,7 @@ export class App {
             this.backButton.disabled = false
             if (targetElement.is(
                 `.${NodeTypeStyleClass.WorkingGroupPipeline}, .${NodeTypeStyleClass.ExternalGroupPipeline}, 
-                .${NodeTypeStyleClass.DataProduct}`)) {
+                .${NodeTypeStyleClass.Public}`)) {
                 this.setPipelineFocusView(event.target)
                 this.setNodeSelection(event.target)
             }
