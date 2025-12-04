@@ -51,7 +51,7 @@ export type DataTreeData = {
     notes?: string
     host?: string
     unitDataSize?: string
-    numberOfUnits?: string
+    totalNumberOfUnits?: string
     totalDataSize?: string
 }
 
