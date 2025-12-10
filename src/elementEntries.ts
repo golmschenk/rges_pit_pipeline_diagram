@@ -324,7 +324,40 @@ const dataFlows: DataFlowData[] = [
         sourcePipeline: pipelineNodeDefinitions.workingGroup11Pipeline,
         destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {
-            name: 'Free-floating planet catalog'
+            name: 'Free-floating planet catalog',
+            host: 'MAST',
+            totalDataSize: '18GB',
+            dataElements: [
+                {
+                    name: 'Free floating planet properties',
+                    unit: 'Row per FFP event',
+                    frequency: 'After each season',
+                    structure: 'Columns with median properties [which properties?] with credible intervals',
+                    totalNumberOfUnits: '1,200 rows (200 rows per season)',
+                    format: 'Parquet',
+                    unitDataSize: '80B',
+                    totalDataSize: '2KB',
+                },
+                {
+                    name: 'Posteriors',
+                    unit: 'Per FFP event',
+                    frequency: 'After detection of event, and re-run at end of season (at least)',
+                    structure: '(parameter values [which parameters?], likelihood)',
+                    format: 'Parquet',
+                    totalNumberOfUnits: '1,200 files (200 files per season)',
+                    unitDataSize: '8KB',
+                    totalDataSize: '10GB',
+                },
+                {
+                    name: 'Light curves',
+                    unit: 'Per FFP event',
+                    frequency: 'After detection of event, and re-run at end of season (at least)',
+                    format: 'ASDF',
+                    totalNumberOfUnits: '1,200 files (200 files per season)',
+                    unitDataSize: '6.6MB',
+                    totalDataSize: '8GB',
+                },
+            ],
         }
     },
 ];
