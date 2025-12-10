@@ -98,6 +98,12 @@ export class App {
             this.setGlobalViewInstant();
         })
 
+        // If localhost, make the save positions button available.
+        const isLocalhost = window.location.hostname.includes('localhost');
+        if (isLocalhost) {
+            const savePositionsButton = document.getElementById('save_positions_button');
+            savePositionsButton?.classList.remove('hidden');
+        }
     }
 
     static create(): App {
