@@ -2,11 +2,8 @@ import type {
     AnimationOptions,
     Collection,
     Core,
-    EdgeCollection,
     EventObject,
-    NodeSingular,
-    Position,
-    StylesheetStyle
+    NodeSingular
 } from 'cytoscape';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -19,66 +16,14 @@ import {elementDefinitions} from './elementEntries';
 import {EdgeTypeStyleClass, NodeTypeStyleClass} from './graphTypes';
 import defaultGlobalViewNodePositionsJson from './default_global_positions.json';
 import {getDefaultAppStyle} from "./styling.ts";
+import {marchingAntsAnimationForEdges} from "./prettification.ts";
+import {getNodePositions, offsetPositions, updateNodeDimensions} from "./sizeAndPosition.ts";
 
 export const ViewType = {
     GlobalView: 'GlobalView',
     PipelineFocusView: 'PipelineFocusView',
 } as const;
 export type ViewType = typeof ViewType[keyof typeof ViewType];
-
-
-async function marchingAntsAnimationForEdges(edges: EdgeCollection) {
-    // TODO: There appears to be a small jitter on each iteration. The 10 second duration is probably an ok fix, but
-    //       figuring out how to actually make it smooth might be better.
-    const speed = 300
-    const duration = 10000
-    let step = 0
-    // noinspection InfiniteLoopJS
-    while (true) {
-        step += 1
-        const style = {
-            'line-dash-pattern': [10, 10],
-            'line-dash-offset': -speed * step,
-        }
-        await new Promise<void>((resolve) => {
-            edges.animate({
-                style: style,
-                duration: duration,
-                queue: false,
-                complete: () => resolve()
-            });
-        });
-    }
-}
-
-function updateNodeDimensions(node: cytoscape.NodeSingular) {
-    const minimumWidth = 180;
-    const minimumHeight = 90;
-    const padding = 0;
-    const bbox = node.boundingBox();
-    const width = Math.max(minimumWidth, bbox.w + padding);
-    const height = Math.max(minimumHeight, bbox.h + padding);
-    node.data('width', width);
-    node.data('height', height);
-}
-
-
-function offsetPositions(positions: Record<string, Position>, offset: Position): Record<string, Position> {
-    let updatedPositions: Record<string, Position> = {}
-    Object.entries(positions).forEach(([key, position]) => {
-        updatedPositions[key] = {
-            x: position.x + offset.x,
-            y: position.y + offset.y
-        }
-    })
-    return updatedPositions
-}
-
-function getNodePositions(nodes: cytoscape.NodeCollection) {
-    return Object.fromEntries(
-        nodes.map(node => [node.id(), {x: node.position().x, y: node.position().y}])
-    );
-}
 
 export class App {
     cy: Core
