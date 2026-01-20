@@ -10,7 +10,7 @@ export function renderPublicDataTable(containerId: string) {
 
     let html = `
         <div class="p-8 max-w-7xl mx-auto">
-            <h1 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">RGES-PIT Public Data</h1>
+            <h1 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">RGES-PIT Public Data Products</h1>
             <div class="overflow-hidden border border-gray-300 rounded-lg shadow-md">
                 <table class="min-w-full border-collapse text-sm bg-white">
                     <thead class="bg-gray-100 border-b border-gray-300">
