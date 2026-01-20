@@ -49,7 +49,7 @@ export function renderPublicDataTable(containerId: string) {
                                             ${unit ? `<div class="block"><span class="text-xs font-bold text-gray-400 uppercase mr-1">Unit:</span> ${unit}</div>` : ''}
                                             ${frequency ? `<div class="block"><span class="text-xs font-bold text-gray-400 uppercase mr-1">Frequency:</span> ${frequency}</div>` : ''}
                                             ${latency ? `<div class="block"><span class="text-xs font-bold text-gray-400 uppercase mr-1">Latency:</span> ${latency}</div>` : ''}
-                                            ${element.format ? `<div class="block"><span class="text-xs font-bold text-gray-400 uppercase mr-1">Format:</span> <span class="px-1.5 py-0.5 bg-gray-100 rounded font-mono text-xs">${element.format}</span></div>` : ''}
+                                            ${element.format ? `<div class="block"><span class="text-xs font-bold text-gray-400 uppercase mr-1">Format:</span>${element.format}</div>` : ''}
                                             ${element.structure ? `<div class="block"><span class="text-xs font-bold text-gray-400 uppercase mr-1">Structure:</span> ${element.structure}</div>` : ''}
                                             ${host ? `<div class="block"><span class="text-xs font-bold text-gray-400 uppercase mr-1">Host:</span> ${host}</div>` : ''}
                                         </div>
@@ -62,7 +62,7 @@ export function renderPublicDataTable(containerId: string) {
                                     </div>
                                 ` : ''}
 
-                                ${element.exampleFileUrl ? `<div><a href="${element.exampleFileUrl}" class="text-xs text-blue-600 hover:underline flex items-center">🔗 Example File</a></div>` : ''}
+                                ${element.exampleFileUrl ? `<div><a href="${element.exampleFileUrl}" class="text-xs text-blue-600 hover:underline flex items-center">Example File</a></div>` : ''}
                                 ${element.notes ? `<div class="mt-2 text-xs italic text-gray-500 bg-gray-50 p-2 rounded border-l-4 border-blue-200">Notes: ${element.notes}</div>` : ''}
                             </div>
                         </td>
