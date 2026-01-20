@@ -1,5 +1,4 @@
 import {
-    type DataLeafData,
     type PipelineNodeDefinition,
     PipelineNodeType
 } from "./graphTypes.ts";
@@ -51,7 +50,7 @@ export const pipelineNodeDefinitions = {
 
 let elementDefinitions: ElementDefinition[] = Object.values(pipelineNodeDefinitions);
 
-const dataFlows: DataFlowData[] = [
+export const dataFlows: DataFlowData[] = [
     {
         sourcePipeline: pipelineNodeDefinitions.lensFluxAnalysisPipeline,
         destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline],
@@ -143,6 +142,7 @@ const dataFlows: DataFlowData[] = [
         destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {
             name: 'Lens flux analysis fits',
+            host: 'MAST',
             dataElements: [
                 {
                     name: 'Lens flux analysis best-fit model parameters',
