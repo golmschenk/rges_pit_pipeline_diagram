@@ -71,6 +71,7 @@ export const dataFlows: DataFlowData[] = [
         destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline, pipelineNodeDefinitions.Public],
         data: {
             name: 'Microlensing event models and light curves',
+            isOfficialPitPublicDataProduct: true,
             host: 'MAST',
             totalDataSize: '1.2TB',
             dataElements: [
@@ -143,6 +144,7 @@ export const dataFlows: DataFlowData[] = [
         data: {
             name: 'Lens flux analysis fits',
             host: 'MAST',
+            isOfficialPitPublicDataProduct: true,
             dataElements: [
                 {
                     name: 'Lens flux analysis best-fit model parameters',
@@ -183,7 +185,10 @@ export const dataFlows: DataFlowData[] = [
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup6Pipeline,
         destinationPipelines: [pipelineNodeDefinitions.Public],
-        data: {name: 'Simulated variable star light curves'},
+        data: {
+            name: 'Simulated variable star light curves',
+            isOfficialPitPublicDataProduct: true,
+        },
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup7Pipeline,
@@ -203,17 +208,26 @@ export const dataFlows: DataFlowData[] = [
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup9Pipeline,
         destinationPipelines: [pipelineNodeDefinitions.Public],
-        data: {name: 'Data challenges'}
+        data: {
+            name: 'Data challenges',
+            isOfficialPitPublicDataProduct: true,
+        }
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup9Pipeline,
         destinationPipelines: [pipelineNodeDefinitions.Public],
-        data: {name: 'Outreach material (data sonifications, etc.)'}
+        data: {
+            name: 'Outreach material (data sonifications, etc.)',
+            isOfficialPitPublicDataProduct: true,
+        }
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup10Pipeline,
         destinationPipelines: [pipelineNodeDefinitions.Public],
-        data: {name: 'Jupyter Notebooks and lectures'}
+        data: {
+            name: 'Jupyter Notebooks and lectures',
+            isOfficialPitPublicDataProduct: true,
+        }
     },
     {
         sourcePipeline: pipelineNodeDefinitions.msosPhotometryPipeline,
@@ -325,6 +339,7 @@ export const dataFlows: DataFlowData[] = [
         destinationPipelines: [pipelineNodeDefinitions.Public],
         data: {
             name: 'Free-floating planet catalog',
+            isOfficialPitPublicDataProduct: true,
             host: 'MAST',
             totalDataSize: '18GB',
             dataElements: [

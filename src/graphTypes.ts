@@ -54,6 +54,7 @@ export type DataTreeData = {
     totalNumberOfUnits?: string
     totalDataSize?: string
     dataReleaseFrequency?: string
+    isOfficialPitPublicDataProduct?: boolean
 }
 
 export type DataFlowData = {
