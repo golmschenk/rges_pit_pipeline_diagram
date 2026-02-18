@@ -197,8 +197,68 @@ export const dataFlows: DataFlowData[] = [
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup12Pipeline,
-        destinationPipelines: [pipelineNodeDefinitions.workingGroup7Pipeline],
-        data: {name: 'Detection efficiency corrected rates for stellar microlensing events to update Galactic models'}
+        destinationPipelines: [pipelineNodeDefinitions.Public],
+        data: {
+            name: 'Maps of detection efficiencies (false negatives)',
+            host: 'Exoplanet Archive',
+            isOfficialPitPublicDataProduct: true,
+            notes: 'MSOS detection efficiencies are not expected to be delivered until the end of the GBTDS, so the PIT will provide early-look detection efficiencies at different levels of fidelity, with at least two depths: Pixel-level analysis and Flux-level analysis. \n' +
+                'In addition, the PIT will develop and deliver additional statistics for detection efficiency maps.\n' +
+                'As well as providing early-look detection efficiencies of the simple PSPL case, the PIT will provide some preliminary detection efficiencies for cases with higher-order effects, such as limb-darkening and multi-planet systems.',
+            dataElements: [
+                {
+                    name: 'Pixel-level analysis',
+                    notes: 'Shallow but sufficient coverage across event magnitudes to constrain S/N losses between images and light curves.',
+                },
+                {
+                    name: 'Flux-level analysis',
+                    notes: 'Deep, comprehensive analysis producing maps over q,s space',
+                    // TODO: Left off here.
+                    // unit: 'Per event for all events',
+                    // frequency: 'After each event',
+                    // structure: '23 parameters per row [what parameters?], with 100,000 rows per posterior',
+                    // totalNumberOfUnits: '30,000 rows (5,000 rows per season, with updates to old models each season)',
+                    // unitDataSize: '92B',
+                    // totalDataSize: '20MB',
+                },
+            ],
+        },
+    },
+    {
+        sourcePipeline: pipelineNodeDefinitions.workingGroup12Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.Public],
+        data: {
+            name: 'Maps of reliability (false positives)',
+            host: 'Exoplanet Archive',
+            isOfficialPitPublicDataProduct: true,
+            // TODO: Left off here.
+            notes: 'Maps of reliability (false positives). There is considerable uncertainty about the rate of false positives that will contaminate the microlensing event detection pipeline and how they will be distributed over detection space; the first few seasons will be incredibly informative as to the true scale of the different contributions to the total false positive rate.\n' +
+                'First season: First constraints on contamination levels from flares and solar system objects\n' +
+                'Three seasons: More comprehensive maps of false positive rates over q,s space',
+        },
+    },
+    {
+        sourcePipeline: pipelineNodeDefinitions.workingGroup12Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.Public],
+        data: {
+            name: 'Preliminary mass ratio function',
+            host: 'Exoplanet Archive',
+            isOfficialPitPublicDataProduct: true,
+            // TODO: Left off here.
+            notes: 'After the first three seasons, the vast majority of the microlensing events will not have sufficient observational baseline for proper motions to provide lens masses, but mass ratios will be available for each event.' +
+                'Three seasons: initial mass ratio function over the range 1e-6 < q < 1e-1.',
+        }
+    },
+    {
+        sourcePipeline: pipelineNodeDefinitions.workingGroup12Pipeline,
+        destinationPipelines: [pipelineNodeDefinitions.Public],
+        data: {
+            name: 'Occurrence rates',
+            host: 'Exoplanet Archive',
+            isOfficialPitPublicDataProduct: true,
+            // TODO: Left off here.
+            notes: 'The PIT will provide preliminary occurrence rates, including upper limits where appropriate, using the above products across a grid of 0.1Me < m < 30MJup and 1 < a < 10 au, assuming an appropriate distribution of stellar masses, and assess progress towards meeting the baseline science requirements.',
+        }
     },
     {
         sourcePipeline: pipelineNodeDefinitions.workingGroup7Pipeline,
