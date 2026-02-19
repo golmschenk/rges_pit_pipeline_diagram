@@ -36,7 +36,7 @@ export function renderPublicDataTable(containerId: string) {
                     if (!isOfficialPitPublicDataProduct) {
                         return;
                     }
-                    // Inherit properties from parent if available and missing in the element
+                    // Inherit properties from the parent if available and missing in the element
                     const unit = element.unit ?? data.unit;
                     const frequency = element.frequency ?? data.frequency;
                     const latency = element.latency ?? data.latency;
