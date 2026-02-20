@@ -81,6 +81,7 @@ export const dataFlows: DataFlowData[] = [
                     frequency: 'After each season',
                     structure: 'Columns with median properties (which properties?) with credible intervals',
                     notes: 'How different types of solutions (1S1L vs 2S1L) to be represented? Perhaps use a relation database instead of a single table?',
+                    format: 'Parquet',
                     totalNumberOfUnits: '120,000 rows (~4 viable models per event, 20,000 rows per season, with updates to old models each season)',
                     unitDataSize: '80B',
                     totalDataSize: '10MB',
@@ -410,6 +411,7 @@ export const dataFlows: DataFlowData[] = [
             isOfficialPitPublicDataProduct: true,
             host: 'MAST',
             totalDataSize: '18GB',
+            narrativeDescription: 'This dataset will consist of free-floating planet candidate light curves and fitted event parameters produced by the PIT\'s FFP detection pipeline. Although free-floating planets have been predicted to outnumber bound planets, little is known about this population. Characterizing the abundance of free-floating planets across a wide range of masses provides a key test of various competing models of planet formation, probing an epoch in system evolution that is otherwise difficult to observe. This dataset will provide the largest sample of FFP events to date, outnumbering existing catalogs by over an order of magnitude, and provides researchers with a critical resource for understanding the origins of these worlds.',
             dataElements: [
                 {
                     name: 'Free floating planet properties',
