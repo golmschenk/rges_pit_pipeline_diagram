@@ -35,13 +35,14 @@ export function renderPublicDataTable(containerId: string) {
         if (publicElements.length === 0) return;
 
         const sectionId = dataCollectionName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        const hasSubElements = data.dataElements && data.dataElements.length > 1;
 
         html += `
         <section class="mb-10">
             <h2 id="${sectionId}" class="text-xl font-bold text-gray-800 mb-1">${dataCollectionName}</h2>
             <p class="text-sm text-gray-500 mb-3">Source pipeline: ${sourcePipelineName}${data.host ? ` · Host: ${data.host}` : ''}</p>
             ${narrative ? `<div class="prose prose-sm max-w-none text-gray-700 mb-4">${narrative}</div>` : ''}
-            ${data.notes ? `<div class="text-sm italic text-gray-500 bg-gray-50 p-3 rounded border-l-4 border-blue-200 mb-4">Notes: ${data.notes}</div>` : ''}
+            ${hasSubElements && data.notes ? `<div class="text-sm italic text-gray-500 bg-gray-50 p-3 rounded border-l-4 border-blue-200 mb-4">Notes: ${data.notes}</div>` : ''}
 
             <div class="overflow-hidden border border-gray-300 rounded-lg shadow-sm mb-2">
                 <table class="min-w-full border-collapse text-sm bg-white table-fixed">
