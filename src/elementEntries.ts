@@ -195,8 +195,12 @@ export const dataFlows: DataFlowData[] = [
                 '<li>Long Period Variables (i.e., Miras)</li>' +
                 '<li>Ellipsoidal Binaries</li>' +
                 '<li>Eclipsing Binaries</li>' +
-                '</ul>' +
-                'Several other variable star types are currently in progress to be added to the catalog',
+                '<li>Delta Scuti</li>' +
+                '<li>Heartbeat Stars</li>' +
+                '<li>Cepheids (type 1 and type 2)</li>' +
+                '<li>M-dwarf flares</li>' +
+                '<li>Cataclysmic Variables</li>' +
+                '</ul>',
         },
     },
     {
