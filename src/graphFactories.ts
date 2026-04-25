@@ -12,7 +12,8 @@ import {
 } from "./graphTypes.ts";
 import {v4 as uuid4, v5 as uuid5} from "uuid";
 import type {ElementDefinition, NodeDefinition} from "cytoscape";
-import type {WorkingGroup} from "./elementEntries.ts";
+
+import type {WorkingGroup} from "./element_entries/working_groups.ts";
 
 const PROJECT_NAMESPACE_UUID = '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b';
 

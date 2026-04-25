@@ -1,4 +1,5 @@
-import {dataFlows, pipelineNodeDefinitions} from './elementEntries';
+import {dataFlows} from './elementEntries';
+import {pipelineNodeDefinitions} from "./element_entries/pipeline_definitions.ts";
 
 export function renderPublicDataTable(containerId: string) {
     const container = document.getElementById(containerId);
