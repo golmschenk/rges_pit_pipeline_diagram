@@ -1,3 +1,9 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 body {overflow: hidden; }
+
+.prose-invert {
+    --tw-prose-invert-bullets: #d1d5db;
+    --tw-prose-invert-counters: #d1d5db;
+}
