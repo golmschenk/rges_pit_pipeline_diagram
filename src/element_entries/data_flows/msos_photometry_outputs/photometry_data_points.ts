@@ -1,6 +1,7 @@
 import type {DataFlowData} from "../../../graphTypes.ts";
 import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
 import notes from './photometry_data_points_resources/notes.md?raw';
+import dia_photometry_data_points_notes from './photometry_data_points_resources/dia_photometry_data_points_notes.md?raw'
 import {from_markdown} from "../../../markdown.ts";
 
 export default {
@@ -22,11 +23,7 @@ export default {
             },
             {
                 name: 'DIA photometry data points',
-                notes: '<ul class="list-disc list-outside px-5">' +
-                    '<li>Fixed centroid, and floating centroid</li>' +
-                    '<li>Against 8 day stack from first week of season (challenges here— proper motion over' +
-                    ' season, if the thing was already changing during stack [long duration event], bad DIA)</li>' +
-                    '</ul>'
+                notes: from_markdown(dia_photometry_data_points_notes)
             },
         ]
     },
