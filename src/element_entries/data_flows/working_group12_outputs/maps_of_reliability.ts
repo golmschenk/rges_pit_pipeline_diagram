@@ -1,5 +1,5 @@
-import type {DataFlowData} from "../../../graphTypes.ts";
 import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
     sourcePipeline: pipelineNodeDefinitions.workingGroup12Pipeline,
@@ -13,4 +13,4 @@ export default {
             'First season: First constraints on contamination levels from flares and solar system objects\n' +
             'Three seasons: More comprehensive maps of false positive rates over q,s space',
     },
-} satisfies DataFlowData;
+} satisfies DataFlow;

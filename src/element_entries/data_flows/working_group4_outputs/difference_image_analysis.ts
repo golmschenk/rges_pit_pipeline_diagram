@@ -1,5 +1,5 @@
-import type {DataFlowData} from "../../../graphTypes.ts";
 import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
     sourcePipeline: pipelineNodeDefinitions.differenceImageAnalysisPipeline,
@@ -7,4 +7,4 @@ export default {
     data: {
         name: 'Difference image analysis',
     },
-} satisfies DataFlowData;
+} satisfies DataFlow;

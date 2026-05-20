@@ -1,6 +1,4 @@
 import {
-    type DataFlowData,
-    type DataTreeData,
     type DataFlowEdgeDefinition,
     type DataFlowNodeDefinition,
     type DataTreeNodeDefinition,
@@ -8,12 +6,15 @@ import {
     type PipelineNodeDefinition,
     PipelineNodeType,
     NodeTypeStyleClass,
-    type DataLeafData, type DataTreeEdgeDefinition, EdgeTypeStyleClass
+    type DataTreeEdgeDefinition, EdgeTypeStyleClass
 } from "./graphTypes.ts";
 import {v4 as uuid4, v5 as uuid5} from "uuid";
 import type {ElementDefinition, NodeDefinition} from "cytoscape";
 
 import type {WorkingGroup} from "./element_entries/working_groups.ts";
+import type {DataFlow} from "./element_data_types/data_flow.ts";
+import type {DataTree} from "./element_data_types/data_tree.ts";
+import type {DataLeaf} from "./element_data_types/data_leaf.ts";
 
 const PROJECT_NAMESPACE_UUID = '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b';
 
@@ -92,11 +93,11 @@ function createDataTreeEdgeDefinition(sourceNode: NodeDefinition, destinationNod
     };
 }
 
-function isDataTreeData(data: DataTreeData | DataLeafData): data is DataTreeData {
+function isDataTreeData(data: DataTree | DataLeaf): data is DataTree {
     return 'dataElements' in data;
 }
 
-function createDataTree(dataElement: DataTreeData | DataLeafData, dataElementIdOverride?: string): [DataTreeNodeDefinition, ElementDefinition[]] {
+function createDataTree(dataElement: DataTree | DataLeaf, dataElementIdOverride?: string): [DataTreeNodeDefinition, ElementDefinition[]] {
     let information: Record<string, any>
     let dataElementNodeClass: NodeTypeStyleClass
     if (isDataTreeData(dataElement)) {
@@ -119,7 +120,7 @@ function createDataTree(dataElement: DataTreeData | DataLeafData, dataElementIdO
     return [rootNodeDefinition, treeElementDefinitions];
 }
 
-function createDataTreeForDataFlowData(dataFlowData: DataFlowData): [DataTreeAndDataFlowNodeDefinition, ElementDefinition[]] {
+function createDataTreeForDataFlowData(dataFlowData: DataFlow): [DataTreeAndDataFlowNodeDefinition, ElementDefinition[]] {
     const [rootNodeDefinition, treeElementDefinitions] = createDataTree(dataFlowData.data, uuid5(dataFlowData.data.name + dataFlowData.sourcePipeline.data.name, PROJECT_NAMESPACE_UUID))
     let dataElementNodeClass: NodeTypeStyleClass
     if (isDataTreeData(dataFlowData.data)) {
@@ -135,7 +136,7 @@ function createDataTreeForDataFlowData(dataFlowData: DataFlowData): [DataTreeAnd
     return [rootNodeDefinitionWithDataFlowNodeType, treeElementDefinitions]
 }
 
-function createDataFlowDefinition(dataFlowData: DataFlowData): ElementDefinition[] {
+function createDataFlowDefinition(dataFlowData: DataFlow): ElementDefinition[] {
     let elementDefinitions: ElementDefinition[] = []
     const [dataFlowNodeDefinition, dataTreeElementDefinitions] = createDataTreeForDataFlowData(dataFlowData)
     elementDefinitions.push(dataFlowNodeDefinition, ...dataTreeElementDefinitions)
@@ -148,7 +149,7 @@ function createDataFlowDefinition(dataFlowData: DataFlowData): ElementDefinition
     return elementDefinitions
 }
 
-export function createDataFlowDefinitionAndAppendToElementDefinitions(dataFlowData: DataFlowData, elementDefinitions: ElementDefinition[]): void {
+export function createDataFlowDefinitionAndAppendToElementDefinitions(dataFlowData: DataFlow, elementDefinitions: ElementDefinition[]): void {
     const newElementDefinitions = createDataFlowDefinition(dataFlowData)
     elementDefinitions.push(...newElementDefinitions);
 }

@@ -1,5 +1,5 @@
-import type {DataFlowData} from "../../../graphTypes.ts";
 import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
     sourcePipeline: pipelineNodeDefinitions.socPipeline,
@@ -11,4 +11,4 @@ export default {
         structure: 'Table of (x, y, flux/mag, xerr, yerr, magerr, t) for all time steps, all filters, ' +
             'cross-matched across all seasons',
     },
-} satisfies DataFlowData;
+} satisfies DataFlow;

@@ -1,8 +1,8 @@
-import type {DataFlowData} from "../../../graphTypes.ts";
 import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
         sourcePipeline: pipelineNodeDefinitions.lensFluxAnalysisPipeline,
         destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline],
         data: {name: 'Source and Lens position and brightness posteriors'}
-} satisfies DataFlowData;
+} satisfies DataFlow;

@@ -31,35 +31,3 @@ export const PipelineNodeType = {
 } as const;
 export type PipelineNodeType = typeof PipelineNodeType[keyof typeof PipelineNodeType];
 
-export type DataLeafData = {
-    name: string
-    unit?: string
-    frequency?: string
-    latency?: string
-    structure?: string
-    format?: string
-    exampleFileUrl?: string
-    notes?: string
-}
-
-export type DataTreeData = {
-    name: string
-    unit?: string
-    frequency?: string
-    latency?: string
-    dataElements: (DataTreeData | DataLeafData)[]
-    notes?: string
-    host?: string
-    unitDataSize?: string
-    totalNumberOfUnits?: string
-    totalDataSize?: string
-    dataReleaseFrequency?: string
-    isOfficialPitPublicDataProduct?: boolean
-    narrativeDescription?: string
-}
-
-export type DataFlowData = {
-    data: DataTreeData | DataLeafData
-    sourcePipeline: PipelineNodeDefinition
-    destinationPipelines: PipelineNodeDefinition[]
-}

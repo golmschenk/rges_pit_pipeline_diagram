@@ -1,5 +1,5 @@
-import type {DataFlowData} from "../../../graphTypes.ts";
 import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
     sourcePipeline: pipelineNodeDefinitions.workingGroup9Pipeline,
@@ -8,4 +8,4 @@ export default {
         name: 'Data challenges',
         isOfficialPitPublicDataProduct: true,
     }
-} satisfies DataFlowData;
+} satisfies DataFlow;
