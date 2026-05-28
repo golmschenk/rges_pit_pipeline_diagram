@@ -1,7 +1,5 @@
-export type WorkingGroup = {
-    number: number
-    name: string
-}
+import type {WorkingGroup} from "../element_data_types/working_group.ts";
+
 export const WorkingGroups = {
     workingGroup1: {number: 1, name: 'Leadership and Project Management'},
     workingGroup2: {number: 2, name: 'Education, Outreach, and Community'},
