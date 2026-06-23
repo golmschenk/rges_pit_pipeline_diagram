@@ -1,9 +1,9 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.workingGroup13Pipeline,
-    destinationPipelines: [pipelineNodeDefinitions.Public],
+    sourcePipeline: pipelines.workingGroup13Pipeline,
+    destinationPipelines: [pipelines.Public],
     data: {
         name: 'Joint photometric and astrometric fit of model',
         unit: 'For each event',

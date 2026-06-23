@@ -1,9 +1,9 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.workingGroup12Pipeline,
-    destinationPipelines: [pipelineNodeDefinitions.Public],
+    sourcePipeline: pipelines.workingGroup12Pipeline,
+    destinationPipelines: [pipelines.Public],
     data: {
         name: 'Maps of reliability (false positives)',
         host: 'Exoplanet Archive',

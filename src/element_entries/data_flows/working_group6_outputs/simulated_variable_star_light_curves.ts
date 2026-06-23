@@ -1,9 +1,9 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.workingGroup6Pipeline,
-    destinationPipelines: [pipelineNodeDefinitions.Public],
+    sourcePipeline: pipelines.workingGroup6Pipeline,
+    destinationPipelines: [pipelines.Public],
     data: {
         name: 'Simulated variable star light curves',
         isOfficialPitPublicDataProduct: true,

@@ -1,9 +1,9 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.socPipeline,
-    destinationPipelines: [pipelineNodeDefinitions.differenceImageAnalysisPipeline],
+    sourcePipeline: pipelines.socPipeline,
+    destinationPipelines: [pipelines.differenceImageAnalysisPipeline],
     data: {
         name: 'Difference images',
     },

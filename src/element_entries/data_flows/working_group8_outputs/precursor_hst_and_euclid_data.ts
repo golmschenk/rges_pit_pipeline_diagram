@@ -1,9 +1,9 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.workingGroup8Pipeline,
-    destinationPipelines: [pipelineNodeDefinitions.lensFluxAnalysisPipeline],
+    sourcePipeline: pipelines.workingGroup8Pipeline,
+    destinationPipelines: [pipelines.lensFluxAnalysisPipeline],
     data: {
         name: 'Precursor HST and Euclid data',
         unit: 'For each field/event',

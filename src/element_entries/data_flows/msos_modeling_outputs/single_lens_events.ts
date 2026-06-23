@@ -1,8 +1,8 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.msosModelingPipeline,
-    destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline],
+    sourcePipeline: pipelines.msosModelingPipeline,
+    destinationPipelines: [pipelines.workingGroup12Pipeline],
     data: {name: 'Single lens events'},
 } satisfies DataFlow;

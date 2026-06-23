@@ -1,6 +1,5 @@
 import {
     type DataFlowEdgeDefinition,
-    type DataFlowNodeDefinition,
     type DataTreeNodeDefinition,
     type DataTreeAndDataFlowNodeDefinition,
     type PipelineNodeDefinition,
@@ -11,34 +10,51 @@ import {
 import {v4 as uuid4, v5 as uuid5} from "uuid";
 import type {ElementDefinition, NodeDefinition} from "cytoscape";
 
-import type {WorkingGroup} from "./element_entries/working_groups.ts";
+import type {WorkingGroup} from "./element_data_types/working_group.ts";
 import type {DataFlow} from "./element_data_types/data_flow.ts";
 import type {DataTree} from "./element_data_types/data_tree.ts";
 import type {DataLeaf} from "./element_data_types/data_leaf.ts";
+import type {Pipeline} from "./element_data_types/pipeline.ts";
+import {Exception} from "handlebars";
+import {pipelines} from "./element_entries/pipelines.ts";
+import {pipelineNodeDefinitionsMap} from "./elementEntries.ts";
 
 const PROJECT_NAMESPACE_UUID = '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b';
 
 const defaultNodeHeight = 90;
 const defaultNodeWidth = 180;
 
-export function createPipelineNodeDefinition(name: string, pipelineNodeType: PipelineNodeType = PipelineNodeType.WorkingGroupPipeline, workingGroup?: WorkingGroup): PipelineNodeDefinition {
-    let classes: string[] = [NodeTypeStyleClass[pipelineNodeType]]
+export function createPipelineNodeDefinition(pipeline: Pipeline): PipelineNodeDefinition {
+    let classes: string[]
     let node_label: string
-    if (workingGroup !== undefined) {
-        node_label = name + ` (WG${workingGroup.number})`
-    } else {
-        node_label = name
+    if (pipeline.owner.type == 'WorkingGroup'){
+        classes = [NodeTypeStyleClass.WorkingGroupPipeline]
+        node_label = pipeline.name + ` (WG${pipeline.owner.number})`
+    }
+    else if (pipeline.owner.type == 'ExternalGroup'){
+        if (pipeline === pipelines.Public){
+            classes = [NodeTypeStyleClass.Public]
+
+        }
+        else {
+            classes = [NodeTypeStyleClass.ExternalGroupPipeline]
+        }
+        node_label = pipeline.name
+    }
+    else {
+        throw new Exception('Pipeline owner type unknown.')
+
     }
 
     return {
         group: 'nodes',
         data: {
-            id: uuid5(name, PROJECT_NAMESPACE_UUID),
+            id: uuid5(pipeline.name, PROJECT_NAMESPACE_UUID),
             name: node_label,
             height: defaultNodeHeight,
             width: defaultNodeWidth,
             information: {
-                name: name
+                name: pipeline.name
 
             }
         },
@@ -121,7 +137,7 @@ function createDataTree(dataElement: DataTree | DataLeaf, dataElementIdOverride?
 }
 
 function createDataTreeForDataFlowData(dataFlowData: DataFlow): [DataTreeAndDataFlowNodeDefinition, ElementDefinition[]] {
-    const [rootNodeDefinition, treeElementDefinitions] = createDataTree(dataFlowData.data, uuid5(dataFlowData.data.name + dataFlowData.sourcePipeline.data.name, PROJECT_NAMESPACE_UUID))
+    const [rootNodeDefinition, treeElementDefinitions] = createDataTree(dataFlowData.data, uuid5(dataFlowData.data.name + dataFlowData.sourcePipeline.name, PROJECT_NAMESPACE_UUID))
     let dataElementNodeClass: NodeTypeStyleClass
     if (isDataTreeData(dataFlowData.data)) {
         dataElementNodeClass = NodeTypeStyleClass.DataTree;
@@ -140,10 +156,10 @@ function createDataFlowDefinition(dataFlowData: DataFlow): ElementDefinition[] {
     let elementDefinitions: ElementDefinition[] = []
     const [dataFlowNodeDefinition, dataTreeElementDefinitions] = createDataTreeForDataFlowData(dataFlowData)
     elementDefinitions.push(dataFlowNodeDefinition, ...dataTreeElementDefinitions)
-    const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowData.sourcePipeline, dataFlowNodeDefinition)
+    const dataFlowEdge = createDataFlowEdgeDefinition(pipelineNodeDefinitionsMap.get(dataFlowData.sourcePipeline), dataFlowNodeDefinition)
     elementDefinitions.push(dataFlowEdge)
     dataFlowData.destinationPipelines.forEach((destinationPipelineNodeDefinition) => {
-        const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowNodeDefinition, destinationPipelineNodeDefinition)
+        const dataFlowEdge = createDataFlowEdgeDefinition(dataFlowNodeDefinition, pipelineNodeDefinitionsMap.get(destinationPipelineNodeDefinition))
         elementDefinitions.push(dataFlowEdge)
     })
     return elementDefinitions

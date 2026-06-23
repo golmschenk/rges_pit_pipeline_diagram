@@ -1,8 +1,8 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.workingGroup7Pipeline,
-    destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline],
+    sourcePipeline: pipelines.workingGroup7Pipeline,
+    destinationPipelines: [pipelines.workingGroup12Pipeline],
     data: {name: 'Galaxy models and stellar microlensing occurrence rate predictions'},
 } satisfies DataFlow;

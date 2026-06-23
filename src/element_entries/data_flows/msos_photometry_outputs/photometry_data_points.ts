@@ -1,12 +1,12 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import notes from './photometry_data_points_resources/notes.md?raw';
 import dia_photometry_data_points_notes from './photometry_data_points_resources/dia_photometry_data_points_notes.md?raw'
 import {from_markdown} from "../../../markdown.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.msosPhotometryPipeline,
-    destinationPipelines: [pipelineNodeDefinitions.socPipeline],
+    sourcePipeline: pipelines.msosPhotometryPipeline,
+    destinationPipelines: [pipelines.socPipeline],
     data: {
         name: 'Photometry data points',
         unit: 'Per source in input catalog',

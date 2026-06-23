@@ -1,8 +1,8 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
+import {pipelines} from "../../pipelines.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.msosModelingPipeline,
-    destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline, pipelineNodeDefinitions.workingGroup12Pipeline],
+    sourcePipeline: pipelines.msosModelingPipeline,
+    destinationPipelines: [pipelines.workingGroup3Pipeline, pipelines.workingGroup12Pipeline],
     data: {name: 'Automated light curve modeling results'},
 } satisfies DataFlow;

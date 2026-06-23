@@ -1,10 +1,10 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.socPipeline,
-    destinationPipelines: [pipelineNodeDefinitions.workingGroup3Pipeline, pipelineNodeDefinitions.workingGroup13Pipeline,
-        pipelineNodeDefinitions.workingGroup5Pipeline],
+    sourcePipeline: pipelines.socPipeline,
+    destinationPipelines: [pipelines.workingGroup3Pipeline, pipelines.workingGroup13Pipeline,
+        pipelines.workingGroup5Pipeline],
     data: {
         name: 'Photometric light curves',
         unit: 'For each event target and nearby targets',

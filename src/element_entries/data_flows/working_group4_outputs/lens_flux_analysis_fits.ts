@@ -1,9 +1,9 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.lensFluxAnalysisPipeline,
-    destinationPipelines: [pipelineNodeDefinitions.Public],
+    sourcePipeline: pipelines.lensFluxAnalysisPipeline,
+    destinationPipelines: [pipelines.Public],
     data: {
         name: 'Lens flux analysis fits',
         host: 'MAST',

@@ -1,9 +1,9 @@
-import {pipelineNodeDefinitions} from "../../pipeline_definitions.ts";
+import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
 
 export default {
-    sourcePipeline: pipelineNodeDefinitions.workingGroup3Pipeline,
-    destinationPipelines: [pipelineNodeDefinitions.workingGroup12Pipeline, pipelineNodeDefinitions.Public],
+    sourcePipeline: pipelines.workingGroup3Pipeline,
+    destinationPipelines: [pipelines.workingGroup12Pipeline, pipelines.Public],
     data: {
         name: 'Microlensing event models and light curves',
         isOfficialPitPublicDataProduct: true,
