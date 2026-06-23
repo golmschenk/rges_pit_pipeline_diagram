@@ -19,4 +19,5 @@ export const pipelines = {
     msosPhotometryPipeline: {name: 'MSOS photometry', owner: ExternalGroups.MsosPhotometry},
     msosModelingPipeline: {name: 'MSOS modeling', owner: ExternalGroups.MsosModeling},
     socPipeline: {name: 'SOC', owner: ExternalGroups.Soc},
+    rapidPipeline: {name: 'RAPID', owner: ExternalGroups.Rapid},
 } satisfies Record<string, Pipeline>;

@@ -5,5 +5,6 @@ export const ExternalGroups = {
     MsosModeling: {name: 'MSOS modeling', type: 'ExternalGroup'},
     Soc: {name: 'SOC', type: 'ExternalGroup'},
     Mast: {name: 'MAST', type: 'ExternalGroup'},
+    Rapid: {name: 'RAPID', type: 'ExternalGroup'},
     Public: {name: 'Public', type: 'ExternalGroup'},
 } satisfies Record<string, ExternalGroup>;
