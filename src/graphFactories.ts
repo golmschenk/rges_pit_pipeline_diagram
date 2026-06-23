@@ -3,7 +3,6 @@ import {
     type DataTreeNodeDefinition,
     type DataTreeAndDataFlowNodeDefinition,
     type PipelineNodeDefinition,
-    PipelineNodeType,
     NodeTypeStyleClass,
     type DataTreeEdgeDefinition, EdgeTypeStyleClass
 } from "./graphTypes.ts";

@@ -1,12 +1,13 @@
 import {dataFlows} from './elementEntries';
-import {pipelineNodeDefinitions} from "./element_entries/pipelines.ts";
+import {pipelines} from "./element_entries/pipelines.ts";
+
 
 export function renderPublicDataTable(containerId: string) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     const publicFlows = dataFlows.filter(flow =>
-        flow.destinationPipelines.some(dest => dest === pipelineNodeDefinitions.Public)
+        flow.destinationPipelines.some(dest => dest === pipelines.Public)
     );
 
     // Collect only flows that have at least one official public data product element
@@ -25,7 +26,7 @@ export function renderPublicDataTable(containerId: string) {
     officialFlows.forEach(flow => {
         const data = flow.data as any;
         const dataElements = data.dataElements || [{name: '(Main Data)', ...data}];
-        const sourcePipelineName = flow.sourcePipeline.data.information.name || 'Unknown Source';
+        const sourcePipelineName = flow.sourcePipeline.name || 'Unknown Source';
         const dataCollectionName = data.name || 'Unnamed Group';
         const narrative = data.narrativeDescription;
 
@@ -125,7 +126,7 @@ export function renderPublicDataTable(containerId: string) {
     publicFlows.forEach(flow => {
         const data = flow.data as any;
         const dataElements = data.dataElements || [{name: '(Main Data)', ...data}];
-        const sourcePipelineName = flow.sourcePipeline.data.information.name || 'Unknown Source';
+        const sourcePipelineName = flow.sourcePipeline.name || 'Unknown Source';
         const dataCollectionName = data.name || 'Unnamed Group';
 
         dataElements.forEach((element: any) => {
