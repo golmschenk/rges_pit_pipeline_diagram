@@ -1,5 +1,7 @@
 import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
+import narrativeDescription from './microlensing_event_models_and_light_curves_resources/narrative_description.md?raw'
+import {from_markdown} from "../../../markdown.ts";
 
 export default {
     sourcePipeline: pipelines.workingGroup3Pipeline,
@@ -7,6 +9,7 @@ export default {
     data: {
         name: 'Microlensing event models and light curves',
         isOfficialPitPublicDataProduct: true,
+        narrativeDescription: from_markdown(narrativeDescription),
         host: 'MAST',
         totalDataSize: '1.2TB',
         dataElements: [
