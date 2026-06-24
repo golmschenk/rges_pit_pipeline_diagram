@@ -1,5 +1,7 @@
 import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
+import {from_markdown} from "../../../markdown.ts";
+import narrativeDescription from './lens_flux_analysis_fits_resources/narrative_description.md?raw'
 
 export default {
     sourcePipeline: pipelines.lensFluxAnalysisPipeline,
@@ -7,6 +9,7 @@ export default {
     data: {
         name: 'Lens flux analysis fits',
         host: 'MAST',
+        narrativeDescription: from_markdown(narrativeDescription),
         isOfficialPitPublicDataProduct: true,
         dataElements: [
             {
