@@ -5,6 +5,7 @@ import {ExternalGroups} from "./external_groups.ts";
 export const pipelines = {
     workingGroup3Pipeline: {name: 'Event modeling pipeline', owner:  WorkingGroups.workingGroup3},
     lensFluxAnalysisPipeline: {name: 'Lens flux analysis pipeline', owner:  WorkingGroups.workingGroup4},
+    differenceImagePipeline: {name: 'Difference image pipeline', owner:  WorkingGroups.workingGroup4},
     differenceImageAnalysisPipeline: {name: 'Difference image analysis pipeline', owner:  WorkingGroups.workingGroup4},
     workingGroup5Pipeline: {name: 'Event and anomaly detection pipeline', owner:  WorkingGroups.workingGroup5},
     workingGroup6Pipeline: {name: 'Variable stars pipeline', owner:  WorkingGroups.workingGroup6},
@@ -19,5 +20,5 @@ export const pipelines = {
     msosPhotometryPipeline: {name: 'MSOS photometry', owner: ExternalGroups.MsosPhotometry},
     msosModelingPipeline: {name: 'MSOS modeling', owner: ExternalGroups.MsosModeling},
     socPipeline: {name: 'SOC', owner: ExternalGroups.Soc},
-    rapidPipeline: {name: 'RAPID', owner: ExternalGroups.Rapid},
+    // rapidPipeline: {name: 'RAPID', owner: ExternalGroups.Rapid},
 } satisfies Record<string, Pipeline>;
