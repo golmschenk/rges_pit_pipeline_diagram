@@ -1,5 +1,7 @@
 import {pipelines} from "../../pipelines.ts";
 import type {DataFlow} from "../../../element_data_types/data_flow.ts";
+import narrativeDescription from './maps_of_detection_efficiencies_resources/narrative_description.md?raw'
+import {from_markdown} from "../../../markdown.ts";
 
 export default {
     sourcePipeline: pipelines.workingGroup12Pipeline,
@@ -7,6 +9,7 @@ export default {
     data: {
         name: 'Maps of detection efficiencies (false negatives)',
         host: 'Exoplanet Archive',
+        narrativeDescription: from_markdown(narrativeDescription),
         isOfficialPitPublicDataProduct: true,
         notes: 'MSOS detection efficiencies are not expected to be delivered until the end of the GBTDS, so the PIT will provide early-look detection efficiencies at different levels of fidelity, with at least two depths: Pixel-level analysis and Flux-level analysis. \n' +
             'In addition, the PIT will develop and deliver additional statistics for detection efficiency maps.\n' +
